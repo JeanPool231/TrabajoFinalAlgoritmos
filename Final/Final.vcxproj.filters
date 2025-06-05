@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de origen">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Archivos de encabezado">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Generico">
+      <UniqueIdentifier>{9d460020-1c6c-4f1f-bfd3-5127cd97df77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Curso">
+      <UniqueIdentifier>{86d6281e-dc8d-46cf-8694-f525980aa635}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Profesor">
+      <UniqueIdentifier>{9af6a7ab-0956-4f74-808b-c6219c953f4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Institucion">
+      <UniqueIdentifier>{0b9e89be-4dae-4a78-bf4f-b48d49c0f341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Admin">
+      <UniqueIdentifier>{bb20e11b-53d7-4125-912f-864d72792050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Estudiante">
+      <UniqueIdentifier>{12d2604d-62f5-485c-9da4-94b8f924d454}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Final.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Sistema.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sistema.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="ListaEnlazada.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="Nodo.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="ListaDobleEnlazada.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="ListaCircularSimple.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="ListaDobleCircular.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="Pila.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="Cola.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
