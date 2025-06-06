@@ -39,6 +39,9 @@
     <ClCompile Include="Sistema.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Profesor.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sistema.h">
@@ -64,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="Cola.h">
       <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="Profesor.h">
+      <Filter>Archivos de encabezado\Profesor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -11,6 +11,18 @@ void Sistema::menuPrincipal() {
 	cout << "4. Salir\n";
 	//_getch();
 }
+
+void Sistema::agregarProfesor() {
+	//debuggeando
+	string nombre, apellido;
+	Profesor profesor;
+
+	cout << "Ingrese su nombre: "; cin >> nombre;
+	cout << "Ingrese su apellido: "; cin >> apellido;
+	profesor.setNombre(nombre);
+	profesor.setApellido(apellido);
+}
+
 void Sistema::iniciarPrograma() {
 	menuPrincipal();
 }
