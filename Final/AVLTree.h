@@ -43,7 +43,7 @@ private:
         return y;
     }
 
-    NodoAVL<T>* insertarNodo(NodoAVL<T>* nodo, T dato, std::function<bool(const T&, const T&)> cmp) {
+    NodoAVL<T>* insertarNodo(NodoAVL<T>* nodo, T dato, std::function<bool(T&, T&)> cmp) {
         if (!nodo) return new NodoAVL<T>(dato);
 
         if (cmp(dato, nodo->dato))
@@ -69,7 +69,7 @@ private:
         return nodo;
     }
 
-    void inOrden(NodoAVL<T>* nodo, std::function<void(const T&)> f) {
+    void inOrden(NodoAVL<T>* nodo, std::function<void(T&)> f) {
         if (nodo) {
             inOrden(nodo->izquierda, f);
             f(nodo->dato);
@@ -80,11 +80,11 @@ private:
 public:
     AVLTree() : raiz(nullptr) {}
 
-    void insertar(T dato, std::function<bool(const T&, const T&)> cmp) {
+    void insertar(T dato, std::function<bool(T&, T&)> cmp) {
         raiz = insertarNodo(raiz, dato, cmp);
     }
 
-    void recorrerInOrden(std::function<void(const T&)> f) {
+    void recorrerInOrden(std::function<void(T&)> f) {
         inOrden(raiz, f);
     }
 };

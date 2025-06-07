@@ -21,14 +21,14 @@ public:
 	void setEstadoCivil(char);
 	void setEdad(int);
 	void setTiempoEnCoursera(int);
-	string getCodigo() const;
-	string getNombre() const;
-	string getApellido() const;
-	string getCorreo() const;
-	char getSexo() const;
-	char getEstadoCivil() const;
-	int getEdad() const;
-	int getTiempoEnCoursera() const;
+	string getCodigo();
+	string getNombre();
+	string getApellido();
+	string getCorreo();
+	char getSexo();
+	char getEstadoCivil();
+	int getEdad();
+	int getTiempoEnCoursera();
 
 };
 

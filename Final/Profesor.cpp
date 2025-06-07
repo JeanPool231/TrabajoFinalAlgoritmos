@@ -21,14 +21,14 @@ Profesor::Profesor(string codigo, string nombre, string apellido, string correo,
 
 // Getters
 
-string Profesor::getNombre() const { return nombre; }
-string Profesor::getCodigo() const { return codigo; }
-string Profesor::getApellido() const { return apellido; }
-string Profesor::getCorreo() const { return correo; }
-char Profesor::getSexo() const { return sexo; }
-char Profesor::getEstadoCivil() const { return estadoCivil; }
-int Profesor::getEdad() const { return edad; }
-int Profesor::getTiempoEnCoursera() const { return tiempoEnCoursera; }
+string Profesor::getNombre() { return nombre; }
+string Profesor::getCodigo() { return codigo; }
+string Profesor::getApellido() { return apellido; }
+string Profesor::getCorreo() { return correo; }
+char Profesor::getSexo() { return sexo; }
+char Profesor::getEstadoCivil() { return estadoCivil; }
+int Profesor::getEdad() { return edad; }
+int Profesor::getTiempoEnCoursera() { return tiempoEnCoursera; }
 
 
 // Setters

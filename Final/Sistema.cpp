@@ -28,7 +28,7 @@ void Sistema::agregarProfesor() {
 
     Profesor nuevo(codigo, nombre, apellido, correo, sexo, estadoCivil, edad, tiempo);
 
-    arbolProfesores.insertar(nuevo, [](const Profesor& a, const Profesor& b) {
+    arbolProfesores.insertar(nuevo, [](Profesor& a, Profesor& b) {
         return a.getApellido() < b.getApellido();
         });
 }

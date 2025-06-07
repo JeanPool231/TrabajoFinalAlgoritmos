@@ -71,5 +71,11 @@
     <ClInclude Include="Profesor.h">
       <Filter>Archivos de encabezado\Profesor</Filter>
     </ClInclude>
+    <ClInclude Include="NodoAVL.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="AVLTree.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
