@@ -12,9 +12,6 @@ private:
 	void iniciarSesion();
 	bool validarCorreo();
 	void inicializarDatos();
-	bool admin = false;
-	void menuAdminDebug();
-	void menuDebug();
 public:
 	void iniciarPrograma();
 };

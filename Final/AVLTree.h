@@ -5,7 +5,7 @@
 #include "NodoAVL.h"
 #include <algorithm>
 #include <functional>
-
+using namespace std;
 template <typename T>
 class AVLTree {
 private:
@@ -20,7 +20,7 @@ private:
     }
 
     void actualizarAltura(NodoAVL<T>* nodo) {
-        nodo->altura = 1 + std::max(altura(nodo->izquierda), altura(nodo->derecha));
+        nodo->altura = 1 + max(altura(nodo->izquierda), altura(nodo->derecha));
     }
 
     NodoAVL<T>* rotarDerecha(NodoAVL<T>* y) {
@@ -43,7 +43,7 @@ private:
         return y;
     }
 
-    NodoAVL<T>* insertarNodo(NodoAVL<T>* nodo, T dato, std::function<bool(T&, T&)> cmp) {
+    NodoAVL<T>* insertarNodo(NodoAVL<T>* nodo, T dato, function<bool(T&, T&)> cmp) {
         if (!nodo) return new NodoAVL<T>(dato);
 
         if (cmp(dato, nodo->dato))
@@ -69,7 +69,7 @@ private:
         return nodo;
     }
 
-    void inOrden(NodoAVL<T>* nodo, std::function<void(T&)> f) {
+    void inOrden(NodoAVL<T>* nodo, function<void(T&)> f) {
         if (nodo) {
             inOrden(nodo->izquierda, f);
             f(nodo->dato);
@@ -80,11 +80,11 @@ private:
 public:
     AVLTree() : raiz(nullptr) {}
 
-    void insertar(T dato, std::function<bool(T&, T&)> cmp) {
+    void insertar(T dato, function<bool(T&, T&)> cmp) {
         raiz = insertarNodo(raiz, dato, cmp);
     }
 
-    void recorrerInOrden(std::function<void(T&)> f) {
+    void recorrerInOrden(function<void(T&)> f) {
         inOrden(raiz, f);
     }
 };
