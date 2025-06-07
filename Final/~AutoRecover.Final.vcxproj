@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -127,21 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Curso.cpp" />
     <ClCompile Include="Final.cpp" />
     <ClCompile Include="Profesor.cpp" />
     <ClCompile Include="Sistema.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Cola.h" />
-    <ClInclude Include="Curso.h" />
     <ClInclude Include="ListaCircularSimple.h" />
     <ClInclude Include="ListaDobleCircular.h" />
     <ClInclude Include="ListaDobleEnlazada.h" />
     <ClInclude Include="ListaEnlazada.h" />
     <ClInclude Include="Nodo.h" />
-    <ClInclude Include="NodoAVL.h" />
     <ClInclude Include="Pila.h" />
     <ClInclude Include="Profesor.h" />
     <ClInclude Include="Sistema.h" />
