@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Curso.cpp" />
     <ClCompile Include="Final.cpp" />
     <ClCompile Include="Profesor.cpp" />
     <ClCompile Include="Sistema.cpp" />
@@ -134,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Cola.h" />
+    <ClInclude Include="Curso.h" />
     <ClInclude Include="ListaCircularSimple.h" />
     <ClInclude Include="ListaDobleCircular.h" />
     <ClInclude Include="ListaDobleEnlazada.h" />

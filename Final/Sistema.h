@@ -5,9 +5,14 @@ using namespace std;
 
 class Sistema {
 private:
-	AVLTree<Profesor> arbolProfesores;
-	void menuPrincipal();
-	void agregarProfesor();
+	//ADMIN
+	bool admin = false;
+	void menuAdminDebug();
+	/// USER
+	void menuDebug();
+
+	///
+	//void menuPrincipal();
 public:
 	void iniciarPrograma();
 };

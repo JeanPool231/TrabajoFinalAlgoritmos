@@ -1,18 +1,20 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "AVLTree.h"
+#include "Curso.h"
 using namespace std;
 
 class Profesor {
 private:
 	string codigo, nombre, apellido, correo;
 	char sexo, estadoCivil;
-	int edad, tiempoEnCoursera;
+	int edad, tiempoEnCoursera, id, reputacion;
 public:
 	Profesor();
 	~Profesor();
 	Profesor(string codigo, string nombre, string apellido, string correo,
-		char sexo, char estadoCivil, int edad, int tiempoEnCoursera);
+		char sexo, char estadoCivil, int edad, int tiempoEnCoursera, int id, int reputacion);
 	void setCodigo(string);
 	void setNombre(string);
 	void setApellido(string);
@@ -21,6 +23,8 @@ public:
 	void setEstadoCivil(char);
 	void setEdad(int);
 	void setTiempoEnCoursera(int);
+	void setId(int);
+	void setReputacion(int);
 	string getCodigo();
 	string getNombre();
 	string getApellido();
@@ -29,6 +33,7 @@ public:
 	char getEstadoCivil();
 	int getEdad();
 	int getTiempoEnCoursera();
-
+	int getId();
+	int getReputacion();
 };
 

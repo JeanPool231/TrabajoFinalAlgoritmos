@@ -2,12 +2,12 @@
 
 Profesor::Profesor()
 	: codigo(" "), nombre(" "), apellido(" "), correo(" "),
-	sexo(' '), estadoCivil(' '), edad(0), tiempoEnCoursera(0) {}
+	sexo(' '), estadoCivil(' '), edad(0), tiempoEnCoursera(0), id(0), reputacion(0){}
 
 Profesor::~Profesor(){}
 
 Profesor::Profesor(string codigo, string nombre, string apellido, string correo,
-	char sexo, char estadoCivil, int edad, int tiempoEnCoursera) {
+	char sexo, char estadoCivil, int edad, int tiempoEnCoursera, int id, int reputacion) {
 
 	this->codigo = codigo;
 	this->nombre = nombre;
@@ -17,6 +17,8 @@ Profesor::Profesor(string codigo, string nombre, string apellido, string correo,
 	this->estadoCivil = estadoCivil;
 	this->edad = edad;
 	this->tiempoEnCoursera = tiempoEnCoursera;
+	this->id = id;
+	this->reputacion = reputacion;
 }
 
 // Getters
@@ -29,6 +31,8 @@ char Profesor::getSexo() { return sexo; }
 char Profesor::getEstadoCivil() { return estadoCivil; }
 int Profesor::getEdad() { return edad; }
 int Profesor::getTiempoEnCoursera() { return tiempoEnCoursera; }
+int Profesor::getId() { return id; }
+int Profesor::getReputacion() { return reputacion; }
 
 
 // Setters
@@ -41,3 +45,5 @@ void Profesor::setSexo(char sexo) {this->sexo = sexo;}
 void Profesor::setEstadoCivil(char estadoCivil) {this->estadoCivil = estadoCivil;}
 void Profesor::setEdad(int edad) {this->edad = edad;}
 void Profesor::setTiempoEnCoursera(int tiempoEnCoursera) {this->tiempoEnCoursera = tiempoEnCoursera;}
+void Profesor::setId(int id) {this->id = id;}
+void Profesor::setReputacion(int reputacion) {this->reputacion = reputacion;}
