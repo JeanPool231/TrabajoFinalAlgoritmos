@@ -5,14 +5,16 @@ using namespace std;
 
 class Sistema {
 private:
-	//ADMIN
+
+	void menuPrincipal();
+	void registroEstudiante();
+	void registrarse();
+	void iniciarSesion();
+	bool validarCorreo();
+	void inicializarDatos();
 	bool admin = false;
 	void menuAdminDebug();
-	/// USER
 	void menuDebug();
-
-	///
-	//void menuPrincipal();
 public:
 	void iniciarPrograma();
 };
