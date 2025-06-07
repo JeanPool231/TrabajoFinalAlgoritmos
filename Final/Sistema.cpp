@@ -13,14 +13,24 @@ void Sistema::menuPrincipal() {
 }
 
 void Sistema::agregarProfesor() {
-	//debuggeando
-	string nombre, apellido;
-	Profesor profesor;
+    string nombre, apellido, correo, codigo;
+    char sexo, estadoCivil;
+    int edad, tiempo;
 
-	cout << "Ingrese su nombre: "; cin >> nombre;
-	cout << "Ingrese su apellido: "; cin >> apellido;
-	profesor.setNombre(nombre);
-	profesor.setApellido(apellido);
+    cout << "Codigo: "; cin >> codigo;
+    cout << "Nombre: "; cin >> nombre;
+    cout << "Apellido: "; cin >> apellido;
+    cout << "Correo: "; cin >> correo;
+    cout << "Sexo (M/F): "; cin >> sexo;
+    cout << "Estado civil (S/C): "; cin >> estadoCivil;
+    cout << "Edad: "; cin >> edad;
+    cout << "Tiempo en Coursera (años): "; cin >> tiempo;
+
+    Profesor nuevo(codigo, nombre, apellido, correo, sexo, estadoCivil, edad, tiempo);
+
+    arbolProfesores.insertar(nuevo, [](const Profesor& a, const Profesor& b) {
+        return a.getApellido() < b.getApellido();
+        });
 }
 
 void Sistema::iniciarPrograma() {
