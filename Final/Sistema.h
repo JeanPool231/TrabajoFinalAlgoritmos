@@ -12,6 +12,7 @@ private:
 	void iniciarSesion();
 	bool validarCorreo();
 	void inicializarDatos();
+
 public:
 	void iniciarPrograma();
 };
