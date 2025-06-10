@@ -31,6 +31,9 @@
     <Filter Include="Archivos de encabezado\Estudiante">
       <UniqueIdentifier>{12d2604d-62f5-485c-9da4-94b8f924d454}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\Leccion">
+      <UniqueIdentifier>{e2a73b71-e9a6-4441-a5af-24fceda68b34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Final.cpp">
@@ -39,17 +42,17 @@
     <ClCompile Include="Sistema.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Leccion.cpp">
+      <Filter>Archivos de encabezado\Leccion</Filter>
+    </ClCompile>
     <ClCompile Include="Profesor.cpp">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de encabezado\Profesor</Filter>
     </ClCompile>
     <ClCompile Include="Curso.cpp">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de encabezado\Curso</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sistema.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="ListaEnlazada.h">
       <Filter>Archivos de encabezado\Generico</Filter>
     </ClInclude>
@@ -82,6 +85,15 @@
     </ClInclude>
     <ClInclude Include="Curso.h">
       <Filter>Archivos de encabezado\Curso</Filter>
+    </ClInclude>
+    <ClInclude Include="Leccion.h">
+      <Filter>Archivos de encabezado\Leccion</Filter>
+    </ClInclude>
+    <ClInclude Include="Sistema.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="HashUtil.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include "Profesor.h"
+#include "Curso.h"
+#include "HashUtil.h"
 using namespace std;
 
 class Sistema {
@@ -12,6 +14,7 @@ private:
 	void iniciarSesion();
 	bool validarCorreo();
 	void inicializarDatos();
+	void menuProfesor();
 public:
 	void iniciarPrograma();
 };
