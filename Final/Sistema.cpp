@@ -7,7 +7,7 @@
 #include <conio.h>
 using namespace std;
 
-string obtenerFechaActual() {
+string obtenerFechaHoraActual() {
     time_t ahora = time(0);
     tm tiempo;
     localtime_s(&tiempo, &ahora);
@@ -15,9 +15,14 @@ string obtenerFechaActual() {
     stringstream ss;
     ss << (tiempo.tm_mday < 10 ? "0" : "") << tiempo.tm_mday << "/"
         << (tiempo.tm_mon + 1 < 10 ? "0" : "") << tiempo.tm_mon + 1 << "/"
-        << (tiempo.tm_year + 1900);
+        << (tiempo.tm_year + 1900) << " "
+        << (tiempo.tm_hour < 10 ? "0" : "") << tiempo.tm_hour << ":"
+        << (tiempo.tm_min < 10 ? "0" : "") << tiempo.tm_min << ":"
+        << (tiempo.tm_sec < 10 ? "0" : "") << tiempo.tm_sec;
+
     return ss.str();
 }
+
 void Sistema::menuPrincipal() {
 	int opcion;
 	cout << "Coursera\n";
@@ -87,7 +92,7 @@ void Sistema::inicializarDatos() {
 
 }
 
-void menuProfesor() {
+void Sistema::menuProfesor() {
     int opcion;
     do {
         cout << "\n===== MENU PROFESOR =====" << endl;
@@ -95,7 +100,7 @@ void menuProfesor() {
         cout << "2. Salir" << endl;
         cout << "Opcion: ";
         cin >> opcion;
-        cin.ignore(); // limpia buffer
+        cin.ignore();
 
         if (opcion == 1) {
             // Crear curso
@@ -123,7 +128,7 @@ void menuProfesor() {
             nuevoCurso.setCategoria(categoria);
             nuevoCurso.setDescripcion(descripcion);
             nuevoCurso.setDuracionHoras(duracion);
-            nuevoCurso.setFechaCreacion(obtenerFechaActual());
+            nuevoCurso.setFechaCreacion(obtenerFechaHoraActual());
             nuevoCurso.setId(id);
 
             int subop;
@@ -155,7 +160,7 @@ void menuProfesor() {
 
             } while (subop != 2);
 
-            string archivoNombre = id + ".txt";
+            string archivoNombre = "cursosCreados/" + id + ".txt";
             ofstream archivo(archivoNombre);
             if (archivo.is_open()) {
                 archivo << "[" << nombre << "]\n";

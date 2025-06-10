@@ -14,7 +14,7 @@ private:
 	void iniciarSesion();
 	bool validarCorreo();
 	void inicializarDatos();
-
+	void menuProfesor();
 public:
 	void iniciarPrograma();
 };
