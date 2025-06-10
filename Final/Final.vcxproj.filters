@@ -92,5 +92,8 @@
     <ClInclude Include="Sistema.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
+    <ClInclude Include="HashUtil.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

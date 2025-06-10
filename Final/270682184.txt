@@ -1,0 +1,10 @@
+[pruebecinAlgoritmicin]
+id: 270682184
+categoria: ciencias
+descripcion: solo para no picsinos
+duracion: 12 horas
+fecha: 10/06/2025
+
+[LECCIONES]
+- calculadora
+- ayuda qyueri dormir

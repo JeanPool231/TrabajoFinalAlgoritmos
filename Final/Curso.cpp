@@ -28,11 +28,13 @@ int Curso::getDuracionHoras() { return duracionHoras; }
 int Curso::getCantidadInscritos() { return cantidadInscritos; }
 int Curso::getNumLecciones() { return numLecciones; }
 
-void Curso::setNombre(string& nombre) { this->nombre = nombre; }
-void Curso::setId(string& id) { this->id = id; }
-void Curso::setCategoria(string& categoria) { this->categoria = categoria; }
-void Curso::setDescripcion(string& descripcion) { this->descripcion = descripcion; }
-void Curso::setFechaCreacion(string& fechaCreacion) { this->fechaCreacion = fechaCreacion; }
+ListaEnlazada<Leccion*>& Curso::getLecciones() { return lecciones;}
+
+void Curso::setNombre(string nombre) { this->nombre = nombre; }
+void Curso::setId(string id) { this->id = id; }
+void Curso::setCategoria(string categoria) { this->categoria = categoria; }
+void Curso::setDescripcion(string descripcion) { this->descripcion = descripcion; }
+void Curso::setFechaCreacion(string fechaCreacion) { this->fechaCreacion = fechaCreacion; }
 void Curso::setDuracionHoras(int duracionHoras) { this->duracionHoras = duracionHoras; }
 void Curso::setCantidadInscritos(int cantidadInscritos) { this->cantidadInscritos = cantidadInscritos; }
 void Curso::setNumLecciones(int numLecciones) { this->numLecciones = numLecciones; }

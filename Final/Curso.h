@@ -37,12 +37,13 @@ public:
     int getNumLecciones();
 
     // Setters
-    void setNombre(string&);
-	void setId(string&);
-    void setCategoria(string&);
-    void setDescripcion(string&);
+    ListaEnlazada<Leccion*>& getLecciones();
+    void setId(string);
+    void setNombre(string);
+    void setCategoria(string);
+    void setDescripcion(string);
     void setDuracionHoras(int);
-    void setFechaCreacion(string&);
+    void setFechaCreacion(string);
 	void setCantidadInscritos(int);
 	void setNumLecciones(int);
 
@@ -52,7 +53,7 @@ public:
 	void guardarLeccionesEnArchivo(const string& ruta);
     void cargarLeccionesDesdeArchivo(const string& ruta);
 
-    void eliminarLeccion(string& tituloLeccion);
+    void eliminarLeccion(string tituloLeccion);
 
     Leccion* obtenerLeccionActual();
     void siguienteLeccion();

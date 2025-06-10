@@ -1,9 +1,23 @@
 #include "Sistema.h"
 #include <iostream>
 #include <string>
+#include <ctime>
+#include <fstream>
+#include <sstream>
 #include <conio.h>
 using namespace std;
 
+string obtenerFechaActual() {
+    time_t ahora = time(0);
+    tm tiempo;
+    localtime_s(&tiempo, &ahora);
+
+    stringstream ss;
+    ss << (tiempo.tm_mday < 10 ? "0" : "") << tiempo.tm_mday << "/"
+        << (tiempo.tm_mon + 1 < 10 ? "0" : "") << tiempo.tm_mon + 1 << "/"
+        << (tiempo.tm_year + 1900);
+    return ss.str();
+}
 void Sistema::menuPrincipal() {
 	int opcion;
 	cout << "Coursera\n";
@@ -28,9 +42,11 @@ void Sistema::menuPrincipal() {
 		break;
 	}
 }
+
 bool Sistema::validarCorreo() {
 	return false;
 }
+
 void Sistema::iniciarSesion() {
 	string correo, contrasena;
 	cout << "Ingrese el correo: ";
@@ -38,6 +54,7 @@ void Sistema::iniciarSesion() {
 	cout << "Ingrese la contrasena: ";
 	cin >> contrasena;
 }
+
 void Sistema::registrarse() {
 	system("cls");
 	char tipoUsuario;
@@ -52,6 +69,7 @@ void Sistema::registrarse() {
 		break;
 	}
 }
+
 void Sistema::registroEstudiante() {
 	system("cls");
 	string correo, contrasena, nombres, apellidos;
@@ -69,6 +87,104 @@ void Sistema::inicializarDatos() {
 
 }
 
+void menuProfesor() {
+    int opcion;
+    do {
+        cout << "\n===== MENU PROFESOR =====" << endl;
+        cout << "1. Crear curso" << endl;
+        cout << "2. Salir" << endl;
+        cout << "Opcion: ";
+        cin >> opcion;
+        cin.ignore(); // limpia buffer
+
+        if (opcion == 1) {
+            // Crear curso
+            string nombre, categoria, descripcion;
+            int duracion;
+
+            cout << "\n--- CREAR CURSO ---" << endl;
+            cout << "Nombre del curso: ";
+            getline(cin, nombre);
+
+            cout << "Categoria: ";
+            getline(cin, categoria);
+
+            cout << "Descripcion: ";
+            getline(cin, descripcion);
+
+            cout << "Duracion (en horas): ";
+            cin >> duracion;
+            cin.ignore();
+
+            string id = HashUtil::generarHash(nombre + to_string(rand() % 10000));
+
+            Curso nuevoCurso;
+            nuevoCurso.setNombre(nombre);
+            nuevoCurso.setCategoria(categoria);
+            nuevoCurso.setDescripcion(descripcion);
+            nuevoCurso.setDuracionHoras(duracion);
+            nuevoCurso.setFechaCreacion(obtenerFechaActual());
+            nuevoCurso.setId(id);
+
+            int subop;
+            do {
+                cout << "\n--- GESTION DE LECCIONES ---" << endl;
+                cout << "1. Añadir una leccion al curso" << endl;
+                cout << "2. Salir y guardar curso" << endl;
+                cout << "Opcion: ";
+                cin >> subop;
+                cin.ignore();
+
+                if (subop == 1) {
+                    string titulo, contenido;
+                    int duracionMin;
+
+                    cout << "Titulo de la leccion: ";
+                    getline(cin, titulo);
+
+                    cout << "Contenido de la leccion: ";
+                    getline(cin, contenido);
+
+                    cout << "Duracion de la leccion (en minutos): ";
+                    cin >> duracionMin;
+                    cin.ignore();
+
+                    Leccion* nueva = new Leccion(titulo, contenido, duracionMin);
+                    nuevoCurso.agregarLeccion(nueva);
+                }
+
+            } while (subop != 2);
+
+            string archivoNombre = id + ".txt";
+            ofstream archivo(archivoNombre);
+            if (archivo.is_open()) {
+                archivo << "[" << nombre << "]\n";
+                archivo << "id: " << id << "\n";
+                archivo << "categoria: " << categoria << "\n";
+                archivo << "descripcion: " << descripcion << "\n";
+                archivo << "duracion: " << duracion << " horas\n";
+                archivo << "fecha: " << nuevoCurso.getFechaCreacion() << "\n";
+                archivo << "\n[LECCIONES]\n";
+
+                Nodo<Leccion*>* actual = nuevoCurso.getLecciones().obtenerCabeza();
+                while (actual) {
+                    archivo << "- " << actual->dato->getTitulo() << "\n";
+                    actual = actual->siguiente;
+                }
+
+                archivo.close();
+                cout << "Curso guardado en " << archivoNombre << endl;
+            }
+            else {
+                cerr << "Error al guardar el curso." << endl;
+            }
+        }
+
+    } while (opcion != 2);
+}
+
+
 void Sistema::iniciarPrograma() {
-	menuPrincipal();
+	//menuPrincipal();
+    menuProfesor(); //toy testeando mano, es pa q veas
 }
