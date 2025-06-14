@@ -7,6 +7,7 @@
 #include <conio.h>
 using namespace std;
 //test 2 pa q no suban a master
+//ya no te creo pool
 string obtenerFechaHoraActual() {
     time_t ahora = time(0);
     tm tiempo;
