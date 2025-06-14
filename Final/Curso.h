@@ -16,13 +16,13 @@ private:
     int duracionHoras;
     int cantidadInscritos;
     int numLecciones;
-
+    string duracionentexto;
     ListaEnlazada<Leccion*> lecciones;
 
 
 public:
     Curso();
-    Curso(string& nombre, string id, string& categoria, string& descripcion, string fechaCreacion, 
+    Curso(string& nombre, string id, string& categoria, string& descripcion, string fechaCreacion,
         int duracionHoras, int cantidadInscritos, int numLecciones);
     ~Curso();
 
@@ -35,6 +35,7 @@ public:
     int getDuracionHoras();
     int getCantidadInscritos();
     int getNumLecciones();
+    string getduracionentexto() const;
 
     // Setters
     ListaEnlazada<Leccion*>& getLecciones();
@@ -44,13 +45,14 @@ public:
     void setDescripcion(string);
     void setDuracionHoras(int);
     void setFechaCreacion(string);
-	void setCantidadInscritos(int);
-	void setNumLecciones(int);
+    void setCantidadInscritos(int);
+    void setNumLecciones(int);
+    void setduracionentexto(const string&);
 
     // Quizas quzias algo como para gestionar lecciones
     void agregarLeccion(Leccion* leccion);
 
-	void guardarLeccionesEnArchivo(const string& ruta);
+    void guardarLeccionesEnArchivo(const string& ruta);
     void cargarLeccionesDesdeArchivo(const string& ruta);
 
     void eliminarLeccion(string tituloLeccion);
