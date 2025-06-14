@@ -137,6 +137,7 @@
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Curso.h" />
+    <ClInclude Include="HashUtil.h" />
     <ClInclude Include="Leccion.h" />
     <ClInclude Include="ListaCircularSimple.h" />
     <ClInclude Include="ListaDobleCircular.h" />
