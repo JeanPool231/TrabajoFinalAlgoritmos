@@ -6,7 +6,7 @@
 #include <sstream>
 #include <conio.h>
 using namespace std;
-//test p
+//test 2 pa q no suban a master
 string obtenerFechaHoraActual() {
     time_t ahora = time(0);
     tm tiempo;
