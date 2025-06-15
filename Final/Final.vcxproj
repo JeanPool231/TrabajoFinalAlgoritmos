@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AdministrarCursos.cpp" />
     <ClCompile Include="Curso.cpp" />
     <ClCompile Include="Final.cpp" />
     <ClCompile Include="Leccion.cpp" />
@@ -134,6 +136,7 @@
     <ClCompile Include="Sistema.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdministrarCursos.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Curso.h" />

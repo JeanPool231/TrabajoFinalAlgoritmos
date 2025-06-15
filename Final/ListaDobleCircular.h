@@ -31,9 +31,9 @@ ListaDobleCircular<T>::ListaDobleCircular() : cabeza(nullptr), tam(0) {}
 
 template <typename T>
 ListaDobleCircular<T>::~ListaDobleCircular() {
-    while (!estaVacia()) {
-        eliminarInicio();
-    }
+    //while (!estaVacia()) {
+        //eliminarInicio();
+    //}
 }
 
 template <typename T>
