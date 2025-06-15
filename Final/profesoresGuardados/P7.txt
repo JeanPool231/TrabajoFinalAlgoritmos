@@ -1,0 +1,11 @@
+codigo: P7
+nombre: AAA
+apellido: AAA
+correo: Aa@gmail.com
+sexo: F
+estado_civil: C
+edad: 30
+tiempo_en_coursera: 4
+id: 107
+reputacion: 3
+curso_asignado: 

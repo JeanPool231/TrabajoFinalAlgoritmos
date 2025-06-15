@@ -87,6 +87,10 @@ public:
     void recorrerInOrden(function<void(T&)> f) {
         inOrden(raiz, f);
     }
+    bool estaVacio() const {
+    return raiz == nullptr;
+}
+
 };
 
 #endif
