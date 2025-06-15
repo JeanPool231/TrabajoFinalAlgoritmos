@@ -22,7 +22,7 @@ Curso* leerCursoDesdeArchivo(string pathArchivo) {
     while (getline(archivo, linea)) {
         if (linea.empty()) continue;
 
-        // Eliminar posibles espacios al inicio y final de cada l�nea
+        
         linea.erase(0, linea.find_first_not_of(" \t\r\n"));
         linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
 
@@ -59,7 +59,7 @@ Curso* leerCursoDesdeArchivo(string pathArchivo) {
                         numeroHoras += c;
                     }
                     else {
-                        break; // dejamos de leer cuando ya no es d�gito
+                        break;
                     }
                 }
 
@@ -68,7 +68,7 @@ Curso* leerCursoDesdeArchivo(string pathArchivo) {
                     curso->setDuracionHoras(horas);
                 }
                 else {
-                    curso->setDuracionHoras(0); // si no hab�a n�mero, ponemos 0 por defecto
+                    curso->setDuracionHoras(0);
                 }
             }
             else if (linea.rfind("fecha:", 0) == 0) {
@@ -319,7 +319,7 @@ void Sistema::menuProfesor() {
 
 void Sistema::iniciarPrograma() {
     inicializarDatos();
-    //	menuPrincipal();    
-         //menuProfesor(); //toy testeando mano, es pa q veas
+    //menuPrincipal();    
+    //menuProfesor();
     menuEstudiante();
 }
