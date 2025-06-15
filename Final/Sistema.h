@@ -2,12 +2,14 @@
 #include <iostream>
 #include "Profesor.h"
 #include "Curso.h"
-#include "HashUtil.h"
 #include "Institucion.h"
+#include "HashUtil.h"
+#include "ListaEnlazada.h"
 using namespace std;
 
 class Sistema {
 private:
+	ListaEnlazada<Curso> cursos;
 	void menuInstitucion();
 	void menuPrincipal();
 	void registroEstudiante();
@@ -16,7 +18,8 @@ private:
 	bool validarCorreo();
 	void inicializarDatos();
 	void menuProfesor();
+	void menuEstudiante();
+	void cursosEstudiante();
 public:
 	void iniciarPrograma();
 };
-

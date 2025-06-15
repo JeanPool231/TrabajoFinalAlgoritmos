@@ -14,7 +14,7 @@ void Institucion::agregarcurso(Curso* curso) {
 
 void Institucion::agregarprofesor(Profesor prof) {
     profesores.insertar(prof, [](Profesor& a, Profesor& b) {
-        return a.getId() < b.getId(); 
+        return a.getId() < b.getId();
         });
 }
 
@@ -34,11 +34,13 @@ void Institucion::verprofesores() {
         cout << "- " << p.getNombre() << " " << p.getApellido()
             << " | Codigo: " << p.getCodigo()
             << " | Correo: " << p.getCorreo()
+            << endl
             << " | Sexo: " << p.getSexo()
             << " | Estado civil: " << p.getEstadoCivil()
             << " | Edad: " << p.getEdad()
+            << endl
             << " | Tiempo en Coursera: " << p.getTiempoEnCoursera()
-            << " edad | ID: " << p.getId()
+            << " | ID: " << p.getId()
             << " | Reputacion: " << p.getReputacion() << "\n";
         });
 }

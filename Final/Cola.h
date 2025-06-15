@@ -30,9 +30,9 @@ Cola<T>::Cola() : frente(nullptr), fondo(nullptr), tam(0) {}
 
 template <typename T>
 Cola<T>::~Cola() {
-    while (!estaVacia()) {
-        desencolar();
-    }
+    //while (!estaVacia()) {
+        //desencolar();
+    //}
 }
 
 template <typename T>

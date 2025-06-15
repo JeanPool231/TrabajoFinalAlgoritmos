@@ -32,9 +32,9 @@ ListaDobleEnlazada<T>::ListaDobleEnlazada() : cabeza(nullptr), cola(nullptr), ta
 
 template <typename T>
 ListaDobleEnlazada<T>::~ListaDobleEnlazada() {
-    while (!estaVacia()) {
-        eliminarInicio();
-    }
+    //while (!estaVacia()) {
+        //eliminarInicio();
+    //}
 }
 
 template <typename T>

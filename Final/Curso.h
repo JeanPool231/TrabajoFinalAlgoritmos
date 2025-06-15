@@ -55,6 +55,9 @@ public:
     void guardarLeccionesEnArchivo(const string& ruta);
     void cargarLeccionesDesdeArchivo(const string& ruta);
 
+    //e
+
+
     void eliminarLeccion(string tituloLeccion);
 
     Leccion* obtenerLeccionActual();
@@ -66,3 +69,5 @@ public:
     void aumentarInscritos();
     void reducirInscritos();
 };
+
+

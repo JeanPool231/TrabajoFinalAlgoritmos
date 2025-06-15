@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,17 +128,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AdministrarCursos.cpp" />
+    <ClCompile Include="AdministrarProfesores.cpp" />
+    <ClCompile Include="Curso.cpp" />
     <ClCompile Include="Final.cpp" />
+    <ClCompile Include="Institucion.cpp" />
+    <ClCompile Include="Leccion.cpp" />
     <ClCompile Include="Profesor.cpp" />
     <ClCompile Include="Sistema.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdministrarCursos.h" />
+    <ClInclude Include="AdministrarProfesores.h" />
+    <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Cola.h" />
+    <ClInclude Include="Curso.h" />
+    <ClInclude Include="HashUtil.h" />
+    <ClInclude Include="Institucion.h" />
+    <ClInclude Include="Leccion.h" />
     <ClInclude Include="ListaCircularSimple.h" />
     <ClInclude Include="ListaDobleCircular.h" />
     <ClInclude Include="ListaDobleEnlazada.h" />
     <ClInclude Include="ListaEnlazada.h" />
     <ClInclude Include="Nodo.h" />
+    <ClInclude Include="NodoAVL.h" />
     <ClInclude Include="Pila.h" />
     <ClInclude Include="Profesor.h" />
     <ClInclude Include="Sistema.h" />
