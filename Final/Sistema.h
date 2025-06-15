@@ -13,6 +13,8 @@ private:
 	void menuInstitucion();
 	void menuPrincipal();
 	void registroEstudiante();
+	void registroProfesor();
+	void registroInstitucion();
 	void registrarse();
 	void iniciarSesion();
 	bool validarCorreo();
