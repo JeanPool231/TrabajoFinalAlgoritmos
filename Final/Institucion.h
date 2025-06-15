@@ -26,11 +26,21 @@ public:
         return cursos;
     }
 
+
+    void quitarprofes();
+    void asignarcursosalprofe();
+
+    void desvincularprofes();
+    void guardarprofenearchivo(Profesor prof);
+    void agregarprofe(); 
+
     void agregarcurso(Curso* curso);
     void agregarprofesor(Profesor prof);
     void quitarprofesor(int id);
+    void menugestiondeprofes(); 
     void verinformacion();
-    void verprofesores();
+    //void verprofesores();
     void vercursos();
     void verestadisticas();
+    
 };
