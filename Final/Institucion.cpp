@@ -145,7 +145,7 @@ void Institucion::agregarprofe() {
         sexo = toupper(sexo);
         cin.ignore();
         if (sexo != 'M' && sexo != 'F') {
-            cout << sexo << " Ese no es un sexo.\n";
+            cout << "No conozco el sexo '" << sexo << "' , ingrese uno valido.\n";
         }
     } while (sexo != 'M' && sexo != 'F');
 
