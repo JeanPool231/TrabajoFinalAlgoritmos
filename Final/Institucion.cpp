@@ -1,23 +1,75 @@
 #include "Institucion.h"
-using namespace std;
+#include <iostream>
 
-Institucion::Institucion() {}
+Institucion::Institucion(string nombre, string descripcion, int yearderegistro)
+    : nombre(nombre), descripcion(descripcion), yearderegistro(yearderegistro) {}
 
-Institucion::Institucion(string nombre, string direccion) {
-    this->nombre = nombre;
-    this->direccion = direccion;
+string Institucion::getnombre() { return nombre; }
+string Institucion::getdescripcion() { return descripcion; }
+int Institucion::getyear() { return yearderegistro; }
+
+void Institucion::agregarcurso(Curso* curso) {
+    cursos.push_back(curso);
 }
 
-void Institucion::setNombre(string nombre) {this->nombre = nombre;}
-
-void Institucion::setDireccion(string direccion) {this->direccion = direccion;}
-
-string Institucion::getNombre() {return nombre;}
-
-string Institucion::getDireccion() {return direccion;}
-
-void Institucion::agregarProfesor(const Profesor& profe) {
-    profesores.insertarAlFinal(profe);
+void Institucion::agregarprofesor(Profesor prof) {
+    profesores.insertar(prof, [](Profesor& a, Profesor& b) {
+        return a.getId() < b.getId();
+        });
 }
 
-ListaEnlazada<Profesor>& Institucion::getProfesores() {return profesores;}
+void Institucion::quitarprofesor(int id) {
+    cout << "\n";
+}
+
+void Institucion::verinformacion() {
+    cout << "Nombre: " << nombre << "\n";
+    cout << "Descripcion: " << descripcion << "\n";
+    cout << "Se registro en: " << yearderegistro << "\n";
+}
+
+void Institucion::verprofesores() {
+    cout << "\nProfesores Afiliados:\n";
+    profesores.recorrerInOrden([](Profesor& p) {
+        cout << "- " << p.getNombre() << " " << p.getApellido()
+            << " | Codigo: " << p.getCodigo()
+            << " | Correo: " << p.getCorreo()
+            << endl
+            << " | Sexo: " << p.getSexo()
+            << " | Estado civil: " << p.getEstadoCivil()
+            << " | Edad: " << p.getEdad()
+            << endl
+            << " | Tiempo en Coursera: " << p.getTiempoEnCoursera()
+            << " | ID: " << p.getId()
+            << " | Reputacion: " << p.getReputacion() << "\n";
+        });
+}
+
+
+void Institucion::vercursos() {
+    cout << "\nCursos Publicados:\n";
+    int i = 1;
+    for (auto curso : cursos) {
+        cout << i++ << ". " << curso->getNombre()
+            << " | ID: " << curso->getId()
+            << " | Categoria: " << curso->getCategoria()
+            << " | Duracion: " << curso->getduracionentexto()
+            << " | Fecha: " << curso->getFechaCreacion() << "\n"
+            << "   Descripcion: " << curso->getDescripcion() << "\n";
+    }
+}
+
+
+
+void Institucion::verestadisticas() {
+    cout << "\nEstadisticas del usuario\n";
+    cout << "Cantidad de cursos: " << cursos.size() << "\n";
+
+    int total = 0;
+    for (auto c : cursos) {
+        total += c->getCantidadInscritos();
+    }
+    cout << "Total de inscritos: " << total << "\n";
+
+    cout << "\n";
+}

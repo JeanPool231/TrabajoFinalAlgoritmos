@@ -22,7 +22,7 @@ Curso* leerCursoDesdeArchivo(string pathArchivo) {
     while (getline(archivo, linea)) {
         if (linea.empty()) continue;
 
-        
+
         linea.erase(0, linea.find_first_not_of(" \t\r\n"));
         linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
 
@@ -93,6 +93,40 @@ Curso* leerCursoDesdeArchivo(string pathArchivo) {
     return curso;
 }
 
+
+//test
+Curso* cargarcursodesdeeltxt(const string& ruta) {
+    ifstream archivo(ruta);
+    if (!archivo.is_open()) {
+        cerr << "error a" << ruta << endl;
+        return nullptr;
+    }
+
+    string linea, nombre, id, categoria, descripcion, duracion, fecha;
+
+    getline(archivo, linea);
+    if (!linea.empty() && linea.front() == '[' && linea.back() == ']')
+        nombre = linea.substr(1, linea.size() - 2);
+
+    while (getline(archivo, linea)) {
+        if (linea.rfind("id:", 0) == 0) id = linea.substr(4);
+        else if (linea.rfind("categoria:", 0) == 0) categoria = linea.substr(10);
+        else if (linea.rfind("descripcion:", 0) == 0) descripcion = linea.substr(12);
+        else if (linea.rfind("duracion:", 0) == 0) duracion = linea.substr(9);
+        else if (linea.rfind("fecha:", 0) == 0) fecha = linea.substr(7);
+        else if (linea == "[LECCIONES]") break;
+    }
+
+    Curso* curso = new Curso();
+    curso->setNombre(nombre);
+    curso->setId(id);
+    curso->setCategoria(categoria);
+    curso->setDescripcion(descripcion);
+    curso->setFechaCreacion(fecha);
+    curso->setduracionentexto(duracion);
+    return curso;
+}
+
 string obtenerFechaHoraActual() {
     time_t ahora = time(0);
     tm tiempo;
@@ -133,6 +167,116 @@ void Sistema::menuPrincipal() {
         break;
     }
 }
+
+
+void Sistema::menuInstitucion() {
+    Institucion inst("UPC", "Educacion universitaria", 2015);
+
+    Curso* cursoDesdeTxt = cargarcursodesdeeltxt("cursosCreados/845632255.txt");
+    if (cursoDesdeTxt != nullptr) {
+        inst.agregarcurso(cursoDesdeTxt);
+    }
+
+
+    // TEST son profes de prueba pre establecidos
+    Profesor p1("P1", "Cain", "Mohammed", "cain@upc.edu.pe", 'M', 'S', 40, 5, 101, 95);
+    Profesor p2("P2", "Rosa", "Melan", "rosa@upc.edu.pe", 'F', 'C', 35, 3, 102, 88);
+    inst.agregarprofesor(p1);
+    inst.agregarprofesor(p2);
+
+
+
+    int opc;
+    do {
+        cout << "\nInstitucion\n";
+        cout << "1. Ver Profesores\n";
+        cout << "2. Agregar/Quitar\n";
+        cout << "3. Ver cursos publicados\n";
+        cout << "4. Ver Estadisticas\n";
+        cout << "5. Salir\n";
+        cout << "\n";
+        cout << "Ingrese una opcion: ";
+        cin >> opc;
+        cin.ignore();
+
+        switch (opc) {
+        case 1:
+            inst.verinformacion();
+            inst.verprofesores();
+            break;
+
+        case 2: {
+            int sub;
+            cout << "\nGestion de profes\n";
+            cout << "1. Agregar Profesor\n";
+            cout << "2. Quitar Profesor\n";
+            cout << "3. Volver\n";
+            cout << "Ingrese opcion: ";
+            cin >> sub;
+            cin.ignore();
+
+            if (sub == 1) {
+                string codigo, nombre, apellido, correo;
+                char sexo, estadocivil;
+                int edad, tiempoencoursera, id, reputacion;
+
+                cout << "Codigo: "; cin >> codigo;
+                cin.ignore();
+                cout << "Nombre: "; getline(cin, nombre);
+                cout << "Apellido: "; getline(cin, apellido);
+                cout << "Correo: "; getline(cin, correo);
+                cout << "Sexo: "; cin >> sexo;
+                cout << "Estado civil: "; cin >> estadocivil;
+                cout << "Edad: "; cin >> edad;
+                cout << "Tiempo en Coursera: "; cin >> tiempoencoursera;
+                cout << "ID: "; cin >> id;
+                cout << "Reputacion: "; cin >> reputacion;
+                cin.ignore();
+
+                Profesor nuevo(codigo, nombre, apellido, correo, sexo, estadocivil, edad, tiempoencoursera, id, reputacion);
+                inst.agregarprofesor(nuevo);
+                cout << "Profesor agregado correctamente.\n";
+            }
+            else if (sub == 2) {
+                cout << "fal\n";
+            }
+            break;
+        }
+
+        case 3:
+            inst.vercursos();
+            break;
+
+        case 4: {
+            int sub;
+            cout << "\nEstadisticas\n";
+            cout << "1. Cantidad de cursos\n";
+            cout << "2. Total de inscritos\n";
+            cout << "3. Volver\n";
+            cout << "Ingrese opción: ";
+            cin >> sub;
+            cin.ignore();
+
+            if (sub == 1) {
+                cout << "Cantidad de cursos: " << inst.getcursos().size() << "\n";
+            }
+            else if (sub == 2) {
+                inst.verestadisticas();
+            }
+            break;
+        }
+
+        case 5:
+            cout << "Saliendo .,...\n";
+            break;
+
+        default:
+            cout << "opcion no valida\n";
+        }
+
+    } while (opc != 5);
+}
+
 void Sistema::menuEstudiante() {
     int opcion;
     system("cls");
@@ -321,5 +465,6 @@ void Sistema::iniciarPrograma() {
     inicializarDatos();
     //menuPrincipal();    
     //menuProfesor();
-    menuEstudiante();
+    //menuEstudiante();
+    menuInstitucion();
 }

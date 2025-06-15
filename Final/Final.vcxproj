@@ -131,6 +131,7 @@
     <ClCompile Include="AdministrarCursos.cpp" />
     <ClCompile Include="Curso.cpp" />
     <ClCompile Include="Final.cpp" />
+    <ClCompile Include="Institucion.cpp" />
     <ClCompile Include="Leccion.cpp" />
     <ClCompile Include="Profesor.cpp" />
     <ClCompile Include="Sistema.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Curso.h" />
     <ClInclude Include="HashUtil.h" />
+    <ClInclude Include="Institucion.h" />
     <ClInclude Include="Leccion.h" />
     <ClInclude Include="ListaCircularSimple.h" />
     <ClInclude Include="ListaDobleCircular.h" />
