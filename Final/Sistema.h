@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Profesor.h"
 #include "Curso.h"
+#include "Institucion.h"
 #include "HashUtil.h"
 #include "ListaEnlazada.h"
 using namespace std;
@@ -9,6 +10,7 @@ using namespace std;
 class Sistema {
 private:
 	ListaEnlazada<Curso> cursos;
+	void menuInstitucion();
 	void menuPrincipal();
 	void registroEstudiante();
 	void registrarse();
