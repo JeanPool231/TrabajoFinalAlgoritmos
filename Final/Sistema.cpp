@@ -4,9 +4,95 @@
 #include <ctime>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 #include <conio.h>
+#include "AdministrarCursos.h"
+#include <vector>
+namespace fs = std::filesystem;
 using namespace std;
 //test 2 pa q no suban a master
+Curso* leerCursoDesdeArchivo(string pathArchivo) {
+    ifstream archivo(pathArchivo);
+    string linea;
+    Curso* curso = new Curso();
+
+    bool leyendoLecciones = false;
+    bool nombreYaLeido = false;
+
+    while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+
+        // Eliminar posibles espacios al inicio y final de cada línea
+        linea.erase(0, linea.find_first_not_of(" \t\r\n"));
+        linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
+
+        if (!leyendoLecciones) {
+            if (!nombreYaLeido && linea.front() == '[' && linea.back() == ']') {
+                string nombre = linea.substr(1, linea.size() - 2);
+                curso->setNombre(nombre);
+                nombreYaLeido = true;
+            }
+            else if (linea == "[LECCIONES]") {
+                leyendoLecciones = true;
+            }
+            else if (linea.rfind("id:", 0) == 0) {
+                string valor = linea.substr(3);
+                valor.erase(0, valor.find_first_not_of(" "));
+                curso->setId(valor);
+            }
+            else if (linea.rfind("categoria:", 0) == 0) {
+                string valor = linea.substr(9);
+                valor.erase(0, valor.find_first_not_of(" "));
+                curso->setCategoria(valor);
+            }
+            else if (linea.rfind("descripcion:", 0) == 0) {
+                string valor = linea.substr(11);
+                valor.erase(0, valor.find_first_not_of(" "));
+                curso->setDescripcion(valor);
+            }
+            else if (linea.rfind("duracion:", 0) == 0) {
+                string valor = linea.substr(8);
+
+                string numeroHoras = "";
+                for (char c : valor) {
+                    if (isdigit(c)) {
+                        numeroHoras += c;
+                    }
+                    else {
+                        break; // dejamos de leer cuando ya no es dígito
+                    }
+                }
+
+                if (!numeroHoras.empty()) {
+                    int horas = stoi(numeroHoras);
+                    curso->setDuracionHoras(horas);
+                }
+                else {
+                    curso->setDuracionHoras(0); // si no había número, ponemos 0 por defecto
+                }
+            }
+            else if (linea.rfind("fecha:", 0) == 0) {
+                string valor = linea.substr(6);
+                valor.erase(0, valor.find_first_not_of(" "));
+                curso->setFechaCreacion(valor);
+            }
+        }
+        else {
+            if (linea.rfind("- ", 0) == 0) {
+                string leccionTitulo = linea.substr(2);
+                string contenidoVacio = "";
+                int duracionPorDefecto = 0;
+
+                Leccion* lec = new Leccion(leccionTitulo, contenidoVacio, duracionPorDefecto);
+                curso->getLecciones().insertarAlFinal(lec);
+            }
+        }
+    }
+
+    archivo.close();
+    return curso;
+}
+
 string obtenerFechaHoraActual() {
     time_t ahora = time(0);
     tm tiempo;
@@ -47,7 +133,41 @@ void Sistema::menuPrincipal() {
 		break;
 	}
 }
-
+void Sistema::menuEstudiante() {
+    int opcion;
+    system("cls");
+    do {
+        system("cls");
+		cout << "Menu estudiante\n";
+		cout << "1. Ver Cursos\n";
+		cout << "2. Ver Perfil\n";
+		cout << "3. Saldo\n";
+		cout << "4. Cerrar Sesion\n";
+        cout << "Opcino: "; 
+        cin >> opcion;
+        switch (opcion)
+        {
+        case 1:
+            cursosEstudiante();
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        default:
+            break;
+        }
+    } while (opcion != 4);
+}
+void Sistema::cursosEstudiante() {
+    system("cls");
+    cout << "Los Cursos disponibles son: \n";
+    AdministrarCurso auxCursos = cursos;
+    auxCursos.ImprimirNombreCursos();
+    system("pause");
+}
 bool Sistema::validarCorreo() {
 	return false;
 }
@@ -89,7 +209,14 @@ void Sistema::registroEstudiante() {
 	system("cls");
 }
 void Sistema::inicializarDatos() {
+    string carpeta = "cursosCreados/";
 
+    for (auto& entry : fs::directory_iterator(carpeta)) {
+        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+            Curso* curso = leerCursoDesdeArchivo(entry.path().string());
+            cursos.insertarAlFinal(*curso);
+        }
+    }
 }
 
 void Sistema::menuProfesor() {
@@ -156,6 +283,7 @@ void Sistema::menuProfesor() {
 
                     Leccion* nueva = new Leccion(titulo, contenido, duracionMin);
                     nuevoCurso.agregarLeccion(nueva);
+                    cursos.insertarAlFinal(nuevoCurso);
                 }
 
             } while (subop != 2);
@@ -190,6 +318,9 @@ void Sistema::menuProfesor() {
 
 
 void Sistema::iniciarPrograma() {
-	//menuPrincipal();
-    menuProfesor(); //toy testeando mano, es pa q veas
+    inicializarDatos();
+//	menuPrincipal();    
+     //menuProfesor(); //toy testeando mano, es pa q veas
+    menuEstudiante();
 }
+

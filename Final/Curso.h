@@ -52,15 +52,4 @@ public:
 
 	void guardarLeccionesEnArchivo(const string& ruta);
     void cargarLeccionesDesdeArchivo(const string& ruta);
-
-    void eliminarLeccion(string tituloLeccion);
-
-    Leccion* obtenerLeccionActual();
-    void siguienteLeccion();
-    void anteriorLeccion();
-
-    int contarLeccionesRecursivo();
-
-    void aumentarInscritos();
-    void reducirInscritos();
 };

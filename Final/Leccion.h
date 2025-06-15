@@ -11,6 +11,7 @@ private:
 public:
     Leccion();
     Leccion(string& titulo, string& contenido, int duracionMinutos);
+    Leccion(string& titulo) : titulo(titulo), contenido(""), duracionMinutos(0) {}
 
     string& getTitulo();
     string& getContenido();

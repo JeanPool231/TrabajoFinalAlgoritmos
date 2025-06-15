@@ -14,7 +14,7 @@ public:
     ~ListaEnlazada();
 
     void insertarAlInicio(T& dato);
-    void insertarAlFinal(T& dato);
+    void insertarAlFinal(T dato);
     bool estaVacia();
     void eliminarPrimero();
     void limpiar();
@@ -27,7 +27,7 @@ ListaEnlazada<T>::ListaEnlazada() : cabeza(nullptr) {}
 
 template <typename T>
 ListaEnlazada<T>::~ListaEnlazada() {
-    limpiar();
+    //limpiar();
 }
 
 template <typename T>
@@ -38,7 +38,7 @@ void ListaEnlazada<T>::insertarAlInicio(T& dato) {
 }
 
 template <typename T>
-void ListaEnlazada<T>::insertarAlFinal(T& dato) {
+void ListaEnlazada<T>::insertarAlFinal(T dato) {
     Nodo<T>* nuevo = new Nodo<T>(dato);
     if (!cabeza) {
         cabeza = nuevo;
@@ -69,7 +69,7 @@ void ListaEnlazada<T>::eliminarPrimero() {
 
 template <typename T>
 void ListaEnlazada<T>::limpiar() {
-    while (!estaVacia()) {
+    while (cabeza != nullptr) {
         eliminarPrimero();
     }
 }
@@ -77,4 +77,5 @@ template <typename T>
 Nodo<T>* ListaEnlazada<T>::obtenerCabeza() {
     return cabeza;
 }
+
 #endif

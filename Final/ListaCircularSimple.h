@@ -31,9 +31,9 @@ ListaCircularSimple<T>::ListaCircularSimple() : ultimo(nullptr), tam(0) {}
 
 template <typename T>
 ListaCircularSimple<T>::~ListaCircularSimple() {
-    while (!estaVacia()) {
-        eliminarInicio();
-    }
+    //while (!estaVacia()) {
+        //eliminarInicio();
+    //}
 }
 
 template <typename T>
