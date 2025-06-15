@@ -5,7 +5,8 @@ Curso::Curso()
 	duracionHoras(0) , cantidadInscritos(0) , numLecciones(0) {
 }
 
-Curso::~Curso() {}
+Curso::~Curso() {
+}
 
 Curso::Curso(string& nombre, string id, string& categoria, string& descripcion, string fechaCreacion,
 	int duracionHoras, int cantidadInscritos, int numLecciones) {

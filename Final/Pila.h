@@ -29,9 +29,9 @@ Pila<T>::Pila() : cima(nullptr), tam(0) {}
 
 template <typename T>
 Pila<T>::~Pila() {
-    while (!estaVacia()) {
-        desapilar();
-    }
+    //while (!estaVacia()) {
+        //desapilar();
+    //}
 }
 
 template <typename T>

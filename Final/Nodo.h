@@ -6,7 +6,7 @@ struct Nodo {
     T dato;
     Nodo<T>* siguiente;
     Nodo<T>* anterior;
-    Nodo(const T& d) : dato(d), siguiente(nullptr) {}
+    Nodo(const T& d) : dato(d), siguiente(nullptr), anterior(nullptr){}
 };
 
 #endif
