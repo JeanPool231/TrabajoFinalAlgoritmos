@@ -1,4 +1,4 @@
-#include "Sistema.h"
+ï»¿#include "Sistema.h"
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -22,7 +22,7 @@ Curso* leerCursoDesdeArchivo(string pathArchivo) {
     while (getline(archivo, linea)) {
         if (linea.empty()) continue;
 
-        // Eliminar posibles espacios al inicio y final de cada línea
+        
         linea.erase(0, linea.find_first_not_of(" \t\r\n"));
         linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
 
@@ -59,7 +59,7 @@ Curso* leerCursoDesdeArchivo(string pathArchivo) {
                         numeroHoras += c;
                     }
                     else {
-                        break; // dejamos de leer cuando ya no es dígito
+                        break;
                     }
                 }
 
@@ -68,7 +68,7 @@ Curso* leerCursoDesdeArchivo(string pathArchivo) {
                     curso->setDuracionHoras(horas);
                 }
                 else {
-                    curso->setDuracionHoras(0); // si no había número, ponemos 0 por defecto
+                    curso->setDuracionHoras(0);
                 }
             }
             else if (linea.rfind("fecha:", 0) == 0) {
@@ -110,40 +110,40 @@ string obtenerFechaHoraActual() {
 }
 
 void Sistema::menuPrincipal() {
-	int opcion;
-	cout << "Coursera\n";
-	cout << "1. Iniciar sesion\n";
-	cout << "2. Registrarte\n";
-	cout << "3. Acceder a los cursos(sin iniciar sesion)\n";
-	cout << "4. Salir\n";
-	cout << "Opcion: ";
-	cin >> opcion;
-	switch (opcion) {
-	case 1:
-		iniciarSesion();
-		break;
-	case 2:
-		registrarse();
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	default:
-		break;
-	}
+    int opcion;
+    cout << "Coursera\n";
+    cout << "1. Iniciar sesion\n";
+    cout << "2. Registrarte\n";
+    cout << "3. Acceder a los cursos(sin iniciar sesion)\n";
+    cout << "4. Salir\n";
+    cout << "Opcion: ";
+    cin >> opcion;
+    switch (opcion) {
+    case 1:
+        iniciarSesion();
+        break;
+    case 2:
+        registrarse();
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    default:
+        break;
+    }
 }
 void Sistema::menuEstudiante() {
     int opcion;
     system("cls");
     do {
         system("cls");
-		cout << "Menu estudiante\n";
-		cout << "1. Ver Cursos\n";
-		cout << "2. Ver Perfil\n";
-		cout << "3. Saldo\n";
-		cout << "4. Cerrar Sesion\n";
-        cout << "Opcino: "; 
+        cout << "Menu estudiante\n";
+        cout << "1. Ver Cursos\n";
+        cout << "2. Ver Perfil\n";
+        cout << "3. Saldo\n";
+        cout << "4. Cerrar Sesion\n";
+        cout << "Opcino: ";
         cin >> opcion;
         switch (opcion)
         {
@@ -169,44 +169,44 @@ void Sistema::cursosEstudiante() {
     system("pause");
 }
 bool Sistema::validarCorreo() {
-	return false;
+    return false;
 }
 
 void Sistema::iniciarSesion() {
-	string correo, contrasena;
-	cout << "Ingrese el correo: ";
-	cin >> correo;
-	cout << "Ingrese la contrasena: ";
-	cin >> contrasena;
+    string correo, contrasena;
+    cout << "Ingrese el correo: ";
+    cin >> correo;
+    cout << "Ingrese la contrasena: ";
+    cin >> contrasena;
 }
 
 void Sistema::registrarse() {
-	system("cls");
-	char tipoUsuario;
-	cout << "Ingrese si es Estudiante(E), Profesor(P) o Institucion(I): "; cin >> tipoUsuario;
-	switch (tipoUsuario) {
-	case 'E':
-		registroEstudiante();
-		break;
-	case 'P':
-		break;
-	case 'I':
-		break;
-	}
+    system("cls");
+    char tipoUsuario;
+    cout << "Ingrese si es Estudiante(E), Profesor(P) o Institucion(I): "; cin >> tipoUsuario;
+    switch (tipoUsuario) {
+    case 'E':
+        registroEstudiante();
+        break;
+    case 'P':
+        break;
+    case 'I':
+        break;
+    }
 }
 
 void Sistema::registroEstudiante() {
-	system("cls");
-	string correo, contrasena, nombres, apellidos;
-	cout << "Ingrese el correo: "; cin >> correo;
-	cout << "Ingrese la contrasena: "; cin >> contrasena;
-	cout << "Ingrese sus Nombres: ";
-	getline(cin, nombres);
-	cout << "Ingrese sus apellidos: ";
-	getline(cin, apellidos);
-	cout << "Se ha registrado correctamente\n";
-	system("pause");
-	system("cls");
+    system("cls");
+    string correo, contrasena, nombres, apellidos;
+    cout << "Ingrese el correo: "; cin >> correo;
+    cout << "Ingrese la contrasena: "; cin >> contrasena;
+    cout << "Ingrese sus Nombres: ";
+    getline(cin, nombres);
+    cout << "Ingrese sus apellidos: ";
+    getline(cin, apellidos);
+    cout << "Se ha registrado correctamente\n";
+    system("pause");
+    system("cls");
 }
 void Sistema::inicializarDatos() {
     string carpeta = "cursosCreados/";
@@ -261,7 +261,7 @@ void Sistema::menuProfesor() {
             int subop;
             do {
                 cout << "\n--- GESTION DE LECCIONES ---" << endl;
-                cout << "1. Añadir una leccion al curso" << endl;
+                cout << "1. Aï¿½adir una leccion al curso" << endl;
                 cout << "2. Salir y guardar curso" << endl;
                 cout << "Opcion: ";
                 cin >> subop;
@@ -319,8 +319,7 @@ void Sistema::menuProfesor() {
 
 void Sistema::iniciarPrograma() {
     inicializarDatos();
-//	menuPrincipal();    
-     //menuProfesor(); //toy testeando mano, es pa q veas
+    //menuPrincipal();    
+    //menuProfesor();
     menuEstudiante();
 }
-
