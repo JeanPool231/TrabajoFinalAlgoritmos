@@ -5,11 +5,13 @@
 #include "Institucion.h"
 #include "HashUtil.h"
 #include "ListaEnlazada.h"
+#include "Usuario.h"
 using namespace std;
 
 class Sistema {
 private:
 	ListaEnlazada<Curso> cursos;
+	ListaEnlazada<Usuario> usuarios;
 	void menuInstitucion();
 	void menuPrincipal();
 	void registroEstudiante();
