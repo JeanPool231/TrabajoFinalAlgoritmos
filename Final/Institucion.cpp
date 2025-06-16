@@ -5,6 +5,25 @@
 #include <regex>
 #include <fstream>
 #include <filesystem>
+#include <ctime>
+#include <sstream>
+
+
+string obtenerFechaHoraActual1() {
+    time_t ahora = time(0);
+    tm tiempo;
+    localtime_s(&tiempo, &ahora);
+
+    stringstream ss;
+    ss << (tiempo.tm_mday < 10 ? "0" : "") << tiempo.tm_mday << "/"
+        << (tiempo.tm_mon + 1 < 10 ? "0" : "") << tiempo.tm_mon + 1 << "/"
+        << (tiempo.tm_year + 1900) << " "
+        << (tiempo.tm_hour < 10 ? "0" : "") << tiempo.tm_hour << ":"
+        << (tiempo.tm_min < 10 ? "0" : "") << tiempo.tm_min << ":"
+        << (tiempo.tm_sec < 10 ? "0" : "") << tiempo.tm_sec;
+
+    return ss.str();
+}
 
 Institucion::Institucion(string nombre, string descripcion, int yearderegistro)
     : nombre(nombre), descripcion(descripcion), yearderegistro(yearderegistro) {}
@@ -85,7 +104,8 @@ void Institucion::menugestiondeprofes() {
         cout << "2. Quitar profesor\n";
         cout << "3. Asignar un curso a un profesor existente\n";
         cout << "4. Desvincular al profesor de su curso\n";
-        cout << "5. Volver\n";
+        cout << "5. logs / beta\n";
+        cout << "6. Volver\n";
         cout << "Ingrese una opcion ";
         cin >> subop;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -95,10 +115,11 @@ void Institucion::menugestiondeprofes() {
         case 2: quitarprofes(); break;
         case 3: asignarcursosalprofe(); break;
         case 4: desvincularprofes(); break;
-        case 5: break;
+        case 5: verhistorial(); break; //lista
+        case 6: break;
         default: cout << "opcion no valida\n"; break;
         }
-    } while (subop != 5);
+    } while (subop != 6);
 }
 
 void Institucion::guardarprofenearchivo(Profesor prof) {
@@ -121,6 +142,22 @@ void Institucion::guardarprofenearchivo(Profesor prof) {
     archivo << "curso_asignado: " << prof.getCursoAsignado() << "\n";
     archivo.close();
 }
+
+
+void Institucion::verhistorial() {
+    cout << "\nhistorial:\n";
+    if (logs.estaVacia()) {
+        cout << "agregue un profesor primero \n";
+        return;
+    }
+    Nodo<string>* actual = logs.obtenerCabeza();
+    while (actual != nullptr) {
+        cout << "- " << actual->dato << endl;
+        actual = actual->siguiente;
+    }
+}
+
+
 void Institucion::agregarprofe() {
     string codigo, nombre, apellido, correo, cursoSeleccionado;
     char sexo, estadoCivil;
@@ -139,34 +176,34 @@ void Institucion::agregarprofe() {
         }
     } while (!regex_match(correo, regex("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")));
 
-    do {
-        cout << "Sexo (M/F): ";
-        cin >> sexo;
-        sexo = toupper(sexo);
-        cin.ignore();
-        if (sexo != 'M' && sexo != 'F') {
-            cout << "No conozco el sexo '" << sexo << "' , ingrese uno valido.\n";
-        }
-    } while (sexo != 'M' && sexo != 'F');
+    //do {
+    //    cout << "Sexo (M/F): ";
+    //    cin >> sexo;
+    //    sexo = toupper(sexo);
+    //    cin.ignore();
+    //    if (sexo != 'M' && sexo != 'F') {
+    //        cout << "No conozco el sexo '" << sexo << "' , ingrese uno valido.\n";
+    //    }
+    //} while (sexo != 'M' && sexo != 'F');
 
-    do {
-        cout << "Estado civil (S/C): ";
-        cin >> estadoCivil;
-        estadoCivil = toupper(estadoCivil);
-        cin.ignore();
-        if (estadoCivil != 'S' && estadoCivil != 'C') {
-            cout << "incorrecto ingrese uno valido\n";
-        }
-    } while (estadoCivil != 'S' && estadoCivil != 'C');
+    //do {
+    //    cout << "Estado civil (S/C): ";
+    //    cin >> estadoCivil;
+    //    estadoCivil = toupper(estadoCivil);
+    //    cin.ignore();
+    //    if (estadoCivil != 'S' && estadoCivil != 'C') {
+    //        cout << "incorrecto ingrese uno valido\n";
+    //    }
+    //} while (estadoCivil != 'S' && estadoCivil != 'C');
 
-    do {
-        cout << "Edad: ";
-        cin >> edad;
-        cin.ignore();
-        if (edad < 25) {
-            cout << "Tiene que tener mas de 25\n";
-        }
-    } while (edad < 25);
+    //do {
+    //    cout << "Edad: ";
+    //    cin >> edad;
+    //    cin.ignore();
+    //    if (edad < 25) {
+    //        cout << "Tiene que tener mas de 25\n";
+    //    }
+    //} while (edad < 25);
 
     cout << "Años en Coursera: "; cin >> tiempoEnCoursera; cin.ignore();
     cout << "ID: "; cin >> id; cin.ignore();
@@ -220,7 +257,14 @@ void Institucion::agregarprofe() {
         });
 
     guardarprofenearchivo(nuevo);
-    cout << "Profesor agregado correctamente '" << cursoSeleccionado << "'\n";
+    logs.insertarAlFinal("Agregado: " + nombre + " " + apellido + " | " + obtenerFechaHoraActual1());
+    cout << "agregado";
+    if (!cursoSeleccionado.empty()) {
+        cout << " y asignado al curso '" << cursoSeleccionado << "'\n";
+    }
+    else {
+        cout << " \n";
+    }
 }
 
 

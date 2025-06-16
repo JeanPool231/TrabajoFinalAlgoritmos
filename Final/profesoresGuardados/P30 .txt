@@ -1,0 +1,8 @@
+codigo: P30 
+nombre: Sofia
+apellido: Perez
+correo: sofia@upc.edu.pe
+tiempo_en_coursera: 2
+id: 130
+reputacion: 80
+curso_asignado: 
