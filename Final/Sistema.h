@@ -6,6 +6,7 @@
 #include "HashUtil.h"
 #include "ListaEnlazada.h"
 #include "Usuario.h"
+#include "Administrador.h"
 using namespace std;
 
 class Sistema {
@@ -19,6 +20,7 @@ private:
 	void registroInstitucion();
 	void registrarse();
 	void iniciarSesion();
+	void menuAdmin();
 	bool validarCorreo();
 	void inicializarDatos();
 	void menuProfesor();
