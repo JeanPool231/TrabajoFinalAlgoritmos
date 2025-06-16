@@ -331,10 +331,15 @@ void Sistema::registrarse() {
     switch (tipoUsuario) {
     case 'E':
         registroEstudiante();
+        menuEstudiante();
         break;
     case 'P':
+        registroProfesor();
+        menuProfesor();
         break;
     case 'I':
+        registroInstitucion();
+        menuInstitucion();
         break;
     }
 }
@@ -344,11 +349,44 @@ void Sistema::registroEstudiante() {
     string correo, contrasena, nombres, apellidos;
     cout << "Ingrese el correo: "; cin >> correo;
     cout << "Ingrese la contrasena: "; cin >> contrasena;
+    cin.ignore();
     cout << "Ingrese sus Nombres: ";
     getline(cin, nombres);
     cout << "Ingrese sus apellidos: ";
     getline(cin, apellidos);
     cout << "Se ha registrado correctamente\n";
+    system("pause");
+    system("cls");
+}
+
+void Sistema::registroProfesor() {
+    system("cls");
+	string codigo, nombre, apellido, correo;
+	char sexo, estadoCivil;
+	int edad, tiempoEnCoursera, id, reputacion;
+    string contrasena;
+    cout << "Ingrese el correo: "; cin >> correo;
+    cout << "Ingrese la contrasena: "; cin >> contrasena;
+    cout << "Ingrese sus Nombres: ";
+    getline(cin, nombre);
+    cout << "Ingrese sus apellidos: ";
+    getline(cin, apellido);
+    cout << "Ingrese su genero (M : masculino, F : femenino): "; cin >> sexo;
+    cout << "Se ha registrado correctamente profesor\n";
+    system("pause");
+    system("cls");
+}
+
+void Sistema::registroInstitucion() {
+    system("cls");
+    //string correo, contrasena, nombres, apellidos;
+    //cout << "Ingrese el correo: "; cin >> correo;
+    //cout << "Ingrese la contrasena: "; cin >> contrasena;
+    //cout << "Ingrese sus Nombres: ";
+    //getline(cin, nombres);
+    //cout << "Ingrese sus apellidos: ";
+    //getline(cin, apellidos);
+    cout << "Se ha registrado los datos \n Por favor espere a que el admin apruebe su registro\n";
     system("pause");
     system("cls");
 }
@@ -463,8 +501,8 @@ void Sistema::menuProfesor() {
 
 void Sistema::iniciarPrograma() {
     inicializarDatos();
-    //menuPrincipal();    
+    menuPrincipal();    
     //menuProfesor();
     //menuEstudiante();
-    menuInstitucion();
+    //menuInstitucion();
 }
