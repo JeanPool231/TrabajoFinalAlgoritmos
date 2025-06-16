@@ -157,7 +157,7 @@ void Sistema::menuInstitucion() {
             }
         }
     }
-
+    //wazaa
     // TEST son profes de prueba pre establecidos 
     Profesor p1("P1", "Cain", "Mohammed", "cain@upc.edu.pe", 'M', 'S', 40, 5, 101, 95);
     Profesor p2("P2", "Rosa", "Melan", "rosa@upc.edu.pe", 'F', 'C', 35, 3, 102, 88);
