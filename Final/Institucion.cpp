@@ -63,9 +63,9 @@ void Institucion::verinformacion() {
             cout << "\n- Codigo: " << p.getCodigo()
                 << "\n  Nombre: " << p.getNombre() << " " << p.getApellido()
                 << "\n  Correo: " << p.getCorreo()
-                << "\n  Sexo: " << p.getSexo()
+           /*     << "\n  Sexo: " << p.getSexo()
                 << "\n  Estado Civil: " << p.getEstadoCivil()
-                << "\n  Edad: " << p.getEdad()
+                << "\n  Edad: " << p.getEdad()*/
                 << "\n  Años en coursera: " << p.getTiempoEnCoursera()
                 << "\n  ID: " << p.getId()
                 << "\n  Reputacion: " << p.getReputacion()
@@ -112,9 +112,9 @@ void Institucion::guardarprofenearchivo(Profesor prof) {
     archivo << "nombre: " << prof.getNombre() << "\n";
     archivo << "apellido: " << prof.getApellido() << "\n";
     archivo << "correo: " << prof.getCorreo() << "\n";
-    archivo << "sexo: " << prof.getSexo() << "\n";
+ /*   archivo << "sexo: " << prof.getSexo() << "\n";
     archivo << "estado_civil: " << prof.getEstadoCivil() << "\n";
-    archivo << "edad: " << prof.getEdad() << "\n";
+    archivo << "edad: " << prof.getEdad() << "\n";*/
     archivo << "tiempo_en_coursera: " << prof.getTiempoEnCoursera() << "\n";
     archivo << "id: " << prof.getId() << "\n";
     archivo << "reputacion: " << prof.getReputacion() << "\n";
@@ -211,7 +211,7 @@ void Institucion::agregarprofe() {
     }
 
 
-    Profesor nuevo(codigo, nombre, apellido, correo, sexo, estadoCivil, edad,
+    Profesor nuevo(codigo, nombre, apellido, correo, 
         tiempoEnCoursera, id, reputacion);
     nuevo.asignarCurso(cursoSeleccionado);
 
