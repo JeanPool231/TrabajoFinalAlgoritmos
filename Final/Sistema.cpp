@@ -1,4 +1,4 @@
-﻿﻿#include "Sistema.h"
+﻿#include "Sistema.h"
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -11,6 +11,7 @@ namespace fs = std::filesystem;
 #include <vector>
 #include <clocale>
 using namespace std;
+
 Curso* leerCursoDesdeArchivo(string ruta) {
     ifstream archivo(ruta);
     string linea;
@@ -147,12 +148,12 @@ void Sistema::menuPrincipal() {
 
 void Sistema::menuInstitucion() {
     Institucion inst("UPC", "Educacion universitaria", 2018);
-
+    
     for (auto entry : fs::directory_iterator("cursosCreados")) {
         if (entry.is_regular_file() && entry.path().extension() == ".txt") {
             Curso* curso = leerCursoDesdeArchivo(entry.path().string());
             if (curso != nullptr) {
-                inst.agregarcurso(curso);
+                inst.agregarcurso(curso); 
             }
         }
     }
@@ -282,20 +283,9 @@ void Sistema::iniciarSesion() {
     else {
         cout << "Correo o contraseña incorrectos.\n";
     }
-    if (correo == "admin@gmail.com" && contrasena == "password")
-    {
-        system("cls");
-        menuAdmin();
-    }
+
     system("pause");
     system("cls");
-}
-
-void Sistema::menuAdmin() {
-    ListaEnlazada<Curso*> curso;
-    AVLTree<Profesor*> profe;
-    Administrador* admin = new Administrador();
-    admin->menu_admin(curso, profe);
 }
 
 void Sistema::registrarse() {
@@ -341,8 +331,8 @@ void Sistema::registroEstudiante() {
 
 void Sistema::registroProfesor() {
     system("cls");
-    string codigo, nombre, apellido, correo;
-    char sexo, estadoCivil;
+	string codigo, nombre, apellido, correo;
+	char sexo, estadoCivil;
     int edad, tiempoEnCoursera, id, reputacion;
     string contrasena;
     cout << "Ingrese el codigo de la institucion: ";
@@ -392,7 +382,7 @@ void Sistema::inicializarDatos() {
             cursos.insertarAlFinal(*curso);
         }
     }
-
+    
     ifstream archivo("Usuarios/usuarios.txt");
     if (archivo.is_open()) {
         Usuario usuario;
@@ -506,7 +496,7 @@ void Sistema::menuProfesor() {
 
 void Sistema::iniciarPrograma() {
     inicializarDatos();
-    menuPrincipal();
+    menuPrincipal();    
     //menuProfesor();
     //menuEstudiante();
     //menuInstitucion();
