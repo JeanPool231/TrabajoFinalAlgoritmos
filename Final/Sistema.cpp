@@ -5,14 +5,14 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+namespace fs = std::filesystem;
 #include <conio.h>
 #include "AdministrarCursos.h"
 #include <vector>
 #include <clocale>
-namespace fs = std::filesystem;
 using namespace std;
-//test 2 pa q no suban a master
-Curso* leerCursoDesdeArchivo(const string& ruta) {
+
+Curso* leerCursoDesdeArchivo(string ruta) {
     ifstream archivo(ruta);
     string linea;
     Curso* curso = new Curso();
@@ -94,6 +94,16 @@ Curso* leerCursoDesdeArchivo(const string& ruta) {
     return curso;
 }
 
+void guardarUsuario(Usuario usuario) {
+    ofstream archivo("Usuarios/usuarios.txt", ios::app);
+    if (archivo.is_open()) {
+        archivo << usuario.tipoUsuario << " " << usuario.correo << " " << usuario.contrasena << endl;
+        archivo.close();
+    }
+    else {
+        cout << "Error al abrir el archivo para guardar.\n";
+    }
+}
 string obtenerFechaHoraActual() {
     time_t ahora = time(0);
     tm tiempo;
@@ -139,7 +149,7 @@ void Sistema::menuPrincipal() {
 void Sistema::menuInstitucion() {
     Institucion inst("UPC", "Educacion universitaria", 2018);
     
-    for (const auto& entry : fs::directory_iterator("cursosCreados")) {
+    for (auto entry : fs::directory_iterator("cursosCreados")) {
         if (entry.is_regular_file() && entry.path().extension() == ".txt") {
             Curso* curso = leerCursoDesdeArchivo(entry.path().string());
             if (curso != nullptr) {
@@ -242,6 +252,31 @@ void Sistema::iniciarSesion() {
     cin >> correo;
     cout << "Ingrese la contrasena: ";
     cin >> contrasena;
+
+    bool encontrado = false;
+    Nodo<Usuario>* actual = usuarios.obtenerCabeza();
+    Usuario& u = actual->dato;
+    while (actual != nullptr) {
+        u = actual->dato;
+        actual = actual->siguiente;
+        if (u.correo == correo && u.contrasena == contrasena) {
+            encontrado = true;
+            break;
+        }
+    }
+    if (encontrado) {
+        switch (u.tipoUsuario) {
+        case 'E': menuEstudiante(); break;
+        case 'P': menuProfesor(); break;
+        case 'I':  break;
+        }
+    }
+    else {
+        cout << "Correo o contraseña incorrectos.\n";
+    }
+
+    system("pause");
+    system("cls");
 }
 
 void Sistema::registrarse() {
@@ -275,6 +310,8 @@ void Sistema::registroEstudiante() {
     cout << "Ingrese sus apellidos: ";
     getline(cin, apellidos);
     cout << "Se ha registrado correctamente\n";
+    Usuario nuevoUsuario = { 'E', correo, contrasena };
+    guardarUsuario(nuevoUsuario);
     system("pause");
     system("cls");
 }
@@ -283,16 +320,23 @@ void Sistema::registroProfesor() {
     system("cls");
 	string codigo, nombre, apellido, correo;
 	char sexo, estadoCivil;
-	int edad, tiempoEnCoursera, id, reputacion;
+    int edad, tiempoEnCoursera, id, reputacion;
     string contrasena;
+    cout << "Ingrese el codigo de la institucion: ";
+    cin >> codigo;
     cout << "Ingrese el correo: "; cin >> correo;
     cout << "Ingrese la contrasena: "; cin >> contrasena;
+    cin.ignore();
     cout << "Ingrese sus Nombres: ";
     getline(cin, nombre);
     cout << "Ingrese sus apellidos: ";
     getline(cin, apellido);
     cout << "Ingrese su genero (M : masculino, F : femenino): "; cin >> sexo;
     cout << "Se ha registrado correctamente profesor\n";
+
+    Usuario nuevoUsuario = { 'P', correo, contrasena };
+    guardarUsuario(nuevoUsuario);
+
     system("pause");
     system("cls");
 }
@@ -313,11 +357,23 @@ void Sistema::registroInstitucion() {
 void Sistema::inicializarDatos() {
     string carpeta = "cursosCreados/";
 
-    for (auto& entry : fs::directory_iterator(carpeta)) {
+    for (auto entry : fs::directory_iterator(carpeta)) {
         if (entry.is_regular_file() && entry.path().extension() == ".txt") {
             Curso* curso = leerCursoDesdeArchivo(entry.path().string());
             cursos.insertarAlFinal(*curso);
         }
+    }
+    
+    ifstream archivo("Usuarios/usuarios.txt");
+    if (archivo.is_open()) {
+        Usuario usuario;
+        while (archivo >> usuario.tipoUsuario >> usuario.correo >> usuario.contrasena) {
+            usuarios.insertarAlFinal(usuario);
+        }
+        archivo.close();
+    }
+    else {
+        cout << "No se pudo abrir el archivo de usuarios.\n";
     }
 }
 

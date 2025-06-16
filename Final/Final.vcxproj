@@ -153,6 +153,7 @@
     <ClInclude Include="Pila.h" />
     <ClInclude Include="Profesor.h" />
     <ClInclude Include="Sistema.h" />
+    <ClInclude Include="Usuario.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
