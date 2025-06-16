@@ -1,4 +1,4 @@
-﻿#include "Sistema.h"
+﻿﻿#include "Sistema.h"
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -11,7 +11,6 @@ namespace fs = std::filesystem;
 #include <vector>
 #include <clocale>
 using namespace std;
-
 Curso* leerCursoDesdeArchivo(string ruta) {
     ifstream archivo(ruta);
     string linea;
@@ -148,12 +147,12 @@ void Sistema::menuPrincipal() {
 
 void Sistema::menuInstitucion() {
     Institucion inst("UPC", "Educacion universitaria", 2018);
-    
+
     for (auto entry : fs::directory_iterator("cursosCreados")) {
         if (entry.is_regular_file() && entry.path().extension() == ".txt") {
             Curso* curso = leerCursoDesdeArchivo(entry.path().string());
             if (curso != nullptr) {
-                inst.agregarcurso(curso); 
+                inst.agregarcurso(curso);
             }
         }
     }
@@ -225,6 +224,7 @@ void Sistema::menuEstudiante() {
             cursosEstudiante();
             break;
         case 2:
+            perfilEstudiante();
             break;
         case 3:
             break;
@@ -234,6 +234,14 @@ void Sistema::menuEstudiante() {
             break;
         }
     } while (opcion != 4);
+}
+void Sistema::perfilEstudiante() {
+    system("cls");
+    cout << "Perfil\n";
+    cout << "1. Nombres: " << estudiante->getNombres() << '\n';
+    cout << "2. Apellidos: " << estudiante->getApellidos() << '\n';
+    cout << "3. Correo: " << estudiante->getCorreo() << '\n';
+    system("pause");
 }
 void Sistema::cursosEstudiante() {
     system("cls");
@@ -274,9 +282,20 @@ void Sistema::iniciarSesion() {
     else {
         cout << "Correo o contraseña incorrectos.\n";
     }
-
+    if (correo == "admin@gmail.com" && contrasena == "password")
+    {
+        system("cls");
+        menuAdmin();
+    }
     system("pause");
     system("cls");
+}
+
+void Sistema::menuAdmin() {
+    ListaEnlazada<Curso*> curso;
+    AVLTree<Profesor*> profe;
+    Administrador* admin = new Administrador();
+    admin->menu_admin(curso, profe);
 }
 
 void Sistema::registrarse() {
@@ -310,6 +329,10 @@ void Sistema::registroEstudiante() {
     cout << "Ingrese sus apellidos: ";
     getline(cin, apellidos);
     cout << "Se ha registrado correctamente\n";
+    estudiante->setNombres(nombres);
+    estudiante->setApellidos(apellidos);
+    estudiante->setContrasena(contrasena);
+    estudiante->setCorreo(correo);
     Usuario nuevoUsuario = { 'E', correo, contrasena };
     guardarUsuario(nuevoUsuario);
     system("pause");
@@ -318,8 +341,8 @@ void Sistema::registroEstudiante() {
 
 void Sistema::registroProfesor() {
     system("cls");
-	string codigo, nombre, apellido, correo;
-	char sexo, estadoCivil;
+    string codigo, nombre, apellido, correo;
+    char sexo, estadoCivil;
     int edad, tiempoEnCoursera, id, reputacion;
     string contrasena;
     cout << "Ingrese el codigo de la institucion: ";
@@ -331,9 +354,15 @@ void Sistema::registroProfesor() {
     getline(cin, nombre);
     cout << "Ingrese sus apellidos: ";
     getline(cin, apellido);
-    cout << "Ingrese su genero (M : masculino, F : femenino): "; cin >> sexo;
+    //cout << "Ingrese su genero (M : masculino, F : femenino): "; cin >> sexo;
     cout << "Se ha registrado correctamente profesor\n";
-
+    profesor->setApellido(apellido);
+    profesor->setCodigo(codigo);
+    profesor->setCorreo(correo);
+    //profesor.setEdad(edad);
+    //profesor.setId(id);
+    profesor->setNombre(nombre);
+    //profesor.setSexo(sexo);
     Usuario nuevoUsuario = { 'P', correo, contrasena };
     guardarUsuario(nuevoUsuario);
 
@@ -363,7 +392,7 @@ void Sistema::inicializarDatos() {
             cursos.insertarAlFinal(*curso);
         }
     }
-    
+
     ifstream archivo("Usuarios/usuarios.txt");
     if (archivo.is_open()) {
         Usuario usuario;
@@ -477,7 +506,7 @@ void Sistema::menuProfesor() {
 
 void Sistema::iniciarPrograma() {
     inicializarDatos();
-    menuPrincipal();    
+    menuPrincipal();
     //menuProfesor();
     //menuEstudiante();
     //menuInstitucion();

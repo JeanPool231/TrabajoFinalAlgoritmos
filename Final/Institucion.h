@@ -17,6 +17,11 @@ private:
     AVLTree<Profesor> profesores;
 
 public:
+    Institucion() {
+        nombre = "";
+        descripcion = "";
+        yearderegistro = 0;
+    }
     Institucion(string nombre, string descripcion, int yearderegistro);
 
     string getnombre();
