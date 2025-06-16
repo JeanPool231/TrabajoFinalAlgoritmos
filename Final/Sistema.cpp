@@ -11,7 +11,6 @@ namespace fs = std::filesystem;
 #include <vector>
 #include <clocale>
 using namespace std;
-
 Curso* leerCursoDesdeArchivo(string ruta) {
     ifstream archivo(ruta);
     string linea;
@@ -126,7 +125,8 @@ void Sistema::menuPrincipal() {
     cout << "1. Iniciar sesion\n";
     cout << "2. Registrarte\n";
     cout << "3. Acceder a los cursos(sin iniciar sesion)\n";
-    cout << "4. Salir\n";
+    cout << "4. Acceder al modo Administrador\n";
+    cout << "5. Salir\n";
     cout << "Opcion: ";
     cin >> opcion;
     switch (opcion) {
@@ -139,6 +139,9 @@ void Sistema::menuPrincipal() {
     case 3:
         break;
     case 4:
+        menuAdmin();
+        break;
+    case 5:
         break;
     default:
         break;
@@ -148,12 +151,12 @@ void Sistema::menuPrincipal() {
 
 void Sistema::menuInstitucion() {
     Institucion inst("UPC", "Educacion universitaria", 2018);
-    
+
     for (auto entry : fs::directory_iterator("cursosCreados")) {
         if (entry.is_regular_file() && entry.path().extension() == ".txt") {
             Curso* curso = leerCursoDesdeArchivo(entry.path().string());
             if (curso != nullptr) {
-                inst.agregarcurso(curso); 
+                inst.agregarcurso(curso);
             }
         }
     }
@@ -299,6 +302,13 @@ void Sistema::registrarse() {
     }
 }
 
+void Sistema::menuAdmin() {
+    ListaEnlazada<Curso*> curso;
+    AVLTree<Profesor*> profe;
+    Administrador* admin = new Administrador();
+    admin->menu_admin(curso, profe);
+}
+
 void Sistema::registroEstudiante() {
     system("cls");
     string correo, contrasena, nombres, apellidos;
@@ -318,8 +328,8 @@ void Sistema::registroEstudiante() {
 
 void Sistema::registroProfesor() {
     system("cls");
-	string codigo, nombre, apellido, correo;
-	char sexo, estadoCivil;
+    string codigo, nombre, apellido, correo;
+    char sexo, estadoCivil;
     int edad, tiempoEnCoursera, id, reputacion;
     string contrasena;
     cout << "Ingrese el codigo de la institucion: ";
@@ -363,7 +373,7 @@ void Sistema::inicializarDatos() {
             cursos.insertarAlFinal(*curso);
         }
     }
-    
+
     ifstream archivo("Usuarios/usuarios.txt");
     if (archivo.is_open()) {
         Usuario usuario;
@@ -477,7 +487,7 @@ void Sistema::menuProfesor() {
 
 void Sistema::iniciarPrograma() {
     inicializarDatos();
-    menuPrincipal();    
+    menuPrincipal();
     //menuProfesor();
     //menuEstudiante();
     //menuInstitucion();
