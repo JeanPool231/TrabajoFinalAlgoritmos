@@ -8,11 +8,12 @@
 #include <conio.h>
 #include "AdministrarCursos.h"
 #include <vector>
+#include <clocale>
 namespace fs = std::filesystem;
 using namespace std;
 //test 2 pa q no suban a master
-Curso* leerCursoDesdeArchivo(string pathArchivo) {
-    ifstream archivo(pathArchivo);
+Curso* leerCursoDesdeArchivo(const string& ruta) {
+    ifstream archivo(ruta);
     string linea;
     Curso* curso = new Curso();
 
@@ -22,7 +23,7 @@ Curso* leerCursoDesdeArchivo(string pathArchivo) {
     while (getline(archivo, linea)) {
         if (linea.empty()) continue;
 
-        
+
         linea.erase(0, linea.find_first_not_of(" \t\r\n"));
         linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
 
@@ -133,6 +134,69 @@ void Sistema::menuPrincipal() {
         break;
     }
 }
+
+
+void Sistema::menuInstitucion() {
+    Institucion inst("UPC", "Educacion universitaria", 2018);
+    
+    for (const auto& entry : fs::directory_iterator("cursosCreados")) {
+        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+            Curso* curso = leerCursoDesdeArchivo(entry.path().string());
+            if (curso != nullptr) {
+                inst.agregarcurso(curso); 
+            }
+        }
+    }
+
+    // TEST son profes de prueba pre establecidos 
+    Profesor p1("P1", "Cain", "Mohammed", "cain@upc.edu.pe", 'M', 'S', 40, 5, 101, 95);
+    Profesor p2("P2", "Rosa", "Melan", "rosa@upc.edu.pe", 'F', 'C', 35, 3, 102, 88);
+    inst.agregarprofesor(p1);
+    inst.agregarprofesor(p2);
+
+    int opc;
+    do {
+        cout << "\nInstitucion\n";
+        cout << "1. Ver Profesores\n";
+        cout << "2. Agregar/Quitar\n";
+        cout << "3. Ver cursos publicados\n";
+        cout << "4. Ver Estadisticas\n";
+        cout << "5. Salir\n";
+        cout << "\n";
+        cout << "Ingrese una opcion: ";
+        cin >> opc;
+        cin.ignore();
+
+        switch (opc) {
+        case 1:
+            inst.verinformacion();
+            break;
+
+        case 2: {
+            inst.menugestiondeprofes();
+            break;
+        }
+
+        case 3:
+            inst.vercursos();
+            break;
+
+        case 4: {
+            inst.verestadisticas();
+            break;
+        }
+
+        case 5:
+            cout << "Saliendo .,...\n";
+            break;
+
+        default:
+            cout << "opcion no valida\n";
+        }
+
+    } while (opc != 5);
+}
+
 void Sistema::menuEstudiante() {
     int opcion;
     system("cls");
@@ -187,10 +251,15 @@ void Sistema::registrarse() {
     switch (tipoUsuario) {
     case 'E':
         registroEstudiante();
+        menuEstudiante();
         break;
     case 'P':
+        registroProfesor();
+        menuProfesor();
         break;
     case 'I':
+        registroInstitucion();
+        menuInstitucion();
         break;
     }
 }
@@ -200,11 +269,44 @@ void Sistema::registroEstudiante() {
     string correo, contrasena, nombres, apellidos;
     cout << "Ingrese el correo: "; cin >> correo;
     cout << "Ingrese la contrasena: "; cin >> contrasena;
+    cin.ignore();
     cout << "Ingrese sus Nombres: ";
     getline(cin, nombres);
     cout << "Ingrese sus apellidos: ";
     getline(cin, apellidos);
     cout << "Se ha registrado correctamente\n";
+    system("pause");
+    system("cls");
+}
+
+void Sistema::registroProfesor() {
+    system("cls");
+	string codigo, nombre, apellido, correo;
+	char sexo, estadoCivil;
+	int edad, tiempoEnCoursera, id, reputacion;
+    string contrasena;
+    cout << "Ingrese el correo: "; cin >> correo;
+    cout << "Ingrese la contrasena: "; cin >> contrasena;
+    cout << "Ingrese sus Nombres: ";
+    getline(cin, nombre);
+    cout << "Ingrese sus apellidos: ";
+    getline(cin, apellido);
+    cout << "Ingrese su genero (M : masculino, F : femenino): "; cin >> sexo;
+    cout << "Se ha registrado correctamente profesor\n";
+    system("pause");
+    system("cls");
+}
+
+void Sistema::registroInstitucion() {
+    system("cls");
+    //string correo, contrasena, nombres, apellidos;
+    //cout << "Ingrese el correo: "; cin >> correo;
+    //cout << "Ingrese la contrasena: "; cin >> contrasena;
+    //cout << "Ingrese sus Nombres: ";
+    //getline(cin, nombres);
+    //cout << "Ingrese sus apellidos: ";
+    //getline(cin, apellidos);
+    cout << "Se ha registrado los datos \n Por favor espere a que el admin apruebe su registro\n";
     system("pause");
     system("cls");
 }
@@ -319,7 +421,9 @@ void Sistema::menuProfesor() {
 
 void Sistema::iniciarPrograma() {
     inicializarDatos();
-    //menuPrincipal();    
+    menuPrincipal();    
     //menuProfesor();
-    menuEstudiante();
+    //menuEstudiante();
+    //menuInstitucion();
+
 }

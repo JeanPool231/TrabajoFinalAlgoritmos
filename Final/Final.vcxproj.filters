@@ -51,6 +51,9 @@
     <ClCompile Include="Curso.cpp">
       <Filter>Archivos de encabezado\Curso</Filter>
     </ClCompile>
+    <ClCompile Include="Institucion.cpp">
+      <Filter>Archivos de encabezado\Institucion</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ListaEnlazada.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="HashUtil.h">
       <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="Institucion.h">
+      <Filter>Archivos de encabezado\Institucion</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

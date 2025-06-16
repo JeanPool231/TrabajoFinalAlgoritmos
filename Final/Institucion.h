@@ -1,23 +1,46 @@
 #pragma once
 #include <string>
-#include "ListaEnlazada.h"
+#include <vector>
+#include "Curso.h"
 #include "Profesor.h"
+#include "AVLTree.h"
+
+using namespace std;
 
 class Institucion {
 private:
-    std::string nombre;
-    std::string direccion;
-    ListaEnlazada<Profesor> profesores;
+    string nombre;
+    string descripcion;
+    int yearderegistro;
+
+    vector<Curso*> cursos;
+    AVLTree<Profesor> profesores;
 
 public:
-    Institucion();
-    Institucion(std::string nombre, std::string direccion);
+    Institucion(string nombre, string descripcion, int yearderegistro);
 
-    void setNombre(std::string);
-    void setDireccion(std::string);
-    std::string getNombre();
-    std::string getDireccion();
+    string getnombre();
+    string getdescripcion();
+    int getyear();
+    vector<Curso*>& getcursos() {
+        return cursos;
+    }
 
-    void agregarProfesor(const Profesor&);
-    ListaEnlazada<Profesor>& getProfesores();
+
+    void quitarprofes();
+    void asignarcursosalprofe();
+
+    void desvincularprofes();
+    void guardarprofenearchivo(Profesor prof);
+    void agregarprofe(); 
+
+    void agregarcurso(Curso* curso);
+    void agregarprofesor(Profesor prof);
+    void quitarprofesor(int id);
+    void menugestiondeprofes(); 
+    void verinformacion();
+    //void verprofesores();
+    void vercursos();
+    void verestadisticas();
+    
 };

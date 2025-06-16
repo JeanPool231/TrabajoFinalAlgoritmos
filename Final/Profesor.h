@@ -10,6 +10,7 @@ private:
 	string codigo, nombre, apellido, correo;
 	char sexo, estadoCivil;
 	int edad, tiempoEnCoursera, id, reputacion;
+	string cursoAsignado;
 public:
 	Profesor();
 	~Profesor();
@@ -36,6 +37,13 @@ public:
 	int getId();
 	int getReputacion();
 
-	void mostrarProfesor(const Profesor* p);
+	void asignarCurso(const string& nombreCurso) {
+		cursoAsignado = nombreCurso;
+	}
+	void quitarCurso() {
+		cursoAsignado = "";
+	}
+	string getCursoAsignado() const {
+		return cursoAsignado;
+	}
 };
-
