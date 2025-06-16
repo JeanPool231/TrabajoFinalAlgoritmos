@@ -4,6 +4,7 @@
 #include "Curso.h"
 #include "Profesor.h"
 #include "AVLTree.h"
+#include "ListaEnlazada.h"
 
 using namespace std;
 
@@ -12,7 +13,7 @@ private:
     string nombre;
     string descripcion;
     int yearderegistro;
-
+    ListaEnlazada<string> logs;
     vector<Curso*> cursos;
     AVLTree<Profesor> profesores;
 
@@ -31,6 +32,7 @@ public:
         return cursos;
     }
 
+    // void mostrarprofes();
 
     void quitarprofes();
     void asignarcursosalprofe();
@@ -39,8 +41,11 @@ public:
     void guardarprofenearchivo(Profesor prof);
     void agregarprofe(); 
 
+
+    void verhistorial();
+
     void agregarcurso(Curso* curso);
-    void agregarprofesor(Profesor prof);
+    void agregarprofesor(Profesor prof); //
     void quitarprofesor(int id);
     void menugestiondeprofes(); 
     void verinformacion();

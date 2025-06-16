@@ -2,9 +2,6 @@ codigo: P10
 nombre: Miguel
 apellido: Ruiz
 correo: miguelruiz@gmail.com
-sexo: M
-estado_civil: S
-edad: 30
 tiempo_en_coursera: 4
 id: 110
 reputacion: 80
