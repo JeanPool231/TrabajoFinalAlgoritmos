@@ -15,14 +15,11 @@ public:
 	Profesor();
 	~Profesor();
 	Profesor(string codigo, string nombre, string apellido, string correo,
-		char sexo, char estadoCivil, int edad, int tiempoEnCoursera, int id, int reputacion);
+		int tiempoEnCoursera, int id, int reputacion);
 	void setCodigo(string);
 	void setNombre(string);
 	void setApellido(string);
 	void setCorreo(string);
-	void setSexo(char);
-	void setEstadoCivil(char);
-	void setEdad(int);
 	void setTiempoEnCoursera(int);
 	void setId(int);
 	void setReputacion(int);
@@ -30,9 +27,6 @@ public:
 	string getNombre();
 	string getApellido();
 	string getCorreo();
-	char getSexo();
-	char getEstadoCivil();
-	int getEdad();
 	int getTiempoEnCoursera();
 	int getId();
 	int getReputacion();
@@ -40,11 +34,10 @@ public:
 	void asignarCurso(const string& nombreCurso) {
 		cursoAsignado = nombreCurso;
 	}
-	void quitarCurso() { 
+	void quitarCurso() {
 		cursoAsignado = "";
 	}
-	string getCursoAsignado() const { 
+	string getCursoAsignado() const {
 		return cursoAsignado;
 	}
 };
-
