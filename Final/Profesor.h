@@ -35,5 +35,7 @@ public:
 	int getTiempoEnCoursera();
 	int getId();
 	int getReputacion();
+
+	void mostrarProfesor(const Profesor* p);
 };
 
