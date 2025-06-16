@@ -225,6 +225,7 @@ void Sistema::menuEstudiante() {
             cursosEstudiante();
             break;
         case 2:
+            perfilEstudiante();
             break;
         case 3:
             break;
@@ -234,6 +235,14 @@ void Sistema::menuEstudiante() {
             break;
         }
     } while (opcion != 4);
+}
+void Sistema::perfilEstudiante() {
+    system("cls");
+    cout << "Perfil\n";
+    cout << "1. Nombres: " << estudiante->getNombres() << '\n';
+    cout << "2. Apellidos: " << estudiante->getApellidos() << '\n';
+    cout << "3. Correo: " << estudiante->getCorreo() << '\n';
+    system("pause");
 }
 void Sistema::cursosEstudiante() {
     system("cls");
@@ -310,6 +319,10 @@ void Sistema::registroEstudiante() {
     cout << "Ingrese sus apellidos: ";
     getline(cin, apellidos);
     cout << "Se ha registrado correctamente\n";
+    estudiante->setNombres(nombres);
+    estudiante->setApellidos(apellidos);
+    estudiante->setContrasena(contrasena);
+    estudiante->setCorreo(correo);
     Usuario nuevoUsuario = { 'E', correo, contrasena };
     guardarUsuario(nuevoUsuario);
     system("pause");
@@ -331,9 +344,15 @@ void Sistema::registroProfesor() {
     getline(cin, nombre);
     cout << "Ingrese sus apellidos: ";
     getline(cin, apellido);
-    cout << "Ingrese su genero (M : masculino, F : femenino): "; cin >> sexo;
+    //cout << "Ingrese su genero (M : masculino, F : femenino): "; cin >> sexo;
     cout << "Se ha registrado correctamente profesor\n";
-
+    profesor->setApellido(apellido);
+    profesor->setCodigo(codigo);
+    profesor->setCorreo(correo);
+    //profesor.setEdad(edad);
+    //profesor.setId(id);
+    profesor->setNombre(nombre);
+    //profesor.setSexo(sexo);
     Usuario nuevoUsuario = { 'P', correo, contrasena };
     guardarUsuario(nuevoUsuario);
 

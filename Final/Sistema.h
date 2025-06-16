@@ -6,10 +6,17 @@
 #include "HashUtil.h"
 #include "ListaEnlazada.h"
 #include "Usuario.h"
+#include "Estudiante.h"
+#include "Profesor.h"
+#include "Institucion.h"
+
 using namespace std;
 
 class Sistema {
 private:
+	Estudiante* estudiante = new Estudiante();
+	Profesor* profesor = new Profesor();
+	Institucion* institucion = new Institucion();
 	ListaEnlazada<Curso> cursos;
 	ListaEnlazada<Usuario> usuarios;
 	void menuInstitucion();
@@ -24,6 +31,7 @@ private:
 	void menuProfesor();
 	void menuEstudiante();
 	void cursosEstudiante();
+	void perfilEstudiante();
 public:
 	void iniciarPrograma();
 };
