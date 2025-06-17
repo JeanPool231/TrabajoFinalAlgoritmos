@@ -1,0 +1,8 @@
+codigo: P40
+nombre: Sebastian
+apellido: Llanos
+correo: sebastian@upc.edu.pe
+tiempo_en_coursera: 8
+id: 140
+reputacion: 80
+curso_asignado: 

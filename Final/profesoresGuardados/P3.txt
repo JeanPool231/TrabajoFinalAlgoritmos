@@ -1,8 +1,0 @@
-codigo: P3
-nombre: L
-apellido: L
-correo: 1@gmail.com
-tiempo_en_coursera: 4
-id: 104
-reputacion: 100
-curso_asignado: Matematica Basica

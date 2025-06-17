@@ -1,0 +1,8 @@
+codigo: P50
+nombre: Marta
+apellido: Flores
+correo: marta@upc.edu.pe
+tiempo_en_coursera: 5
+id: 150
+reputacion: 88
+curso_asignado: Programacion en python desde cero

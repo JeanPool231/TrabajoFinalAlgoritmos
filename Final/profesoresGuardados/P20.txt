@@ -1,10 +1,7 @@
 codigo: P20
 nombre: Amalia
-apellido: Vela
+apellido: Velin
 correo: amalia@gmail.com
-sexo: F
-estado_civil: S
-edad: 30
 tiempo_en_coursera: 1
 id: 120
 reputacion: 99
