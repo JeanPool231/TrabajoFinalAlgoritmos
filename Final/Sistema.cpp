@@ -4,9 +4,106 @@
 #include <ctime>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
+namespace fs = std::filesystem;
 #include <conio.h>
+#include "AdministrarCursos.h"
+#include <vector>
+#include <clocale>
 using namespace std;
-//test 2 pa q no suban a master
+
+Curso* leerCursoDesdeArchivo(string ruta) {
+    ifstream archivo(ruta);
+    string linea;
+    Curso* curso = new Curso();
+
+    bool leyendoLecciones = false;
+    bool nombreYaLeido = false;
+
+    while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+
+
+        linea.erase(0, linea.find_first_not_of(" \t\r\n"));
+        linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
+
+        if (!leyendoLecciones) {
+            if (!nombreYaLeido && linea.front() == '[' && linea.back() == ']') {
+                string nombre = linea.substr(1, linea.size() - 2);
+                curso->setNombre(nombre);
+                nombreYaLeido = true;
+            }
+            else if (linea == "[LECCIONES]") {
+                leyendoLecciones = true;
+            }
+            else if (linea.rfind("id:", 0) == 0) {
+                string valor = linea.substr(3);
+                valor.erase(0, valor.find_first_not_of(" "));
+                curso->setId(valor);
+            }
+            else if (linea.rfind("categoria:", 0) == 0) {
+                string valor = linea.substr(9);
+                valor.erase(0, valor.find_first_not_of(" "));
+                curso->setCategoria(valor);
+            }
+            else if (linea.rfind("descripcion:", 0) == 0) {
+                string valor = linea.substr(11);
+                valor.erase(0, valor.find_first_not_of(" "));
+                curso->setDescripcion(valor);
+            }
+            else if (linea.rfind("duracion:", 0) == 0) {
+                string valor = linea.substr(8);
+
+                string numeroHoras = "";
+                for (char c : valor) {
+                    if (isdigit(c)) {
+                        numeroHoras += c;
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                if (!numeroHoras.empty()) {
+                    int horas = stoi(numeroHoras);
+                    curso->setDuracionHoras(horas);
+                }
+                else {
+                    curso->setDuracionHoras(0);
+                }
+            }
+            else if (linea.rfind("fecha:", 0) == 0) {
+                string valor = linea.substr(6);
+                valor.erase(0, valor.find_first_not_of(" "));
+                curso->setFechaCreacion(valor);
+            }
+        }
+        else {
+            if (linea.rfind("- ", 0) == 0) {
+                string leccionTitulo = linea.substr(2);
+                string contenidoVacio = "";
+                int duracionPorDefecto = 0;
+
+                Leccion* lec = new Leccion(leccionTitulo, contenidoVacio, duracionPorDefecto);
+                curso->getLecciones().insertarAlFinal(lec);
+            }
+        }
+    }
+
+    archivo.close();
+    return curso;
+}
+
+void guardarUsuario(Usuario usuario) {
+    ofstream archivo("Usuarios/usuarios.txt", ios::app);
+    if (archivo.is_open()) {
+        archivo << usuario.tipoUsuario << " " << usuario.correo << " " << usuario.contrasena << endl;
+        archivo.close();
+    }
+    else {
+        cout << "Error al abrir el archivo para guardar.\n";
+    }
+}
 string obtenerFechaHoraActual() {
     time_t ahora = time(0);
     tm tiempo;
@@ -24,72 +121,292 @@ string obtenerFechaHoraActual() {
 }
 
 void Sistema::menuPrincipal() {
-	int opcion;
-	cout << "Coursera\n";
-	cout << "1. Iniciar sesion\n";
-	cout << "2. Registrarte\n";
-	cout << "3. Acceder a los cursos(sin iniciar sesion)\n";
-	cout << "4. Salir\n";
-	cout << "Opcion: ";
-	cin >> opcion;
-	switch (opcion) {
-	case 1:
-		iniciarSesion();
-		break;
-	case 2:
-		registrarse();
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	default:
-		break;
-	}
+    int opcion;
+    cout << "Coursera\n";
+    cout << "1. Iniciar sesion\n";
+    cout << "2. Registrarte\n";
+    cout << "3. Acceder a los cursos(sin iniciar sesion)\n";
+    cout << "4. Salir\n";
+    cout << "Opcion: ";
+    cin >> opcion;
+    switch (opcion) {
+    case 1:
+        iniciarSesion();
+        break;
+    case 2:
+        registrarse();
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    default:
+        break;
+    }
 }
 
+
+void Sistema::menuInstitucion() {
+    Institucion inst("UPC", "Educacion universitaria", 2018);
+    
+    for (auto entry : fs::directory_iterator("cursosCreados")) {
+        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+            Curso* curso = leerCursoDesdeArchivo(entry.path().string());
+            if (curso != nullptr) {
+                inst.agregarcurso(curso); 
+            }
+        }
+    }
+    //wazaa
+    // TEST son profes de prueba pre establecido
+    Profesor p1("P1", "Cain", "Mohammed", "cain@upc.edu.pe", 5, 101, 95);
+    Profesor p2("P2", "Rosa", "Melan", "rosa@upc.edu.pe", 3, 102, 88);
+    inst.agregarprofesor(p1);
+    inst.agregarprofesor(p2);
+
+    int opc;
+    do {
+        cout << "\nInstitucion\n";
+        cout << "1. Ver Profesores\n";
+        cout << "2. Agregar/Quitar\n";
+        cout << "3. Ver cursos publicados\n";
+        cout << "4. Ver Estadisticas\n";
+        cout << "5. Salir\n";
+        cout << "\n";
+        cout << "Ingrese una opcion: ";
+        cin >> opc;
+        cin.ignore();
+
+        switch (opc) {
+        case 1:
+            inst.verinformacion();
+            break;
+
+        case 2: {
+            inst.menugestiondeprofes();
+            break;
+        }
+
+        case 3:
+            inst.vercursos();
+            break;
+
+        case 4: {
+            inst.verestadisticas();
+            break;
+        }
+
+        case 5:
+            cout << "Saliendo .,...\n";
+            break;
+
+        default:
+            cout << "opcion no valida\n";
+        }
+
+    } while (opc != 5);
+}
+
+void Sistema::menuEstudiante() {
+    int opcion;
+    system("cls");
+    do {
+        system("cls");
+        cout << "Menu estudiante\n";
+        cout << "1. Ver Cursos\n";
+        cout << "2. Ver Perfil\n";
+        cout << "3. Saldo\n";
+        cout << "4. Cerrar Sesion\n";
+        cout << "Opcino: ";
+        cin >> opcion;
+        switch (opcion)
+        {
+        case 1:
+            cursosEstudiante();
+            break;
+        case 2:
+            perfilEstudiante();
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        default:
+            break;
+        }
+    } while (opcion != 4);
+}
+void Sistema::perfilEstudiante() {
+    system("cls");
+    cout << "Perfil\n";
+    cout << "1. Nombres: " << estudiante->getNombres() << '\n';
+    cout << "2. Apellidos: " << estudiante->getApellidos() << '\n';
+    cout << "3. Correo: " << estudiante->getCorreo() << '\n';
+    system("pause");
+}
+void Sistema::cursosEstudiante() {
+    system("cls");
+    cout << "Los Cursos disponibles son: \n";
+    AdministrarCurso auxCursos = cursos;
+    auxCursos.ImprimirNombreCursos();
+    system("pause");
+}
 bool Sistema::validarCorreo() {
-	return false;
+    return false;
 }
 
 void Sistema::iniciarSesion() {
-	string correo, contrasena;
-	cout << "Ingrese el correo: ";
-	cin >> correo;
-	cout << "Ingrese la contrasena: ";
-	cin >> contrasena;
+    string correo, contrasena;
+    cout << "Ingrese el correo: ";
+    cin >> correo;
+    cout << "Ingrese la contrasena: ";
+    cin >> contrasena;
+
+    bool encontrado = false;
+    Nodo<Usuario>* actual = usuarios.obtenerCabeza();
+    Usuario& u = actual->dato;
+    while (actual != nullptr) {
+        u = actual->dato;
+        actual = actual->siguiente;
+        if (u.correo == correo && u.contrasena == contrasena) {
+            encontrado = true;
+            break;
+        }
+    }
+    if (encontrado) {
+        switch (u.tipoUsuario) {
+        case 'E': menuEstudiante(); break;
+        case 'P': menuProfesor(); break;
+        case 'I':  break;
+        }
+    }
+    else {
+        cout << "Correo o contraseÃ±a incorrectos.\n";
+    }
+
+    if (correo == "admin@gmail.com" && contrasena == "password") {
+        system("cls");
+        menuAdmin();
+    }
+    system("pause");
+    system("cls");
+}
+
+void Sistema::menuAdmin() {
+    ListaEnlazada<Curso*> curso;
+    ListaEnlazada<Estudiante*> estu;
+    AVLTree<Profesor*> profe;
+    AVLTree<Institucion*> inst;
+    Administrador* admin = new Administrador();
+    admin->menu_admin(curso, estu, profe, inst);
 }
 
 void Sistema::registrarse() {
-	system("cls");
-	char tipoUsuario;
-	cout << "Ingrese si es Estudiante(E), Profesor(P) o Institucion(I): "; cin >> tipoUsuario;
-	switch (tipoUsuario) {
-	case 'E':
-		registroEstudiante();
-		break;
-	case 'P':
-		break;
-	case 'I':
-		break;
-	}
+    system("cls");
+    char tipoUsuario;
+    cout << "Ingrese si es Estudiante(E), Profesor(P) o Institucion(I): "; cin >> tipoUsuario;
+    switch (tipoUsuario) {
+    case 'E':
+        registroEstudiante();
+        menuEstudiante();
+        break;
+    case 'P':
+        registroProfesor();
+        menuProfesor();
+        break;
+    case 'I':
+        registroInstitucion();
+        menuInstitucion();
+        break;
+    }
 }
 
 void Sistema::registroEstudiante() {
-	system("cls");
-	string correo, contrasena, nombres, apellidos;
-	cout << "Ingrese el correo: "; cin >> correo;
-	cout << "Ingrese la contrasena: "; cin >> contrasena;
-	cout << "Ingrese sus Nombres: ";
-	getline(cin, nombres);
-	cout << "Ingrese sus apellidos: ";
-	getline(cin, apellidos);
-	cout << "Se ha registrado correctamente\n";
-	system("pause");
-	system("cls");
+    system("cls");
+    string correo, contrasena, nombres, apellidos;
+    cout << "Ingrese el correo: "; cin >> correo;
+    cout << "Ingrese la contrasena: "; cin >> contrasena;
+    cin.ignore();
+    cout << "Ingrese sus Nombres: ";
+    getline(cin, nombres);
+    cout << "Ingrese sus apellidos: ";
+    getline(cin, apellidos);
+    cout << "Se ha registrado correctamente\n";
+    estudiante->setNombres(nombres);
+    estudiante->setApellidos(apellidos);
+    estudiante->setContrasena(contrasena);
+    estudiante->setCorreo(correo);
+    Usuario nuevoUsuario = { 'E', correo, contrasena };
+    guardarUsuario(nuevoUsuario);
+    system("pause");
+    system("cls");
+}
+
+void Sistema::registroProfesor() {
+    system("cls");
+	string codigo, nombre, apellido, correo;
+	char sexo, estadoCivil;
+    int edad, tiempoEnCoursera, id, reputacion;
+    string contrasena;
+    cout << "Ingrese el codigo de la institucion: ";
+    cin >> codigo;
+    cout << "Ingrese el correo: "; cin >> correo;
+    cout << "Ingrese la contrasena: "; cin >> contrasena;
+    cin.ignore();
+    cout << "Ingrese sus Nombres: ";
+    getline(cin, nombre);
+    cout << "Ingrese sus apellidos: ";
+    getline(cin, apellido);
+    //cout << "Ingrese su genero (M : masculino, F : femenino): "; cin >> sexo;
+    cout << "Se ha registrado correctamente profesor\n";
+    profesor->setApellido(apellido);
+    profesor->setCodigo(codigo);
+    profesor->setCorreo(correo);
+    //profesor.setEdad(edad);
+    //profesor.setId(id);
+    profesor->setNombre(nombre);
+    //profesor.setSexo(sexo);
+    Usuario nuevoUsuario = { 'P', correo, contrasena };
+    guardarUsuario(nuevoUsuario);
+
+    system("pause");
+    system("cls");
+}
+
+void Sistema::registroInstitucion() {
+    system("cls");
+    //string correo, contrasena, nombres, apellidos;
+    //cout << "Ingrese el correo: "; cin >> correo;
+    //cout << "Ingrese la contrasena: "; cin >> contrasena;
+    //cout << "Ingrese sus Nombres: ";
+    //getline(cin, nombres);
+    //cout << "Ingrese sus apellidos: ";
+    //getline(cin, apellidos);
+    cout << "Se ha registrado los datos \n Por favor espere a que el admin apruebe su registro\n";
+    system("pause");
+    system("cls");
 }
 void Sistema::inicializarDatos() {
+    string carpeta = "cursosCreados/";
 
+    for (auto entry : fs::directory_iterator(carpeta)) {
+        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+            Curso* curso = leerCursoDesdeArchivo(entry.path().string());
+            cursos.insertarAlFinal(*curso);
+        }
+    }
+    
+    ifstream archivo("Usuarios/usuarios.txt");
+    if (archivo.is_open()) {
+        Usuario usuario;
+        while (archivo >> usuario.tipoUsuario >> usuario.correo >> usuario.contrasena) {
+            usuarios.insertarAlFinal(usuario);
+        }
+        archivo.close();
+    }
+    else {
+        cout << "No se pudo abrir el archivo de usuarios.\n";
+    }
 }
 
 void Sistema::menuProfesor() {
@@ -134,7 +451,7 @@ void Sistema::menuProfesor() {
             int subop;
             do {
                 cout << "\n--- GESTION DE LECCIONES ---" << endl;
-                cout << "1. Añadir una leccion al curso" << endl;
+                cout << "1. Aï¿½adir una leccion al curso" << endl;
                 cout << "2. Salir y guardar curso" << endl;
                 cout << "Opcion: ";
                 cin >> subop;
@@ -156,6 +473,7 @@ void Sistema::menuProfesor() {
 
                     Leccion* nueva = new Leccion(titulo, contenido, duracionMin);
                     nuevoCurso.agregarLeccion(nueva);
+                    cursos.insertarAlFinal(nuevoCurso);
                 }
 
             } while (subop != 2);
@@ -190,6 +508,10 @@ void Sistema::menuProfesor() {
 
 
 void Sistema::iniciarPrograma() {
-	//menuPrincipal();
-    menuProfesor(); //toy testeando mano, es pa q veas
+    inicializarDatos();
+    menuPrincipal();    
+    //menuProfesor();
+    //menuEstudiante();
+    //menuInstitucion();
+
 }
