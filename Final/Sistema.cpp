@@ -12,6 +12,7 @@ namespace fs = std::filesystem;
 #include <clocale>
 using namespace std;
 
+
 Curso* leerCursoDesdeArchivo(string ruta) {
     ifstream archivo(ruta);
     string linea;
@@ -212,8 +213,10 @@ void Sistema::menuPrincipal() {
 
 
 void Sistema::menuInstitucion() {
+
     Institucion inst("UPC", "Educacion universitaria", 2018);
-    
+
+    fs::create_directory("logs");
 
     for (const auto& entry : fs::directory_iterator("profesoresGuardados")) {
         if (entry.is_regular_file() && entry.path().extension() == ".txt") {
@@ -238,7 +241,7 @@ void Sistema::menuInstitucion() {
 
     // test
     Profesor p1("P1", "Cain", "Mohammed", "cain@upc.edu.pe", 5, 101, 95);
-    Profesor p2("P2", "Beniju", "Ballestin", "rosa@upc.edu.pe", 3, 102, 88);
+    Profesor p2("P2", "Beniju", "Ballestin", "beniju@upc.edu.pe", 3, 102, 88);
     inst.agregarprofesor(p1);
     inst.agregarprofesor(p2);
 
@@ -573,6 +576,7 @@ void Sistema::menuProfesor() {
 
 
 void Sistema::iniciarPrograma() {
+
     inicializarDatos();
     //menuPrincipal();    
     //menuProfesor();

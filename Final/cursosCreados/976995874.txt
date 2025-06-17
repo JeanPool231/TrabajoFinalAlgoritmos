@@ -1,0 +1,9 @@
+[Desarrollo Web con HTML y CSS]
+id: 976995874
+categoria: Desarollo Frontend
+descripcion: Construye sitios web estaticos con HTML5 y CSS3 
+duracion: 25 horas
+fecha: 16/06/2025 19:33:08
+
+[LECCIONES]
+- Estructura HTML

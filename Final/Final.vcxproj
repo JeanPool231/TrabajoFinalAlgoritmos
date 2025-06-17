@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AdministrarCursos.cpp" />
+    <ClCompile Include="AdministrarInstituciones.cpp" />
     <ClCompile Include="Curso.cpp" />
     <ClCompile Include="Estudiante.cpp" />
     <ClCompile Include="Final.cpp" />
@@ -139,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdministrarCursos.h" />
+    <ClInclude Include="AdministrarInstituciones.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Curso.h" />

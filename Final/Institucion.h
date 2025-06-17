@@ -10,12 +10,13 @@ using namespace std;
 
 class Institucion {
 private:
-    string nombre;
-    string descripcion;
-    int yearderegistro;
     ListaEnlazada<string> logs;
     vector<Curso*> cursos;
     AVLTree<Profesor> profesores;
+
+    string nombre;
+    string descripcion;
+    int yearderegistro;
 
 public:
     Institucion() {
@@ -28,29 +29,45 @@ public:
     string getnombre();
     string getdescripcion();
     int getyear();
+
     vector<Curso*>& getcursos() {
         return cursos;
     }
 
-    // void mostrarprofes();
+    AVLTree<Profesor>& getprofesores() { 
+        return profesores;
+    }
 
-    void quitarprofes();
-    void asignarcursosalprofe();
-
-    void desvincularprofes();
-    void guardarprofenearchivo(Profesor prof);
-    void agregarprofe(); 
-
-
-    void verhistorial();
+    ListaEnlazada<string>& getlogsdeprofes() { 
+        return logs; 
+    }
 
     void agregarcurso(Curso* curso);
-    void agregarprofesor(Profesor prof); //
+
+    void agregarprofesor(Profesor prof); 
+
     void quitarprofesor(int id);
-    void menugestiondeprofes(); 
+
+    void guardarprofenearchivo(Profesor prof); //admininsti
+    
+    ///////////////////////////////////////////
+
     void verinformacion();
-    //void verprofesores();
+
+    void menugestiondeprofes();
+
+    void verhistorial(); //admininsti
+
+    void agregarprofe(); //admininsti
+
+    void quitarprofes(); //admininsti
+
+    void asignarcursosalprofe(); //admininsti
+
+    void desvincularprofes(); //admininsti
+
     void vercursos();
+
     void verestadisticas();
     
 };
