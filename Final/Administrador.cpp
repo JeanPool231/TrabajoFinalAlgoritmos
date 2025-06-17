@@ -129,7 +129,9 @@ void Administrador::eliminar_instituciones(AVLTree<Institucion*>& inst)
 
 void Administrador::menu_admin(ListaEnlazada<Curso*>& curso, ListaEnlazada<Estudiante*>& estu, AVLTree<Profesor*>& profe, AVLTree<Institucion*>& inst)
 {
-	int opc; bool ciclo = true;
+	int opc;
+	bool ciclo = true;
+	
 	do {
 		system("cls");
 		cout << "MENU" << endl;
