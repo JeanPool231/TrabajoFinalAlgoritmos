@@ -94,6 +94,71 @@ Curso* leerCursoDesdeArchivo(string ruta) {
     return curso;
 }
 
+Profesor* leerprofesor(const string& ruta) {
+    try {
+        ifstream archivo(ruta);
+
+        string linea, codigo, nombre, apellido, correo, curso_asignado;
+        char sexo = ' ', estadoCivil = ' ';
+        int edad = 0, tiempoEnCoursera = 0, id = 0, reputacion = 0;
+
+        while (getline(archivo, linea)) {
+            linea.erase(0, linea.find_first_not_of(" \t\r\n"));
+            linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
+            if (linea.empty()) continue;
+
+            if (linea.rfind("codigo:", 0) == 0) codigo = linea.substr(7);
+            else if (linea.rfind("nombre:", 0) == 0) nombre = linea.substr(7);
+            else if (linea.rfind("apellido:", 0) == 0) apellido = linea.substr(9);
+            else if (linea.rfind("correo:", 0) == 0) correo = linea.substr(7);
+            //else if (linea.rfind("sexo:", 0) == 0 && linea.length() > 6) sexo = linea[6];
+            //else if (linea.rfind("estado_civil:", 0) == 0 && linea.length() > 14) estadoCivil = linea[14];
+            //else if (linea.rfind("edad:", 0) == 0) {
+            //    string val = linea.substr(5);
+            //    if (!val.empty()) edad = stoi(val);
+            //}
+            else if (linea.rfind("tiempo_en_coursera:", 0) == 0) {
+                string val = linea.substr(21);
+                if (!val.empty()) tiempoEnCoursera = stoi(val);
+            }
+            else if (linea.rfind("id:", 0) == 0) {
+                string val = linea.substr(3);
+                if (!val.empty()) id = stoi(val);
+            }
+            else if (linea.rfind("reputacion:", 0) == 0) {
+                string val = linea.substr(11);
+                if (!val.empty()) reputacion = stoi(val);
+            }
+            else if (linea.rfind("curso_asignado:", 0) == 0) {
+                if (linea.length() > 16) {
+                    curso_asignado = linea.substr(16);
+                    curso_asignado.erase(0, curso_asignado.find_first_not_of(" "));
+                }
+                else {
+                    curso_asignado = ""; //b dnt
+                }
+            }
+        }
+
+        archivo.close();
+
+        if (codigo.empty() || nombre.empty()) {
+            return nullptr;
+        }
+
+        Profesor* prof = new Profesor(codigo, nombre, apellido, correo,
+            tiempoEnCoursera, id, reputacion);
+        if (!curso_asignado.empty())
+            prof->asignarCurso(curso_asignado);
+
+        return prof;
+    }
+    catch (const exception& e) {
+        return nullptr;
+    }
+}
+
+
 void guardarUsuario(Usuario usuario) {
     ofstream archivo("Usuarios/usuarios.txt", ios::app);
     if (archivo.is_open()) {
@@ -147,30 +212,45 @@ void Sistema::menuPrincipal() {
 
 
 void Sistema::menuInstitucion() {
+
     Institucion inst("UPC", "Educacion universitaria", 2018);
-    
+
+    fs::create_directory("logs");
+
+    for (const auto& entry : fs::directory_iterator("profesoresGuardados")) {
+        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+            if (fs::file_size(entry.path()) == 0) continue;
+
+            Profesor* prof = leerprofesor(entry.path().string());
+            if (prof != nullptr) {
+                inst.agregarprofesor(*prof);
+                delete prof;
+            }
+        }
+    }
+
     for (auto entry : fs::directory_iterator("cursosCreados")) {
         if (entry.is_regular_file() && entry.path().extension() == ".txt") {
             Curso* curso = leerCursoDesdeArchivo(entry.path().string());
             if (curso != nullptr) {
-                inst.agregarcurso(curso); 
+                inst.agregarcurso(curso);
             }
         }
     }
-    //wazaa
-    // TEST son profes de prueba pre establecido
+
+    // test
     Profesor p1("P1", "Cain", "Mohammed", "cain@upc.edu.pe", 5, 101, 95);
-    Profesor p2("P2", "Rosa", "Melan", "rosa@upc.edu.pe", 3, 102, 88);
+    Profesor p2("P2", "Beniju", "Ballestin", "beniju@upc.edu.pe", 3, 102, 88);
     inst.agregarprofesor(p1);
     inst.agregarprofesor(p2);
 
     int opc;
     do {
         cout << "\nInstitucion\n";
-        cout << "1. Ver Profesores\n";
-        cout << "2. Agregar/Quitar\n";
+        cout << "1. Ver informacion de la institucion\n";
+        cout << "2. Gestionar profesores\n";
         cout << "3. Ver cursos publicados\n";
-        cout << "4. Ver Estadisticas\n";
+        cout << "4. Ver estadisticas\n";
         cout << "5. Salir\n";
         cout << "\n";
         cout << "Ingrese una opcion: ";
@@ -284,21 +364,8 @@ void Sistema::iniciarSesion() {
         cout << "Correo o contraseña incorrectos.\n";
     }
 
-    if (correo == "admin@gmail.com" && contrasena == "password") {
-        system("cls");
-        menuAdmin();
-    }
     system("pause");
     system("cls");
-}
-
-void Sistema::menuAdmin() {
-    ListaEnlazada<Curso*> curso;
-    ListaEnlazada<Estudiante*> estu;
-    AVLTree<Profesor*> profe;
-    AVLTree<Institucion*> inst;
-    Administrador* admin = new Administrador();
-    admin->menu_admin(curso, estu, profe, inst);
 }
 
 void Sistema::registrarse() {
@@ -344,8 +411,8 @@ void Sistema::registroEstudiante() {
 
 void Sistema::registroProfesor() {
     system("cls");
-	string codigo, nombre, apellido, correo;
-	char sexo, estadoCivil;
+    string codigo, nombre, apellido, correo;
+    char sexo, estadoCivil;
     int edad, tiempoEnCoursera, id, reputacion;
     string contrasena;
     cout << "Ingrese el codigo de la institucion: ";
@@ -395,7 +462,7 @@ void Sistema::inicializarDatos() {
             cursos.insertarAlFinal(*curso);
         }
     }
-    
+
     ifstream archivo("Usuarios/usuarios.txt");
     if (archivo.is_open()) {
         Usuario usuario;
@@ -508,10 +575,11 @@ void Sistema::menuProfesor() {
 
 
 void Sistema::iniciarPrograma() {
+
     inicializarDatos();
-    menuPrincipal();    
+    //menuPrincipal();    
     //menuProfesor();
     //menuEstudiante();
-    //menuInstitucion();
+    menuInstitucion();
 
 }
