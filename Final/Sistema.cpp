@@ -364,9 +364,21 @@ void Sistema::iniciarSesion() {
     else {
         cout << "Correo o contraseña incorrectos.\n";
     }
-
+    if (correo == "admin@gmail.com" && contrasena == "password")
+    {
+        menuAdmin();
+    }
     system("pause");
     system("cls");
+}
+
+void Sistema::menuAdmin() {
+    ListaEnlazada<Curso*> curso;
+    ListaEnlazada<Estudiante*> estu;
+    AVLTree<Profesor*> profe;
+    AVLTree<Institucion*> inst;
+    Administrador* admin = new Administrador();
+    admin->menu_admin(curso, estu, profe, inst);
 }
 
 void Sistema::registrarse() {
