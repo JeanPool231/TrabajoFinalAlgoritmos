@@ -579,8 +579,8 @@ void Sistema::iniciarPrograma() {
 
     inicializarDatos();
     //menuPrincipal();    
-    //menuProfesor();
+    menuProfesor();
     //menuEstudiante();
-    menuInstitucion();
+    //menuInstitucion();
 
 }

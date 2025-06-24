@@ -3,6 +3,7 @@
 #include <vector>
 #include "AVLTree.h"
 #include "Curso.h"
+#include "ListaEnlazada.h"
 using namespace std;
 
 class Profesor {
@@ -11,6 +12,7 @@ private:
 	char sexo, estadoCivil;
 	int edad, tiempoEnCoursera, id, reputacion;
 	string cursoAsignado;
+	ListaEnlazada<Curso*> cursosCreados;
 public:
 	Profesor();
 	~Profesor();
@@ -40,4 +42,12 @@ public:
 	string getCursoAsignado() const {
 		return cursoAsignado;
 	}
+
+	void agregarCurso(Curso* c) {
+		cursosCreados.insertarAlFinal(c);
+	}
+	ListaEnlazada<Curso*>& getCursosCreados() {
+		return cursosCreados;
+	}
+
 };

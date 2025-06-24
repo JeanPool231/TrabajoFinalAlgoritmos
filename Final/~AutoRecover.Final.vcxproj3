@@ -143,13 +143,10 @@
     <ClInclude Include="AdministradorProfesores.h" />
     <ClInclude Include="AdministrarCursos.h" />
     <ClInclude Include="AdministrarInstituciones.h" />
-    <ClInclude Include="ArbolBB.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Curso.h" />
     <ClInclude Include="Estudiante.h" />
-    <ClInclude Include="HashEntidad.h" />
-    <ClInclude Include="HashTabla.h" />
     <ClInclude Include="HashUtil.h" />
     <ClInclude Include="Institucion.h" />
     <ClInclude Include="Leccion.h" />

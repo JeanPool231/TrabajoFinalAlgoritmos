@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AdministradorProfesores.cpp" />
     <ClCompile Include="AdministrarCursos.cpp" />
     <ClCompile Include="AdministrarInstituciones.cpp" />
     <ClCompile Include="Curso.cpp" />
@@ -139,12 +140,16 @@
     <ClCompile Include="Sistema.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdministradorProfesores.h" />
     <ClInclude Include="AdministrarCursos.h" />
     <ClInclude Include="AdministrarInstituciones.h" />
+    <ClInclude Include="ArbolBB.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Curso.h" />
     <ClInclude Include="Estudiante.h" />
+    <ClInclude Include="HashEntidad.h" />
+    <ClInclude Include="HashTabla.h" />
     <ClInclude Include="HashUtil.h" />
     <ClInclude Include="Institucion.h" />
     <ClInclude Include="Leccion.h" />
@@ -157,6 +162,7 @@
     <ClInclude Include="Pila.h" />
     <ClInclude Include="Profesor.h" />
     <ClInclude Include="Sistema.h" />
+    <ClInclude Include="TEMPlistaEnlazada.h" />
     <ClInclude Include="Usuario.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
