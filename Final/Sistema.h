@@ -14,6 +14,7 @@ using namespace std;
 
 class Sistema {
 private:
+	Curso curso;
 	Estudiante* estudiante = new Estudiante();
 	Profesor* profesor = new Profesor();
 	Institucion* institucion = new Institucion();

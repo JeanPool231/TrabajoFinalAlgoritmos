@@ -132,6 +132,7 @@
     <ClCompile Include="AdministrarCursos.cpp" />
     <ClCompile Include="AdministrarInstituciones.cpp" />
     <ClCompile Include="Curso.cpp" />
+    <ClCompile Include="CursoUtils.cpp" />
     <ClCompile Include="Estudiante.cpp" />
     <ClCompile Include="Final.cpp" />
     <ClCompile Include="Institucion.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Curso.h" />
+    <ClInclude Include="CursoUtils.h" />
     <ClInclude Include="Estudiante.h" />
     <ClInclude Include="HashEntidad.h" />
     <ClInclude Include="HashTabla.h" />

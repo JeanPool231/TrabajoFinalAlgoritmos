@@ -10,90 +10,9 @@ namespace fs = std::filesystem;
 #include "AdministrarCursos.h"
 #include <vector>
 #include <clocale>
+#include "CursoUtils.h"
 using namespace std;
 
-
-Curso* leerCursoDesdeArchivo(string ruta) {
-    ifstream archivo(ruta);
-    string linea;
-    Curso* curso = new Curso();
-
-    bool leyendoLecciones = false;
-    bool nombreYaLeido = false;
-
-    while (getline(archivo, linea)) {
-        if (linea.empty()) continue;
-
-
-        linea.erase(0, linea.find_first_not_of(" \t\r\n"));
-        linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
-
-        if (!leyendoLecciones) {
-            if (!nombreYaLeido && linea.front() == '[' && linea.back() == ']') {
-                string nombre = linea.substr(1, linea.size() - 2);
-                curso->setNombre(nombre);
-                nombreYaLeido = true;
-            }
-            else if (linea == "[LECCIONES]") {
-                leyendoLecciones = true;
-            }
-            else if (linea.rfind("id:", 0) == 0) {
-                string valor = linea.substr(3);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setId(valor);
-            }
-            else if (linea.rfind("categoria:", 0) == 0) {
-                string valor = linea.substr(9);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setCategoria(valor);
-            }
-            else if (linea.rfind("descripcion:", 0) == 0) {
-                string valor = linea.substr(11);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setDescripcion(valor);
-            }
-            else if (linea.rfind("duracion:", 0) == 0) {
-                string valor = linea.substr(8);
-
-                string numeroHoras = "";
-                for (char c : valor) {
-                    if (isdigit(c)) {
-                        numeroHoras += c;
-                    }
-                    else {
-                        break;
-                    }
-                }
-
-                if (!numeroHoras.empty()) {
-                    int horas = stoi(numeroHoras);
-                    curso->setDuracionHoras(horas);
-                }
-                else {
-                    curso->setDuracionHoras(0);
-                }
-            }
-            else if (linea.rfind("fecha:", 0) == 0) {
-                string valor = linea.substr(6);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setFechaCreacion(valor);
-            }
-        }
-        else {
-            if (linea.rfind("- ", 0) == 0) {
-                string leccionTitulo = linea.substr(2);
-                string contenidoVacio = "";
-                int duracionPorDefecto = 0;
-
-                Leccion* lec = new Leccion(leccionTitulo, contenidoVacio, duracionPorDefecto);
-                curso->getLecciones().insertarAlFinal(lec);
-            }
-        }
-    }
-
-    archivo.close();
-    return curso;
-}
 
 
 Profesor* leerprofesor(const string& ruta) {

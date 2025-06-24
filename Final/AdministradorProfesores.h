@@ -13,20 +13,22 @@ using namespace std;
 class AdministradorProfesores {
 private:
     ArbolBB<Profesor> arbolProfesores;
-    HashTabla<string> hashCorreos; // Solo almacena correos por ahora
+    HashTabla<string> hashCorreos;
     TEMPListaEnlazada<string> logs;
 
 public:
     AdministradorProfesores();
 
     void cargarProfesoresDesdeArchivos();
-    void guardarProfesor(Profesor& prof);
-
     void agregarProfesorInteractivo(vector<Curso*>& cursosDisponibles);
-    void eliminarProfesor();
     void asignarCursoAProfesor(vector<Curso*>& cursosDisponibles);
     void desvincularCurso();
 
+
+    void cargarCursosDesdeCarpeta(string ruta, vector<Curso*>& cursosRef);
+    void mostrarCursos(const vector<Curso*>& cursosRef);
+    void eliminarCursoPorId(vector<Curso*>& cursosRef, string id);
+    void guardarCursoEnArchivo(Curso* curso);
     void mostrarLogs();
     void mostrarProfesoresEnOrden();
 
