@@ -20,7 +20,7 @@ public:
     AdministradorProfesores();
 
     void cargarProfesoresDesdeArchivos();
-    void guardarProfesor(const Profesor& prof);
+    void guardarProfesor(Profesor& prof);
 
     void agregarProfesorInteractivo(vector<Curso*>& cursosDisponibles);
     void eliminarProfesor();

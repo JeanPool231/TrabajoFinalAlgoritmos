@@ -8,14 +8,14 @@ template <class T>
 class ArbolBB {
 	typedef function<int(T, T)> Comp; //Lambda
 
-	Nodo<T>* raiz;
+	NodoArbol<T>* raiz;
 	void(*procesar)(T); //Puntero a funcion
 
 	Comp comparar; // lambda de criterio de comparación
 
 
 private:
-	bool _buscar(Nodo<T>* nodo, T e) {
+	bool _buscar(NodoArbol<T>* nodo, T e) {
 		if (nodo == nullptr) return false;
 		else {
 			int r = comparar(nodo->elemento, e);
@@ -28,7 +28,7 @@ private:
 			}
 		}
 	}
-	Nodo<T>* _obtener(Nodo<T>* nodo, T e) {
+	NodoArbol<T>* _obtener(NodoArbol<T>* nodo, T e) {
 		if (nodo == nullptr) return nullptr;
 		else {
 			int r = comparar(nodo->elemento, e);
@@ -41,9 +41,9 @@ private:
 			}
 		}
 	}
-	bool _insertar(Nodo<T>*& nodo, T e) {
+	bool _insertar(NodoArbol<T>*& nodo, T e) {
 		if (nodo == nullptr) {
-			nodo = new Nodo<T>();
+			nodo = new NodoArbol<T>();
 			nodo->elemento = e;
 			return true;
 		}
@@ -58,21 +58,21 @@ private:
 			}
 		}
 	}
-	void _enOrden(Nodo<T>* nodo) {
+	void _enOrden(NodoArbol<T>* nodo) {
 		if (nodo == nullptr) return;
 		_enOrden(nodo->izq);
 		procesar(nodo->elemento);
 		_enOrden(nodo->der);
 	}
 
-	void _preOrden(Nodo<T>* nodo) {
+	void _preOrden(NodoArbol<T>* nodo) {
 		if (nodo == nullptr) return;
 		procesar(nodo->elemento);
 		_preOrden(nodo->izq);
 		_preOrden(nodo->der);
 	}
 
-	void _postOrden(Nodo<T>* nodo) {
+	void _postOrden(NodoArbol<T>* nodo) {
 		if (nodo == nullptr) return;
 		_postOrden(nodo->izq);
 		_postOrden(nodo->der);
@@ -81,7 +81,7 @@ private:
 	bool _vacio() {
 		return raiz == nullptr;
 	}
-	int _cantidad(Nodo<T>* nodo) {
+	int _cantidad(NodoArbol<T>* nodo) {
 		//La cantidad de nodos del árbol es:
 		//	0 si es vacío
 		//	1 + la cantidad de nodos por la izquierda + la cantidad de nodos por la derecha
@@ -97,7 +97,7 @@ private:
 		}
 
 	}
-	int _altura(Nodo<T>* nodo) {
+	int _altura(NodoArbol<T>* nodo) {
 		//La altura del árbol es:
 		//	0 si es vacío
 		//	la mayor de las alturas por la izquierda y por la derecha, las cuáles son 0 si son vacías ó 1 + la altura por la izq(o der) en caso contrario
@@ -113,17 +113,17 @@ private:
 		}
 	}
 
-	int _minimo(Nodo<T>* nodo) {
+	int _minimo(NodoArbol<T>* nodo) {
 		if (nodo->izq == nullptr) return nodo->elemento;
 		else
 			return _minimo(nodo->izq);
 	}
-	int _maximo(Nodo<T>* nodo) {
+	int _maximo(NodoArbol<T>* nodo) {
 		if (nodo->der == nullptr) return nodo->elemento;
 		else
 			return _maximo(nodo->der);
 	}
-	bool _eliminar(Nodo<T>*& nodo, T e) {
+	bool _eliminar(NodoArbol<T>*& nodo, T e) {
 		if (nodo == nullptr) return false;
 		else {
 			int r = comparar(nodo->elemento, e);
@@ -148,7 +148,7 @@ private:
 					return true;
 				}
 				else { //caso 4
-					Nodo<T>* aux = nodo->der; //Se establece buscar el menor elemento por la derecha
+					NodoArbol<T>* aux = nodo->der; //Se establece buscar el menor elemento por la derecha
 					while (aux->izq != nullptr)
 					{
 						aux = aux->izq; //Se obtiene la hoja menor
@@ -162,9 +162,16 @@ private:
 public:
 	ArbolBB(void(*otroPunteroAFuncion)(T)) {
 		this->procesar = otroPunteroAFuncion;
-		this->comparar = [](T a, T b)->int {return a - b; };
+		this->comparar = [](T a, T b)->int { return a - b; };
 		raiz = nullptr;
 	}
+
+	ArbolBB(void(*otroPunteroAFuncion)(T), function<int(T, T)> cmp) {
+		this->procesar = otroPunteroAFuncion;
+		this->comparar = cmp;
+		raiz = nullptr;
+	}
+
 	bool insertar(T e) {
 		return _insertar(raiz, e);
 	}
