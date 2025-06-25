@@ -2,7 +2,10 @@
 #define LISTA_ENLAZADA_H
 
 #include <iostream>
+#include <functional>
 #include "Nodo.h"
+
+using namespace std;
 
 template <typename T>
 class ListaEnlazada {
@@ -19,15 +22,17 @@ public:
     void eliminarPrimero();
     void limpiar();
     Nodo<T>* obtenerCabeza();
-};
 
+    bool eliminarSi(function<bool(T)> condicion);
+    void recorrer(function<void(T)> accion);
+};
 
 template <typename T>
 ListaEnlazada<T>::ListaEnlazada() : cabeza(nullptr) {}
 
 template <typename T>
 ListaEnlazada<T>::~ListaEnlazada() {
-    //limpiar();
+    limpiar();
 }
 
 template <typename T>
@@ -52,7 +57,6 @@ void ListaEnlazada<T>::insertarAlFinal(T dato) {
     }
 }
 
-
 template <typename T>
 bool ListaEnlazada<T>::estaVacia() {
     return cabeza == nullptr;
@@ -73,9 +77,42 @@ void ListaEnlazada<T>::limpiar() {
         eliminarPrimero();
     }
 }
+
 template <typename T>
 Nodo<T>* ListaEnlazada<T>::obtenerCabeza() {
     return cabeza;
+}
+
+template <typename T>
+bool ListaEnlazada<T>::eliminarSi(function<bool(T)> condicion) {
+    Nodo<T>* actual = cabeza;
+    Nodo<T>* anterior = nullptr;
+
+    while (actual != nullptr) {
+        if (condicion(actual->dato)) {
+            if (anterior == nullptr) {
+                cabeza = actual->siguiente;
+            }
+            else {
+                anterior->siguiente = actual->siguiente;
+            }
+            delete actual;
+            return true;
+        }
+        anterior = actual;
+        actual = actual->siguiente;
+    }
+    return false;
+}
+
+
+template <typename T>
+void ListaEnlazada<T>::recorrer(function<void(T)> accion) {
+    Nodo<T>* actual = cabeza;
+    while (actual != nullptr) {
+        accion(actual->dato);
+        actual = actual->siguiente;
+    }
 }
 
 #endif

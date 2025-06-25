@@ -10,90 +10,8 @@ namespace fs = std::filesystem;
 #include "AdministrarCursos.h"
 #include <vector>
 #include <clocale>
+#include "CursoUtils.h"
 using namespace std;
-
-
-Curso* leerCursoDesdeArchivo(string ruta) {
-    ifstream archivo(ruta);
-    string linea;
-    Curso* curso = new Curso();
-
-    bool leyendoLecciones = false;
-    bool nombreYaLeido = false;
-
-    while (getline(archivo, linea)) {
-        if (linea.empty()) continue;
-
-
-        linea.erase(0, linea.find_first_not_of(" \t\r\n"));
-        linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
-
-        if (!leyendoLecciones) {
-            if (!nombreYaLeido && linea.front() == '[' && linea.back() == ']') {
-                string nombre = linea.substr(1, linea.size() - 2);
-                curso->setNombre(nombre);
-                nombreYaLeido = true;
-            }
-            else if (linea == "[LECCIONES]") {
-                leyendoLecciones = true;
-            }
-            else if (linea.rfind("id:", 0) == 0) {
-                string valor = linea.substr(3);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setId(valor);
-            }
-            else if (linea.rfind("categoria:", 0) == 0) {
-                string valor = linea.substr(9);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setCategoria(valor);
-            }
-            else if (linea.rfind("descripcion:", 0) == 0) {
-                string valor = linea.substr(11);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setDescripcion(valor);
-            }
-            else if (linea.rfind("duracion:", 0) == 0) {
-                string valor = linea.substr(8);
-
-                string numeroHoras = "";
-                for (char c : valor) {
-                    if (isdigit(c)) {
-                        numeroHoras += c;
-                    }
-                    else {
-                        break;
-                    }
-                }
-
-                if (!numeroHoras.empty()) {
-                    int horas = stoi(numeroHoras);
-                    curso->setDuracionHoras(horas);
-                }
-                else {
-                    curso->setDuracionHoras(0);
-                }
-            }
-            else if (linea.rfind("fecha:", 0) == 0) {
-                string valor = linea.substr(6);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setFechaCreacion(valor);
-            }
-        }
-        else {
-            if (linea.rfind("- ", 0) == 0) {
-                string leccionTitulo = linea.substr(2);
-                string contenidoVacio = "";
-                int duracionPorDefecto = 0;
-
-                Leccion* lec = new Leccion(leccionTitulo, contenidoVacio, duracionPorDefecto);
-                curso->getLecciones().insertarAlFinal(lec);
-            }
-        }
-    }
-
-    archivo.close();
-    return curso;
-}
 
 
 Profesor* leerprofesor(const string& ruta) {
@@ -476,32 +394,29 @@ void Sistema::inicializarDatos() {
         cout << "No se pudo abrir el archivo de usuarios.\n";
     }
 }
-
 void Sistema::menuProfesor() {
     int opcion;
     do {
         cout << "\n===== MENU PROFESOR =====" << endl;
         cout << "1. Crear curso" << endl;
-        cout << "2. Salir" << endl;
+        cout << "2. Ver cursos existentes" << endl;
+        cout << "3. Eliminar curso" << endl;
+        cout << "4. Salir" << endl;
         cout << "Opcion: ";
         cin >> opcion;
         cin.ignore();
 
         if (opcion == 1) {
-            // Crear curso
             string nombre, categoria, descripcion;
             int duracion;
 
             cout << "\n--- CREAR CURSO ---" << endl;
             cout << "Nombre del curso: ";
             getline(cin, nombre);
-
             cout << "Categoria: ";
             getline(cin, categoria);
-
             cout << "Descripcion: ";
             getline(cin, descripcion);
-
             cout << "Duracion (en horas): ";
             cin >> duracion;
             cin.ignore();
@@ -519,7 +434,7 @@ void Sistema::menuProfesor() {
             int subop;
             do {
                 cout << "\n--- GESTION DE LECCIONES ---" << endl;
-                cout << "1. A�adir una leccion al curso" << endl;
+                cout << "1. Añadir una leccion al curso" << endl;
                 cout << "2. Salir y guardar curso" << endl;
                 cout << "Opcion: ";
                 cin >> subop;
@@ -531,20 +446,19 @@ void Sistema::menuProfesor() {
 
                     cout << "Titulo de la leccion: ";
                     getline(cin, titulo);
-
                     cout << "Contenido de la leccion: ";
                     getline(cin, contenido);
-
                     cout << "Duracion de la leccion (en minutos): ";
                     cin >> duracionMin;
                     cin.ignore();
 
                     Leccion* nueva = new Leccion(titulo, contenido, duracionMin);
                     nuevoCurso.agregarLeccion(nueva);
-                    cursos.insertarAlFinal(nuevoCurso);
                 }
 
             } while (subop != 2);
+
+            cursos.insertarAlFinal(nuevoCurso);
 
             string archivoNombre = "cursosCreados/" + id + ".txt";
             ofstream archivo(archivoNombre);
@@ -571,7 +485,53 @@ void Sistema::menuProfesor() {
             }
         }
 
-    } while (opcion != 2);
+        else if (opcion == 2) {
+            cout << "\n--- CURSOS EXISTENTES ---\n";
+            for (auto entry : fs::directory_iterator("cursosCreados")) {
+                if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+                    Curso* curso = leerCursoDesdeArchivo(entry.path().string());
+                    if (curso != nullptr) {
+                        cout << "ID: " << curso->getId() << "\n";
+                        cout << "Nombre: " << curso->getNombre() << "\n";
+                        cout << "Categoria: " << curso->getCategoria() << "\n";
+                        cout << "Descripcion: " << curso->getDescripcion() << "\n";
+                        cout << "Duracion: " << curso->getDuracionHoras() << " horas\n";
+                        cout << "Fecha: " << curso->getFechaCreacion() << "\n";
+                        cout << "-----------------------------\n";
+                        delete curso;
+                    }
+                }
+            }
+        }
+
+        else if (opcion == 3) {
+            cout << "\n--- ELIMINAR CURSO ---\n";
+            cout << "Ingrese el ID del curso a eliminar: ";
+            string idEliminar;
+            getline(cin, idEliminar);
+
+            string ruta = "cursosCreados/" + idEliminar + ".txt";
+            if (fs::exists(ruta)) {
+                fs::remove(ruta);
+                cout << "Archivo eliminado correctamente.\n";
+            }
+            else {
+                cout << "No se encontró el archivo.\n";
+            }
+
+            bool eliminado = cursos.eliminarSi([&](Curso c) {
+                return c.getId() == idEliminar;
+                });
+
+            if (eliminado) {
+                cout << "Curso eliminado de la lista en memoria.\n";
+            }
+            else {
+                cout << "Curso no encontrado en la lista.\n";
+            }
+        }
+
+    } while (opcion != 4);
 }
 
 
@@ -579,8 +539,8 @@ void Sistema::iniciarPrograma() {
 
     inicializarDatos();
     //menuPrincipal();    
-    //menuProfesor();
+    menuProfesor();
     //menuEstudiante();
-    menuInstitucion();
+    //menuInstitucion();
 
 }
