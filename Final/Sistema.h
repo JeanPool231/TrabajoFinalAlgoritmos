@@ -9,6 +9,7 @@
 #include "Estudiante.h"
 #include "Profesor.h"
 #include "Institucion.h"
+#include "Administrador.h"
 
 using namespace std;
 
@@ -27,6 +28,7 @@ private:
 	void registroInstitucion();
 	void registrarse();
 	void iniciarSesion();
+        void menuAdmin();
 	bool validarCorreo();
 	void inicializarDatos();
 	void menuProfesor();
