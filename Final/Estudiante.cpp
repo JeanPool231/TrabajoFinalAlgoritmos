@@ -1,6 +1,5 @@
 #include "Estudiante.h"
 
-// Constructor por defecto
 Estudiante::Estudiante() {
     correo = "";
     contrasena = "";
@@ -8,7 +7,6 @@ Estudiante::Estudiante() {
     apellidos = "";
 }
 
-// Constructor con parámetros
 Estudiante::Estudiante(string correo, string contrasena, string nombres, string apellidos) {
     this->correo = correo;
     this->contrasena = contrasena;
@@ -16,12 +14,9 @@ Estudiante::Estudiante(string correo, string contrasena, string nombres, string 
     this->apellidos = apellidos;
 }
 
-// Destructor
 Estudiante::~Estudiante() {
-    // Por ahora vacío
 }
 
-// Getters
 string Estudiante::getCorreo() {
     return correo;
 }
@@ -38,7 +33,6 @@ string Estudiante::getApellidos() {
     return apellidos;
 }
 
-// Setters
 void Estudiante::setCorreo(string correo) {
     this->correo = correo;
 }
@@ -53,4 +47,10 @@ void Estudiante::setNombres(string nombres) {
 
 void Estudiante::setApellidos(string apellidos) {
     this->apellidos = apellidos;
+}
+void Estudiante::agregarCurso(Curso curso) {
+    cursosInscritos.insertarAlFinal(curso);
+}
+ListaEnlazada<Curso> Estudiante::getCursosInscritos() {
+    return cursosInscritos;
 }

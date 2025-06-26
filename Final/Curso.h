@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <string>
 #include <fstream>
 #include "Leccion.h"
@@ -13,6 +13,7 @@ private:
     string categoria;
     string descripcion;
     string fechaCreacion; //aprovechando q vamos a usar lo del tiempo maybe
+    //double costo;
     int duracionHoras;
     int cantidadInscritos;
     int numLecciones;
@@ -36,7 +37,7 @@ public:
     int getCantidadInscritos();
     int getNumLecciones();
     string getduracionentexto() const;
-
+    //double getCosto();
     // Setters
     ListaEnlazada<Leccion*>& getLecciones();
     void setId(string);
@@ -48,6 +49,7 @@ public:
     void setCantidadInscritos(int);
     void setNumLecciones(int);
     void setduracionentexto(const string&);
+    //void setCosto(double costo);
 
     // Quizas quzias algo como para gestionar lecciones
     void agregarLeccion(Leccion* leccion);

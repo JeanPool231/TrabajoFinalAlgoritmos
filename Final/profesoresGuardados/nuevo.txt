@@ -1,0 +1,8 @@
+codigo: nuevo
+nombre: nuevoprofe
+apellido: apellidoprofe
+correo: profe@gmail.com
+tiempo_en_coursera: 0
+id: 12
+reputacion: 0
+curso_asignado: calculo

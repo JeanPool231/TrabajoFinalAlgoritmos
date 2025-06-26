@@ -10,17 +10,19 @@
 #include "Profesor.h"
 #include "Institucion.h"
 #include "Administrador.h"
-
+#include "UI.h"
 using namespace std;
 
 class Sistema {
 private:
+	UI disenio;
 	Curso curso;
 	Estudiante* estudiante = new Estudiante();
 	Profesor* profesor = new Profesor();
 	Institucion* institucion = new Institucion();
 	ListaEnlazada<Curso> cursos;
 	ListaEnlazada<Usuario> usuarios;
+	ListaEnlazada<Estudiante> estudiantes;
 	void menuInstitucion();
 	void menuPrincipal();
 	void registroEstudiante();
@@ -28,13 +30,17 @@ private:
 	void registroInstitucion();
 	void registrarse();
 	void iniciarSesion();
-        void menuAdmin();
-	bool validarCorreo();
+    void menuAdmin();
+	bool validarCorreo(string& correo);
+	bool validarContrasena(string& contrasena, string& correo);
 	void inicializarDatos();
 	void menuProfesor();
 	void menuEstudiante();
 	void cursosEstudiante();
 	void perfilEstudiante();
+	void saldoEstudiante();
+	void cursosInscritos();
+	void iniciarSesionUI();
 public:
 	void iniciarPrograma();
 };
