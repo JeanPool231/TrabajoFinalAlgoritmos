@@ -3,14 +3,14 @@
 
 Curso::Curso()
     : nombre(""), id(""), categoria(""), descripcion(""), fechaCreacion(""),
-    duracionHoras(0), cantidadInscritos(0), numLecciones(0) {
+    duracionHoras(0), cantidadInscritos(0), numLecciones(0), costo(0) {
 }
 
 Curso::~Curso() {
 }
 
 Curso::Curso(string& nombre, string id, string& categoria, string& descripcion, string fechaCreacion,
-    int duracionHoras, int cantidadInscritos, int numLecciones) {
+    int duracionHoras, int cantidadInscritos, int numLecciones, double costo) {
 
     this->nombre = nombre;
     this->id = id;
@@ -19,7 +19,7 @@ Curso::Curso(string& nombre, string id, string& categoria, string& descripcion, 
     this->duracionHoras = duracionHoras;
     this->cantidadInscritos = cantidadInscritos;
     this->numLecciones = numLecciones;
-    //this->costo = costo;
+    this->costo = costo;
 }
 
 string Curso::getNombre() { return nombre; }
@@ -33,7 +33,7 @@ int Curso::getNumLecciones() { return numLecciones; }
 string Curso::getduracionentexto() const {
     return duracionentexto;
 }
-//double Curso::getCosto() { return costo; }
+double Curso::getCosto() { return costo; }
 ListaEnlazada<Leccion*>& Curso::getLecciones() { return lecciones; }
 
 void Curso::setNombre(string nombre) { this->nombre = nombre; }
@@ -47,7 +47,7 @@ void Curso::setNumLecciones(int numLecciones) { this->numLecciones = numLeccione
 void Curso::setduracionentexto(const string& d) {
     duracionentexto = d;
 }
-//void Curso::setCosto(double costo) { this->costo = costo; }
+void Curso::setCosto(double costo) { this->costo = costo; }
 
 void Curso::agregarLeccion(Leccion* leccion) {
     lecciones.insertarAlFinal(leccion);

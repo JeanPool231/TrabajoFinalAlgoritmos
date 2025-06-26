@@ -13,7 +13,7 @@ private:
     string categoria;
     string descripcion;
     string fechaCreacion; //aprovechando q vamos a usar lo del tiempo maybe
-    //double costo;
+    double costo;
     int duracionHoras;
     int cantidadInscritos;
     int numLecciones;
@@ -24,7 +24,7 @@ private:
 public:
     Curso();
     Curso(string& nombre, string id, string& categoria, string& descripcion, string fechaCreacion,
-        int duracionHoras, int cantidadInscritos, int numLecciones);
+        int duracionHoras, int cantidadInscritos, int numLecciones, double costo);
     ~Curso();
 
     // Getters
@@ -37,7 +37,7 @@ public:
     int getCantidadInscritos();
     int getNumLecciones();
     string getduracionentexto() const;
-    //double getCosto();
+    double getCosto();
     // Setters
     ListaEnlazada<Leccion*>& getLecciones();
     void setId(string);
@@ -49,7 +49,7 @@ public:
     void setCantidadInscritos(int);
     void setNumLecciones(int);
     void setduracionentexto(const string&);
-    //void setCosto(double costo);
+    void setCosto(double costo);
 
     // Quizas quzias algo como para gestionar lecciones
     void agregarLeccion(Leccion* leccion);
