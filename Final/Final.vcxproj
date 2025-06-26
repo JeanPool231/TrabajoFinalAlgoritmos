@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Administrador.cpp" />
     <ClCompile Include="AdministradorProfesores.cpp" />
     <ClCompile Include="AdministrarCursos.cpp" />
     <ClCompile Include="AdministrarInstituciones.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Profesor.h" />
     <ClInclude Include="Sistema.h" />
     <ClInclude Include="TEMPlistaEnlazada.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Usuario.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,4 +1,4 @@
-#include "Curso.h"
+﻿#include "Curso.h"
 #include <iostream>
 
 Curso::Curso()
@@ -19,6 +19,7 @@ Curso::Curso(string& nombre, string id, string& categoria, string& descripcion, 
     this->duracionHoras = duracionHoras;
     this->cantidadInscritos = cantidadInscritos;
     this->numLecciones = numLecciones;
+    //this->costo = costo;
 }
 
 string Curso::getNombre() { return nombre; }
@@ -32,7 +33,7 @@ int Curso::getNumLecciones() { return numLecciones; }
 string Curso::getduracionentexto() const {
     return duracionentexto;
 }
-
+//double Curso::getCosto() { return costo; }
 ListaEnlazada<Leccion*>& Curso::getLecciones() { return lecciones; }
 
 void Curso::setNombre(string nombre) { this->nombre = nombre; }
@@ -46,6 +47,7 @@ void Curso::setNumLecciones(int numLecciones) { this->numLecciones = numLeccione
 void Curso::setduracionentexto(const string& d) {
     duracionentexto = d;
 }
+//void Curso::setCosto(double costo) { this->costo = costo; }
 
 void Curso::agregarLeccion(Leccion* leccion) {
     lecciones.insertarAlFinal(leccion);

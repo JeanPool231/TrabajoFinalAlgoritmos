@@ -14,4 +14,7 @@ public:
     ~AdministrarCurso();
 
     void ImprimirNombreCursos();
+    void ImprimirNombreCursosIndices();
+    void verDetallesCursos(int indice);
+    Curso InscribirseACurso(int indice);
 };

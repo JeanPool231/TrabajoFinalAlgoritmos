@@ -32,7 +32,7 @@ ListaEnlazada<T>::ListaEnlazada() : cabeza(nullptr) {}
 
 template <typename T>
 ListaEnlazada<T>::~ListaEnlazada() {
-    limpiar();
+    //limpiar();
 }
 
 template <typename T>

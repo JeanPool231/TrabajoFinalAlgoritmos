@@ -69,6 +69,9 @@
     <ClCompile Include="AdministradorProfesores.cpp">
       <Filter>Archivos de encabezado\Profesor</Filter>
     </ClCompile>
+    <ClCompile Include="Administrador.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ListaEnlazada.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="HashTabla.h">
       <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
