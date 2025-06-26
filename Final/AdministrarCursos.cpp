@@ -1,5 +1,6 @@
 #include "AdministrarCursos.h"
-
+#include <vector>
+using namespace std;
 AdministrarCurso::AdministrarCurso() {}
 
 AdministrarCurso::AdministrarCurso(ListaEnlazada<Curso> cursos) {

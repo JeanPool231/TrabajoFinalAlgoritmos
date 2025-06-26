@@ -331,8 +331,7 @@ void Sistema::cursosEstudiante() {
 		cout << "2. Inscribirse a un curso\n";
 		cout << "3. Ver cursos ordenados por nombre\n";
 		cout << "4. Ver cursos ordenados por costo\n";
-		cout << "5. Ver cursos ordenados por Institucion\n";
-        cout << "6. Volver\n";
+        cout << "5. Volver\n";
         cout << "Opcion : "; cin >> opcion;
         system("cls");
         switch (opcion) {
@@ -352,18 +351,28 @@ void Sistema::cursosEstudiante() {
             system("pause");
             break;
         case 3:
+            auxCursos.mostrarCursosOrdenados([](Curso a, Curso b) {
+                string aux = a.getNombre();
+                string aux2 = b.getNombre();
+                char c1 = aux[0];
+                char c2 = aux2[0];
+                return toupper(c1) < toupper(c2);
+                });
+            system("pause");
             break;
         case 4:
+            auxCursos.mostrarCursosOrdenados([](Curso a, Curso b) {
+                return a.getCosto() < b.getCosto();
+                });
+            system("pause");
             break;
         case 5:
-            break;
-        case 6:
             break;
         default:
             cout << "Ingrese a una opcion valida\n";
             break;
         }
-    } while (opcion != 6);
+    } while (opcion != 5);
 }
 bool Sistema::validarCorreo(string& correo) {
     string ar = "Usuarios/" + correo + ".txt";
@@ -651,12 +660,15 @@ void Sistema::menuProfesor() {
 }
 
 void Sistema::iniciarSesionUI() {
+
+	cout << "\033[?25l"; // eliminar cursos
     disenio.cuadro(120, 28);
     disenio.tituloIniciarSesion(3, 30);
     disenio.cuadroDobleLineas(10, 40, 30, 5);
     disenio.tituloEmail(8, 40);
     disenio.cuadroDobleLineas(20, 40, 30, 5);
     disenio.tituloPassword(18, 40);
+	cout << "\033[?25h"; // mostrar cursor luego de eliminar cursor
 }
 void Sistema::iniciarPrograma() {
     inicializarDatos();

@@ -45,8 +45,8 @@ void Administrador::anadir_cursos(ListaEnlazada<Curso*>& curso)
 	cout << "Ingrese duracion en horas del curso a agregar: "; cin >> duracionHoras;
 	cout << "Ingrese la cantidad de inscritos del curso a agregar: "; cin >> cantidadInscritos;
 	cout << "Ingrese el numero de lecciones del curso a agregar: "; cin >> numLecciones;
-	//cout << "Ingrese el costo del curso"; cin >> costo;
-	Curso* c = new Curso(nombre, id, categoria, descripcion, fechaCreacion, duracionHoras, cantidadInscritos, numLecciones);
+	cout << "Ingrese el costo del curso"; cin >> costo;
+	Curso* c = new Curso(nombre, id, categoria, descripcion, fechaCreacion, duracionHoras, cantidadInscritos, numLecciones, costo);
 	cout << endl;
 	cout << "Donde quiere agregar el nuevo curso: Inicio(1) o Final (2): "; cin >> opc;
 	if (opc == 1)
