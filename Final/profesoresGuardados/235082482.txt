@@ -1,0 +1,8 @@
+codigo: 235082482
+nombre: Maria Alejandra
+apellido: Salazar Ivanez
+correo: maria.salazar@gmail.com
+tiempo_en_coursera: 0
+id: 0
+reputacion: 0
+curso_asignado: 

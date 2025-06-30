@@ -1,9 +1,7 @@
-[Machine Learning Basico]
-id: 573490506
-categoria: Ciencia de Datos
-descripcion: Primeros pasos en modelos predictivos usando Python
-duracion: 60 horas
-fecha: 16/06/2025 19:35:06
-
-[LECCIONES]
-- Regresion lineal
+Machine Learning Basico
+573490506
+Ciencia de Datos
+Primeros pasos en modelos predictivos usando Python
+60
+16/06/2025 19:35:06
+Regresion lineal

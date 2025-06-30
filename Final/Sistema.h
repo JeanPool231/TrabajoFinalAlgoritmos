@@ -22,6 +22,7 @@ private:
 	Institucion* institucion = new Institucion();
 	ListaEnlazada<Curso> cursos;
 	ListaEnlazada<Usuario> usuarios;
+	ListaEnlazada<Profesor> profesores;
 	ListaEnlazada<Estudiante> estudiantes;
 	void menuInstitucion();
 	void menuPrincipal();
@@ -41,6 +42,10 @@ private:
 	void saldoEstudiante();
 	void cursosInscritos();
 	void iniciarSesionUI();
+	void mostrarCursosUI();
+	void registroEstudianteUI();
+	void registroUI();
+	void inicioUI();
 public:
 	void iniciarPrograma();
 };

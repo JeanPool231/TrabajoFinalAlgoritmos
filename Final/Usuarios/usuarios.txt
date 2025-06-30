@@ -1,3 +1,0 @@
-E jean@gmail.com 12345
-E zayd@gmail.com 12345
-E papulandia@gmail.com 123456

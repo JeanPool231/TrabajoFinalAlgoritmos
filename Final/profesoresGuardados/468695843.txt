@@ -1,0 +1,8 @@
+codigo: 468695843
+nombre: nose
+apellido: nose
+correo: nsoe
+tiempo_en_coursera: 0
+id: 0
+reputacion: 0
+curso_asignado: 
