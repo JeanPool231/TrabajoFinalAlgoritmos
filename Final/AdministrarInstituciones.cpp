@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <sstream>
+#include "HashUtil.h"
 using namespace std;
 namespace fs = std::filesystem;
 
@@ -53,6 +54,28 @@ void guardarprofenelarchivo(Profesor prof) {
     archivo.close();
 }
 
+
+void guardarProfesor(Profesor profesor) {
+    filesystem::create_directory("profesoresCreados");
+
+    string ruta = "profesoresCreados/" + profesor.getCodigo() + ".txt";
+    ofstream archivo(ruta);
+
+    if (archivo.is_open()) {
+        archivo << profesor.getCodigo() << "\n";
+        archivo << profesor.getNombre() << "\n";
+        archivo << profesor.getApellido() << "\n";
+        archivo << profesor.getCorreo() << "\n";
+        archivo << profesor.getTiempoEnCoursera() << "\n";
+        archivo << profesor.getId() << "\n";
+        archivo << profesor.getReputacion() << "\n";
+        archivo.close();
+    }
+    else {
+        cerr << "No se pudo abrir el archivo para escritura.\n";
+    }
+}
+
 void agregarprofesor2(Institucion& inst) {
 
     vector<Curso*>& cursos = inst.getcursos(); 
@@ -60,26 +83,18 @@ void agregarprofesor2(Institucion& inst) {
     vector<Curso*> disponibles;
 
 
-    string codigo, nombre, apellido, correo, cursoSeleccionado;
-    int tiempoEnCoursera, id, reputacion;
+    string codigo = "", nombre, apellido, correo, cursoSeleccionado;
+    int tiempoEnCoursera = 0, id = 0, reputacion = 0;
 
     cout << "Ingrese datos del profesor:\n";
-    cout << "Codigo: "; getline(cin, codigo);
     cout << "Nombre: "; getline(cin, nombre);
     cout << "Apellido: "; getline(cin, apellido);
-
-    do {
-        cout << "Correo : ";
-        getline(cin, correo);
-        if (!regex_match(correo, regex("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"))) {
-            cout << "Ese @ medio dudoso ingrese otro uno que si exista\n";
-        }
-    } while (!regex_match(correo, regex("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")));
-
-    cout << "Años en Coursera: "; cin >> tiempoEnCoursera; cin.ignore();
-    cout << "ID: "; cin >> id; cin.ignore();
-    cout << "Reputacion (0/100): "; cin >> reputacion; cin.ignore();
-
+    cout << "Correo: "; getline(cin, correo);
+    codigo = HashUtil::generarHash(nombre + to_string(rand() % 10000));
+    cout << '\n';
+    cout << codigo << '\n';
+    system("pause");
+    cin.ignore();
 
     for (auto c : cursos) {
         bool ocupado = false;
@@ -126,7 +141,7 @@ void agregarprofesor2(Institucion& inst) {
     profesores.insertar(nuevo, [](Profesor& a, Profesor& b) {
         return a.getCodigo() < b.getCodigo();
         });
-
+    guardarProfesor(nuevo);
     guardarprofenelarchivo(nuevo);
 
 
@@ -139,7 +154,6 @@ void agregarprofesor2(Institucion& inst) {
 
 
 }
-
 
 void mostrarhistorial2(const ListaEnlazada<string>& logs) {
     

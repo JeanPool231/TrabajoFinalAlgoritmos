@@ -31,15 +31,15 @@ TEMPListaEnlazada<string>& AdministradorProfesores::getLogs() {
 
 
 // NUEVO: Gestionar cursos desde este "administrador de profesores"
-void AdministradorProfesores::cargarCursosDesdeCarpeta(string ruta, vector<Curso*>& cursosRef) {
-    for (auto entry : fs::directory_iterator(ruta)) {
-        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
-            Curso* curso = leerCursoDesdeArchivo(entry.path().string());
-            cursosRef.push_back(curso);
-            logs.insertarAlFinal("Curso cargado: " + curso->getNombre());
-        }
-    }
-}
+//void AdministradorProfesores::cargarCursosDesdeCarpeta(string ruta, vector<Curso*>& cursosRef) {
+    //for (auto entry : fs::directory_iterator(ruta)) {
+        //if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+            //Curso* curso = leerCursoDesdeArchivo(entry.path().string());
+            //cursosRef.push_back(curso);
+            //logs.insertarAlFinal("Curso cargado: " + curso->getNombre());
+        //}
+    //}
+//}
 
 void AdministradorProfesores::mostrarCursos(const vector<Curso*>& cursosRef) {
     for (Curso* c : cursosRef) {

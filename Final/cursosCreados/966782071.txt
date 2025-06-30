@@ -1,9 +1,7 @@
-[Fundamentos de Ciberseguridad]
-id: 966782071
-categoria: Seguridad Informatica
-descripcion: Conceptos muy importantes para proteger sistemas y redes
-duracion: 35 horas
-fecha: 16/06/2025 19:34:10
-
-[LECCIONES]
-- Amenazas comunes
+Fundamentos de Ciberseguridad
+966782071
+Seguridad Informatica
+Conceptos muy importantes para proteger sistemas y redes
+35
+16/06/2025 19:34:10
+Amenazas comunes

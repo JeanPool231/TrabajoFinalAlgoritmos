@@ -4,6 +4,6 @@
 #include <string>
 #include "Curso.h"
 
-Curso* leerCursoDesdeArchivo(std::string ruta);
+Curso* leerCurso(string ruta);
 
 #endif

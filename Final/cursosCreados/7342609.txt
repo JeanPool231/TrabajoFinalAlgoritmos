@@ -1,9 +1,7 @@
-[Programacion en python desde cero]
-id: 7342609
-categoria: Programacion Basica
-descripcion: Aprende los fundamentos de python para automatizar tareas
-duracion: 30 horas
-fecha: 16/06/2025 19:32:08
-
-[LECCIONES]
-- Introduccion a Python
+Programacion en python desde cero
+7342609
+Programacion Basica
+Aprende los fundamentos de python para automatizar tareas
+30
+16/06/2025 19:32:08
+Introduccion a Python

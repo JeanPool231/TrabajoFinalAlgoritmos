@@ -5,13 +5,15 @@ Estudiante::Estudiante() {
     contrasena = "";
     nombres = "";
     apellidos = "";
+    codigo = "";
 }
 
-Estudiante::Estudiante(string correo, string contrasena, string nombres, string apellidos) {
+Estudiante::Estudiante(string correo, string contrasena, string nombres, string apellidos, string codigo) {
     this->correo = correo;
     this->contrasena = contrasena;
     this->nombres = nombres;
     this->apellidos = apellidos;
+    this->codigo = codigo;
 }
 
 Estudiante::~Estudiante() {
@@ -20,7 +22,9 @@ Estudiante::~Estudiante() {
 string Estudiante::getCorreo() {
     return correo;
 }
-
+string Estudiante::getCodigo() {
+    return codigo;
+}
 string Estudiante::getContrasena() {
     return contrasena;
 }
@@ -50,6 +54,9 @@ void Estudiante::setApellidos(string apellidos) {
 }
 void Estudiante::agregarCurso(Curso curso) {
     cursosInscritos.insertarAlFinal(curso);
+}
+void Estudiante::setCodigo(string codigo) {
+    this->codigo = codigo;
 }
 ListaEnlazada<Curso> Estudiante::getCursosInscritos() {
     return cursosInscritos;

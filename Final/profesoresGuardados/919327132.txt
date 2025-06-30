@@ -1,0 +1,8 @@
+codigo: 919327132
+nombre: pala
+apellido: pala
+correo: nose
+tiempo_en_coursera: 0
+id: 0
+reputacion: 0
+curso_asignado: 

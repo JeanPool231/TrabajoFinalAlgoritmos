@@ -8,15 +8,14 @@ using namespace std;
 
 class Profesor {
 private:
-	string codigo, nombre, apellido, correo;
-	char sexo, estadoCivil;
-	int edad, tiempoEnCoursera, id, reputacion;
+	string codigo_institucion, nombre, apellido, correo;
+	int tiempoEnCoursera, id, reputacion;
 	string cursoAsignado;
 	ListaEnlazada<Curso*> cursosCreados;
 public:
 	Profesor();
 	~Profesor();
-	Profesor(string codigo, string nombre, string apellido, string correo,
+	Profesor(string codigo_institucion, string nombre, string apellido, string correo,
 		int tiempoEnCoursera, int id, int reputacion);
 	void setCodigo(string);
 	void setNombre(string);
@@ -33,13 +32,13 @@ public:
 	int getId();
 	int getReputacion();
 
-	void asignarCurso(const string& nombreCurso) {
+	void asignarCurso(string nombreCurso) {
 		cursoAsignado = nombreCurso;
 	}
 	void quitarCurso() {
 		cursoAsignado = "";
 	}
-	string getCursoAsignado() const {
+	string getCursoAsignado() {
 		return cursoAsignado;
 	}
 

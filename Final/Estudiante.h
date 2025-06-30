@@ -11,10 +11,11 @@ private:
     string contrasena;
     string nombres;
     string apellidos;
+    string codigo;
     ListaEnlazada<Curso> cursosInscritos;
 public:
     Estudiante();
-    Estudiante(string correo, string contrasena, string nombres, string apellidos);
+    Estudiante(string correo, string contrasena, string nombres, string apellidos, string codigo);
     ~Estudiante();
 
     // Getters
@@ -22,6 +23,7 @@ public:
     string getContrasena();
     string getNombres();
     string getApellidos();
+    string getCodigo();
     ListaEnlazada<Curso> getCursosInscritos();
 
     // Setters
@@ -30,4 +32,5 @@ public:
     void setNombres(string nombres);
     void setApellidos(string apellidos);
     void agregarCurso(Curso curso);
+    void setCodigo(string codigo);
 };

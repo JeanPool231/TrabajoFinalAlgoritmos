@@ -20,7 +20,6 @@ private:
     string duracionentexto;
     ListaEnlazada<Leccion*> lecciones;
 
-
 public:
     Curso();
     Curso(string& nombre, string id, string& categoria, string& descripcion, string fechaCreacion,

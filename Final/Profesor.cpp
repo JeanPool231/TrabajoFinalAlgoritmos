@@ -1,15 +1,15 @@
 #include "Profesor.h"
 
 Profesor::Profesor()
-	: codigo(" "), nombre(" "), apellido(" "), correo(" "),
-	sexo(' '), estadoCivil(' '), edad(0), tiempoEnCoursera(0), id(0), reputacion(0){}
+	: codigo_institucion(" "), nombre(" "), apellido(" "), correo(" "),
+	tiempoEnCoursera(0), id(0), reputacion(0){}
 
 Profesor::~Profesor(){}
 
 Profesor::Profesor(string codigo, string nombre, string apellido, string correo,
 	int tiempoEnCoursera, int id, int reputacion) {
 
-	this->codigo = codigo;
+	this->codigo_institucion = codigo;
 	this->nombre = nombre;
 	this->apellido = apellido;
 	this->correo = correo;
@@ -21,7 +21,7 @@ Profesor::Profesor(string codigo, string nombre, string apellido, string correo,
 // Getters
 
 string Profesor::getNombre() { return nombre; }
-string Profesor::getCodigo() { return codigo; }
+string Profesor::getCodigo() { return codigo_institucion; }
 string Profesor::getApellido() { return apellido; }
 string Profesor::getCorreo() { return correo; }
 int Profesor::getTiempoEnCoursera() { return tiempoEnCoursera; }
@@ -32,7 +32,7 @@ int Profesor::getReputacion() { return reputacion; }
 // Setters
 
 void Profesor::setNombre(string nombre) {this->nombre = nombre;}
-void Profesor::setCodigo(string codigo) {this->codigo = codigo;}
+void Profesor::setCodigo(string codigo) {this->codigo_institucion = codigo;}
 void Profesor::setApellido(string apellido) {this->apellido = apellido;}
 void Profesor::setCorreo(string correo) {this->correo = correo;}
 void Profesor::setTiempoEnCoursera(int tiempoEnCoursera) {this->tiempoEnCoursera = tiempoEnCoursera;}

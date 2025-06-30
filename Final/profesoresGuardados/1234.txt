@@ -1,8 +1,0 @@
-codigo: 1234
-nombre: profe
-apellido: profea
-correo: profe@gmail.com
-tiempo_en_coursera: 0
-id: 12345
-reputacion: 0
-curso_asignado: Fundamentos de Ciberseguridad

@@ -1,0 +1,8 @@
+codigo: 771626098
+nombre: Natalia Fernanda
+apellido: Rivas Montenegro
+correo: natalia.fernanda@gmail.com
+tiempo_en_coursera: 0
+id: 0
+reputacion: 0
+curso_asignado: 

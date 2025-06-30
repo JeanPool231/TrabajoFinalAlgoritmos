@@ -29,7 +29,7 @@ void Administrador::ver_cursos(ListaEnlazada<Curso*>& curso)
 	else {
 		cout << "Error al abrir el archivo para cargar.\n";
 	}
-	_getch();
+	system("pause");
 }
 void Administrador::anadir_cursos(ListaEnlazada<Curso*>& curso)
 {
@@ -72,13 +72,13 @@ void Administrador::anadir_cursos(ListaEnlazada<Curso*>& curso)
 		cout << "Error al abrir el archivo para guardar.\n";
 	}
 	cout << "Curso Anadido";
-	_getch();
+	system("pause");
 }
 void Administrador::eliminar_cursos(ListaEnlazada<Curso*>& curso)
 {
 	curso.eliminarPrimero();
 	cout << "Curso Eliminado";
-	_getch();
+	system("pause");
 }
 void Administrador::ver_estudiantes(ListaEnlazada<Estudiante*>& estu)
 {
@@ -88,23 +88,23 @@ void Administrador::ver_estudiantes(ListaEnlazada<Estudiante*>& estu)
 }
 void Administrador::anadir_estudiantes(ListaEnlazada<Estudiante*>& estu)
 {
-	string correo, contrasena, nombre, apellido;
+	string correo, contrasena, nombre, apellido, codigo;
 	cout << "Ingresar correo del estudiante a agregar: "; cin >> correo;
 	cout << "Ingresar la contrasena del estudiante a agregar: "; cin >> contrasena;
 	cout << "Ingresar el nombre del estudiante a agregar: "; cin >> nombre;
 	cout << "Ingresar el apellido del estudiante a agregar: "; cin >> apellido;
-	Estudiante* est = new Estudiante(correo, contrasena, nombre, apellido);
+	Estudiante* est = new Estudiante(correo, contrasena, nombre, apellido, codigo);
 	cout << endl;
 	Usuario estudiante = { 'E', correo, contrasena };
 	guardar(estudiante);
 	cout << "Estudiante Anadido";
-	_getch();
+	system("pause");
 }
 void Administrador::eliminar_estudiantes(ListaEnlazada<Estudiante*>& estu)
 {
 	estu.eliminarPrimero();
 	cout << "Estudiante Eliminado";
-	_getch();
+	system("pause");
 }
 void Administrador::ver_profesores(AVLTree<Profesor*>& profe)
 {
@@ -121,7 +121,7 @@ void Administrador::ver_profesores(AVLTree<Profesor*>& profe)
 	else {
 		cout << "Error al abrir el archivo para cargar.\n";
 	}
-	_getch();
+	system("pause");
 }
 void Administrador::anadir_profesores(AVLTree<Profesor*>& profe)
 {
@@ -155,7 +155,7 @@ void Administrador::anadir_profesores(AVLTree<Profesor*>& profe)
 		cout << "Error al abrir el archivo para guardar.\n";
 	}
 	cout << "Profesor Anadido";
-	_getch();
+	system("pause");
 }
 void Administrador::eliminar_profesores(AVLTree<Profesor*>& profe)
 {
@@ -179,7 +179,7 @@ void Administrador::anadir_instituciones(AVLTree<Institucion*>& inst)
 	Usuario institucion = { 'I', correo, contrasena };
 	guardar(institucion);
 	cout << "Institucion Anadida";
-	_getch();
+	system("pause");
 }
 void Administrador::eliminar_instituciones(AVLTree<Institucion*>& inst)
 {
