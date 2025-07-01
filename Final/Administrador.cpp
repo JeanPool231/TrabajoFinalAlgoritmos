@@ -1,4 +1,6 @@
 #include "Administrador.h"
+#include <filesystem>
+namespace fs = std::filesystem;
 
 Administrador::Administrador() {}
 Administrador::~Administrador() {}
@@ -16,24 +18,25 @@ void Administrador::guardar(Usuario usuario) {
 
 void Administrador::ver_cursos(ListaEnlazada<Curso*>& curso)
 {
-	ifstream archivo("cursosCreados/654633245.txt");
-	if (archivo.is_open())
+	for (auto& entry : fs::directory_iterator("cursosCreados"))
 	{
-		string linea;
-		while (getline(archivo, linea))
+		if (entry.path().extension() == ".txt")
 		{
-			cout << linea << endl;
+			ifstream archivo(entry.path());
+			string linea;
+			while (getline(archivo, linea))
+			{
+				cout << linea << endl;
+			}
 		}
-		archivo.close();
-	}
-	else {
-		cout << "Error al abrir el archivo para cargar.\n";
+		cout << endl;
 	}
 	_getch();
 }
+
 void Administrador::añadir_cursos(ListaEnlazada<Curso*>& curso)
 {
-	int opc; ofstream archivo("cursosCreados/654633245.txt", ios::app);
+	int opc;   
 	string nombre, id, categoria, descripcion, fechaCreacion;
 	int duracionHoras, cantidadInscritos,numLecciones;
 	cout << "Ingrese nombre del curso a agregar: "; cin >> nombre;
@@ -54,6 +57,7 @@ void Administrador::añadir_cursos(ListaEnlazada<Curso*>& curso)
 	else {
 		curso.insertarAlFinal(c);
 	}
+	string name = "cursosCreados/" + id + ".txt"; ofstream archivo(name, ios::app);
 	if (archivo.is_open()) {
 		archivo << "[" << nombre << "]" << endl;
 		archivo << "id: " << id << endl;
@@ -62,8 +66,7 @@ void Administrador::añadir_cursos(ListaEnlazada<Curso*>& curso)
 		archivo << "duracion: " << duracionHoras << endl;
 		archivo << "fecha: " << fechaCreacion << endl;
 		archivo << endl;
-		archivo << "[LECCIONES]" << endl;
-		archivo << numLecciones << endl;
+		archivo << "[LECCIONES] " << numLecciones << endl;
 		archivo.close();
 	}
 	else {
@@ -74,13 +77,38 @@ void Administrador::añadir_cursos(ListaEnlazada<Curso*>& curso)
 }
 void Administrador::eliminar_cursos(ListaEnlazada<Curso*>& curso)
 {
+	int ID;
+	cout << "Ingresar ID del curso a eliminar: "; cin >> ID;
+	string name = "cursosCreados/" + to_string(ID) + ".txt";
 	curso.eliminarPrimero();
-	cout << "Curso Eliminado";
+	if (fs::exists(name))
+	{
+		fs::remove(name);
+		cout << "Curso Eliminado";
+	}
+	else {
+		cout << "Ese curso no existe" << endl;
+	}
 	_getch();
 }
+
 void Administrador::ver_estudiantes(ListaEnlazada<Estudiante*>& estu)
 {
-
+	string name = "Usuarios/usuarios.txt";
+	ifstream archivo(name);
+	if (archivo.is_open())
+	{
+		string linea;
+		while (getline(archivo, linea))
+		{
+			if (!linea.empty() && linea[0] == 'E')
+			{
+				cout << linea << endl;
+				cout << endl;
+			}
+		}
+	}
+	_getch();
 }
 void Administrador::añadir_estudiantes(ListaEnlazada<Estudiante*>& estu)
 {
@@ -98,30 +126,43 @@ void Administrador::añadir_estudiantes(ListaEnlazada<Estudiante*>& estu)
 }
 void Administrador::eliminar_estudiantes(ListaEnlazada<Estudiante*>& estu)
 {
+	string name1 = "Usuarios/usuarios.txt", name2 = "Usuarios/usuarios1.txt"; string correo, linea;
+	cout << "Ingresar el correo del estudiante a eliminar: "; cin >> correo;
 	estu.eliminarPrimero();
+	ifstream archivo1(name1); ofstream archivo2(name2);
+	while (getline(archivo1, linea))
+	{
+		if (linea.find(correo) == string::npos)
+		{
+			archivo2 << linea << endl;
+		}
+	}
+	archivo1.close(); archivo2.close();
+	remove(name1.c_str());
+	rename(name2.c_str(), name1.c_str());
 	cout << "Estudiante Eliminado";
 	_getch();
 }
+
 void Administrador::ver_profesores(AVLTree<Profesor*>& profe)
 {
-	ifstream archivo("profesoresGuardados/P12.txt");
-	if (archivo.is_open())
+	for (auto& entry : fs::directory_iterator("profesoresGuardados"))
 	{
-		string linea;
-		while (getline(archivo, linea))
+		if (entry.path().extension() == ".txt")
 		{
-			cout << linea << endl;
+			ifstream archivo(entry.path());
+			string linea;
+			while (getline(archivo, linea))
+			{
+				cout << linea << endl;
+			}
+			cout << endl;
 		}
-		archivo.close();
-	}
-	else {
-		cout << "Error al abrir el archivo para cargar.\n";
 	}
 	_getch();
 }
 void Administrador::añadir_profesores(AVLTree<Profesor*>& profe)
 {
-	ofstream archivo("profesoresGuardados/P12.txt", ios::app);
 	string codigo, contraseña, nombre, apellido, correo; int tiempoEnCoursera, id, reputacion;
 	cout << "Ingrese el codigo del profesor a añadir: "; cin >> codigo;
 	cout << "Ingrese el nombre del profesor a añadir: "; cin >> nombre;
@@ -137,6 +178,8 @@ void Administrador::añadir_profesores(AVLTree<Profesor*>& profe)
 	profe.insertar(pro, cmp);
 	Usuario usprofe = { 'P', correo, contraseña };
 	guardar(usprofe);
+	string name = "profesoresGuardados/" + codigo + ".txt";
+	ofstream archivo(name, ios::app);
 	if (archivo.is_open()) {
 		archivo << "codigo: " << codigo << endl;
 		archivo << "nombre: " << nombre << endl;
@@ -155,11 +198,37 @@ void Administrador::añadir_profesores(AVLTree<Profesor*>& profe)
 }
 void Administrador::eliminar_profesores(AVLTree<Profesor*>& profe)
 {
-
+	string cod;
+	cout << "Ingresar el codigo del profesor a eliminar: "; cin >> cod;
+	string name = "profesoresGuardados/" + cod + ".txt";
+	if (fs::exists(name))
+	{
+		fs::remove(name);
+		cout << "Profesor Eliminado";
+	}
+	else {
+		cout << "Ese profesor no existe" << endl;
+	}
+	_getch();
 }
+
 void Administrador::ver_instituciones(AVLTree<Institucion*>& inst)
 {
-
+	string name = "Usuarios/usuarios.txt";
+	ifstream archivo(name);
+	if (archivo.is_open())
+	{
+		string linea;
+		while (getline(archivo, linea))
+		{
+			if (!linea.empty() && linea[0] == 'I')
+			{
+				cout << linea << endl;
+				cout << endl;
+			}
+		}
+	}
+	_getch();
 }
 void Administrador::añadir_instituciones(AVLTree<Institucion*>& inst)
 {
@@ -179,7 +248,21 @@ void Administrador::añadir_instituciones(AVLTree<Institucion*>& inst)
 }
 void Administrador::eliminar_instituciones(AVLTree<Institucion*>& inst)
 {
-
+	string name1 = "Usuarios/usuarios.txt", name2 = "Usuarios/usuarios1.txt"; string correo, linea;
+	cout << "Ingresar el correo de la institucion a eliminar: "; cin >> correo;
+	ifstream archivo1(name1); ofstream archivo2(name2);
+	while (getline(archivo1, linea))
+	{
+		if (linea.find(correo) == string::npos)
+		{
+			archivo2 << linea << endl;
+		}
+	}
+	archivo1.close(); archivo2.close();
+	remove(name1.c_str());
+	rename(name2.c_str(), name1.c_str());
+	cout << "Institucion eliminada";
+	_getch();
 }
 
 void Administrador::menu_admin(ListaEnlazada<Curso*>& curso, ListaEnlazada<Estudiante*>& estu, AVLTree<Profesor*>& profe, AVLTree<Institucion*>& inst)
