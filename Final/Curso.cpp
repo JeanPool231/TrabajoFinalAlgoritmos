@@ -3,14 +3,14 @@
 
 Curso::Curso()
     : nombre(""), id(""), categoria(""), descripcion(""), fechaCreacion(""),
-    duracionHoras(0), cantidadInscritos(0), numLecciones(0), costo(0) {
+    duracionHoras(0), cantidadInscritos(0), numLecciones(0), costo(0), codigo_profesor("") {
 }
 
 Curso::~Curso() {
 }
 
 Curso::Curso(string& nombre, string id, string& categoria, string& descripcion, string fechaCreacion,
-    int duracionHoras, int cantidadInscritos, int numLecciones, double costo) {
+    int duracionHoras, int cantidadInscritos, int numLecciones, double costo, string codigo_profesor) {
 
     this->nombre = nombre;
     this->id = id;
@@ -20,6 +20,7 @@ Curso::Curso(string& nombre, string id, string& categoria, string& descripcion, 
     this->cantidadInscritos = cantidadInscritos;
     this->numLecciones = numLecciones;
     this->costo = costo;
+    this->codigo_profesor = codigo_profesor;
 }
 
 string Curso::getNombre() { return nombre; }
@@ -30,6 +31,7 @@ string Curso::getFechaCreacion() { return fechaCreacion; }
 int Curso::getDuracionHoras() { return duracionHoras; }
 int Curso::getCantidadInscritos() { return cantidadInscritos; }
 int Curso::getNumLecciones() { return numLecciones; }
+string Curso::getCodigoProfesor() { return codigo_profesor; }
 string Curso::getduracionentexto() const {
     return duracionentexto;
 }
@@ -44,6 +46,7 @@ void Curso::setFechaCreacion(string fechaCreacion) { this->fechaCreacion = fecha
 void Curso::setDuracionHoras(int duracionHoras) { this->duracionHoras = duracionHoras; }
 void Curso::setCantidadInscritos(int cantidadInscritos) { this->cantidadInscritos = cantidadInscritos; }
 void Curso::setNumLecciones(int numLecciones) { this->numLecciones = numLecciones; }
+void Curso::setCodigoProfesor(string codigo_profesor) { this->codigo_profesor = codigo_profesor; }
 void Curso::setduracionentexto(const string& d) {
     duracionentexto = d;
 }

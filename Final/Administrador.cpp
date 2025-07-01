@@ -34,7 +34,7 @@ void Administrador::ver_cursos(ListaEnlazada<Curso*>& curso)
 void Administrador::anadir_cursos(ListaEnlazada<Curso*>& curso)
 {
 	int opc; ofstream archivo("cursosCreados/654633245.txt", ios::app);
-	string nombre, id, categoria, descripcion, fechaCreacion;
+	string nombre, id, categoria, descripcion, fechaCreacion, codigo_profesor;
 	int duracionHoras, cantidadInscritos,numLecciones;
 	double costo;
 	cout << "Ingrese nombre del curso a agregar: "; cin >> nombre;
@@ -46,7 +46,8 @@ void Administrador::anadir_cursos(ListaEnlazada<Curso*>& curso)
 	cout << "Ingrese la cantidad de inscritos del curso a agregar: "; cin >> cantidadInscritos;
 	cout << "Ingrese el numero de lecciones del curso a agregar: "; cin >> numLecciones;
 	cout << "Ingrese el costo del curso"; cin >> costo;
-	Curso* c = new Curso(nombre, id, categoria, descripcion, fechaCreacion, duracionHoras, cantidadInscritos, numLecciones, costo);
+	cout << "Ingrese el codigo del profesor encargado: "; cin >> codigo_profesor;
+	Curso* c = new Curso(nombre, id, categoria, descripcion, fechaCreacion, duracionHoras, cantidadInscritos, numLecciones, costo, codigo_profesor);
 	cout << endl;
 	cout << "Donde quiere agregar el nuevo curso: Inicio(1) o Final (2): "; cin >> opc;
 	if (opc == 1)
@@ -126,7 +127,8 @@ void Administrador::ver_profesores(AVLTree<Profesor*>& profe)
 void Administrador::anadir_profesores(AVLTree<Profesor*>& profe)
 {
 	ofstream archivo("profesoresGuardados/P12.txt", ios::app);
-	string codigo, contrasena, nombre, apellido, correo; int tiempoEnCoursera, id, reputacion;
+	string codigo, contrasena, nombre, apellido, correo; int tiempoEnCoursera, reputacion;
+	string id;
 	cout << "Ingrese el codigo del profesor a anadir: "; cin >> codigo;
 	cout << "Ingrese el nombre del profesor a anadir: "; cin >> nombre;
 	cout << "Ingrese el apellido del profesor a anadir: "; cin >> apellido;
@@ -135,6 +137,7 @@ void Administrador::anadir_profesores(AVLTree<Profesor*>& profe)
 	cout << "Ingrese el tiempo en Cursera del profesor a anadir: "; cin >> tiempoEnCoursera;
 	cout << "Ingrese el ID del profesor a anadir: "; cin >> id;
 	cout << "Ingrese la reputacion del profesor a anadir: "; cin >> reputacion;
+
 	Profesor* pro = new Profesor(codigo, nombre, apellido, correo, tiempoEnCoursera, id, reputacion);
 	cout << endl;
 	auto cmp = [](Profesor*& a, Profesor*& b) { return a->getReputacion() < b->getReputacion(); };

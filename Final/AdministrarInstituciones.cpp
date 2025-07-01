@@ -84,8 +84,8 @@ void agregarprofesor2(Institucion& inst) {
 
 
     string codigo = "", nombre, apellido, correo, cursoSeleccionado;
-    int tiempoEnCoursera = 0, id = 0, reputacion = 0;
-
+    int tiempoEnCoursera = 0, reputacion = 0;
+    string id = "";
     cout << "Ingrese datos del profesor:\n";
     cout << "Nombre: "; getline(cin, nombre);
     cout << "Apellido: "; getline(cin, apellido);
