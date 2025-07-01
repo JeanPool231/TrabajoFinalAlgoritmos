@@ -5,6 +5,7 @@
 #include "Institucion.h"
 #include "HashUtil.h"
 #include "ListaEnlazada.h"
+#include "ListaDobleEnlazada.h"
 #include "Usuario.h"
 #include "Estudiante.h"
 #include "Profesor.h"
@@ -39,13 +40,17 @@ private:
 	void menuEstudiante();
 	void cursosEstudiante();
 	void perfilEstudiante();
-	void saldoEstudiante();
+	//void saldoEstudiante();
 	void cursosInscritos();
 	void iniciarSesionUI();
 	void mostrarCursosUI();
 	void registroEstudianteUI();
 	void registroUI();
 	void inicioUI();
+	void bienvenidoUI();
+	void estudianteUI();
+	void verPerfilUI();
+	void verCursoSeleccionadoUI(Curso);
 public:
 	void iniciarPrograma();
 };

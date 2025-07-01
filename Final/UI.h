@@ -2,6 +2,9 @@
 #include <iostream>
 #include <io.h>
 #include <fcntl.h>
+#include <chrono>
+#include <thread>
+
 using namespace std;
 class UI {
 private:
@@ -44,6 +47,70 @@ public:
 
         _setmode(_fileno(stdout), _O_TEXT);
     }
+    void tituloBienvenido(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        moverCursor(fila++, columna); std::wcout << L"   █████████                                                                    \n";
+        moverCursor(fila++, columna); std::wcout << L"  ███░░░░░███                                                                   \n";
+        moverCursor(fila++, columna); std::wcout << L" ███     ░░░   ██████  █████ ████ ████████   █████   ██████  ████████   ██████  \n";
+        moverCursor(fila++, columna); std::wcout << L"░███          ███░░███░░███ ░███ ░░███░░███ ███░░   ███░░███░░███░░███ ░░░░░███ \n";
+        moverCursor(fila++, columna); std::wcout << L"░███         ░███ ░███ ░███ ░███  ░███ ░░░ ░░█████ ░███████  ░███ ░░░   ███████ \n";
+        moverCursor(fila++, columna); std::wcout << L"░░███     ███░███ ░███ ░███ ░███  ░███      ░░░░███░███░░░   ░███      ███░░███ \n";
+        moverCursor(fila++, columna); std::wcout << L" ░░█████████ ░░██████  ░░████████ █████     ██████ ░░██████  █████    ░░████████\n";
+        moverCursor(fila++, columna); std::wcout << L"  ░░░░░░░░░   ░░░░░░    ░░░░░░░░ ░░░░░     ░░░░░░   ░░░░░░  ░░░░░      ░░░░░░░░  \n";
+
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+    void barraCargaConCuadro(int fila, int columna, int largo, int retardoMs) {
+        if (largo < 2) return;
+
+        int ancho = largo + 2;  
+        int alto = 3;           
+
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        wchar_t horizontal = L'─';
+        wchar_t vertical = L'│';
+        wchar_t esquina_sup_izq = L'┌';
+        wchar_t esquina_sup_der = L'┐';
+        wchar_t esquina_inf_izq = L'└';
+        wchar_t esquina_inf_der = L'┘';
+
+        auto moverCursor = [](int f, int c) {
+            wcout << L"\033[" << f << L";" << c << L"H";
+            };
+
+        for (int y = 0; y < alto; ++y) {
+            moverCursor(fila + y, columna);
+            for (int x = 0; x < ancho; ++x) {
+                if (y == 0 && x == 0) wcout << esquina_sup_izq;
+                else if (y == 0 && x == ancho - 1) wcout << esquina_sup_der;
+                else if (y == alto - 1 && x == 0) wcout << esquina_inf_izq;
+                else if (y == alto - 1 && x == ancho - 1) wcout << esquina_inf_der;
+                else if (y == 0 || y == alto - 1) wcout << horizontal;
+                else if (x == 0 || x == ancho - 1) wcout << vertical;
+                else wcout << L' ';
+            }
+        }
+
+
+        auto moverCursor2 = [](int f, int c) {
+            wcout << "\033[" << f << ";" << c << "H";
+            };
+
+        int filaBarra = fila + 1;
+        int columnaBarra = columna + 1;
+
+        for (int i = 0; i <= largo; ++i) {
+            moverCursor2(filaBarra, columnaBarra);
+            for (int j = 0; j < i; ++j) wcout << L"█";
+            for (int j = i; j < largo; ++j) wcout << L" ";
+            cout.flush();
+            this_thread::sleep_for(chrono::milliseconds(retardoMs));
+        }
+        _setmode(_fileno(stdout), _O_TEXT); 
+    }
+
     void tituloOpcion(int fila, int columna) {
         _setmode(_fileno(stdout), _O_U16TEXT);
 
@@ -98,11 +165,7 @@ public:
         moverCursor(22, 4);
         wcout << L"Input:";
         //tituloOpcion(20, 4);
-        
-        moverCursor(2, 2);
-        wcout << L"MENU DE";
-        moverCursor(3, 2);
-        wcout << L"OPCIONES";
+        tituloOpciones(2, 2);
         _setmode(_fileno(stdout), _O_TEXT);
     }
     void tituloIniciarSesion(int fila, int columna) {
@@ -179,6 +242,38 @@ public:
                 else std::wcout << L' ';
             }
         }
+
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+    void cuadroRedondo(int fila, int columna, int ancho, int alto) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        wchar_t esquinaSupIzq = L'╭';
+        wchar_t esquinaSupDer = L'╮';
+        wchar_t esquinaInfIzq = L'╰';
+        wchar_t esquinaInfDer = L'╯';
+        wchar_t horizontal = L'─';
+        wchar_t vertical = L'│';
+
+        // Parte superior
+        moverCursor(fila, columna);
+        std::wcout << esquinaSupIzq;
+        for (int i = 0; i < ancho - 2; ++i) std::wcout << horizontal;
+        std::wcout << esquinaSupDer;
+
+        // Laterales
+        for (int i = 1; i < alto - 1; ++i) {
+            moverCursor(fila + i, columna);
+            std::wcout << vertical;
+            moverCursor(fila + i, columna + ancho - 1);
+            std::wcout << vertical;
+        }
+
+        // Parte inferior
+        moverCursor(fila + alto - 1, columna);
+        std::wcout << esquinaInfIzq;
+        for (int i = 0; i < ancho - 2; ++i) std::wcout << horizontal;
+        std::wcout << esquinaInfDer;
 
         _setmode(_fileno(stdout), _O_TEXT);
     }
@@ -315,4 +410,24 @@ public:
 
         _setmode(_fileno(stdout), _O_TEXT);
     }
+
+    void tituloTuPerfil(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        moverCursor(fila++, columna); std::wcout << L"░▀█▀░█░█░░░█▀█░█▀▀░█▀▄░█▀▀░▀█▀░█░░\n";
+        moverCursor(fila++, columna); std::wcout << L"░░█░░█░█░░░█▀▀░█▀▀░█▀▄░█▀▀░░█░░█░░\n";
+        moverCursor(fila++, columna); std::wcout << L"░░▀░░▀▀▀░░░▀░░░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀\n";
+
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+    void tituloOpciones(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        moverCursor(fila++, columna); std::wcout << L"┏┓   •       \n";
+        moverCursor(fila++, columna); std::wcout << L"┃┃┏┓┏┓┏┓┏┓┏┓┏\n";
+        moverCursor(fila++, columna); std::wcout << L"┗┛┣┛┗┗┗┛┛┗┗ ┛\n";
+        moverCursor(fila++, columna); std::wcout << L"  ┛           \n";
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+
 };

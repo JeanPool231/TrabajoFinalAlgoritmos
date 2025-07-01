@@ -12,6 +12,7 @@ private:
     string nombres;
     string apellidos;
     string codigo;
+    double saldo;
     ListaEnlazada<Curso> cursosInscritos;
 public:
     Estudiante();
@@ -24,6 +25,7 @@ public:
     string getNombres();
     string getApellidos();
     string getCodigo();
+    double getSaldo();
     ListaEnlazada<Curso> getCursosInscritos();
 
     // Setters
@@ -33,4 +35,5 @@ public:
     void setApellidos(string apellidos);
     void agregarCurso(Curso curso);
     void setCodigo(string codigo);
+    void setSaldo(double saldo);
 };

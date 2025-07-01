@@ -9,27 +9,28 @@ using namespace std;
 class Profesor {
 private:
 	string codigo_institucion, nombre, apellido, correo;
-	int tiempoEnCoursera, id, reputacion;
+	string id;
+	int tiempoEnCoursera, reputacion;
 	string cursoAsignado;
 	ListaEnlazada<Curso*> cursosCreados;
 public:
 	Profesor();
 	~Profesor();
 	Profesor(string codigo_institucion, string nombre, string apellido, string correo,
-		int tiempoEnCoursera, int id, int reputacion);
+		int tiempoEnCoursera, string id, int reputacion);
 	void setCodigo(string);
 	void setNombre(string);
 	void setApellido(string);
 	void setCorreo(string);
 	void setTiempoEnCoursera(int);
-	void setId(int);
+	void setId(string);
 	void setReputacion(int);
 	string getCodigo();
 	string getNombre();
 	string getApellido();
 	string getCorreo();
 	int getTiempoEnCoursera();
-	int getId();
+	string getId();
 	int getReputacion();
 
 	void asignarCurso(string nombreCurso) {
