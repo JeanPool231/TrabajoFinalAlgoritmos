@@ -1,9 +1,7 @@
-[calculo]
-id: 43924692
-categoria: a
-descripcion: integrales
-duracion: 50 horas
-fecha: 15/06/2025 13:09:15
-
-[LECCIONES]
-- Como derivar
+Calculo
+43924692
+Matematica
+integrales
+50
+15/06/2025 13:09:15
+Como derivar

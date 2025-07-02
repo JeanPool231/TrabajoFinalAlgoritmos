@@ -1,0 +1,8 @@
+codigo: 222213451
+nombre: Andres Felipe
+apellido: Quispe Lujan
+correo: andres.quispe@gmail.com
+tiempo_en_coursera: 0
+id: 0
+reputacion: 0
+curso_asignado: 

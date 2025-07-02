@@ -1,4 +1,4 @@
-ï»¿#include "Sistema.h"
+#include "Sistema.h"
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -10,166 +10,175 @@ namespace fs = std::filesystem;
 #include "AdministrarCursos.h"
 #include <vector>
 #include <clocale>
+#include <algorithm>
+#include "CursoUtils.h"
 using namespace std;
+#include <iostream>
 
+void limpiarZona(int filaInicio, int columnaInicio, int alto, int ancho) {
+    for (int i = 0; i < alto; ++i) {
+        cout << "\033[" << (filaInicio + i) << ";" << columnaInicio << "H";
+        cout << string(ancho, ' ');
+    }
+}
 
-Curso* leerCursoDesdeArchivo(string ruta) {
-    ifstream archivo(ruta);
-    string linea;
-    Curso* curso = new Curso();
+string leerPassword() {
+    string password;
+    char c;
 
-    bool leyendoLecciones = false;
-    bool nombreYaLeido = false;
-
-    while (getline(archivo, linea)) {
-        if (linea.empty()) continue;
-
-
-        linea.erase(0, linea.find_first_not_of(" \t\r\n"));
-        linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
-
-        if (!leyendoLecciones) {
-            if (!nombreYaLeido && linea.front() == '[' && linea.back() == ']') {
-                string nombre = linea.substr(1, linea.size() - 2);
-                curso->setNombre(nombre);
-                nombreYaLeido = true;
-            }
-            else if (linea == "[LECCIONES]") {
-                leyendoLecciones = true;
-            }
-            else if (linea.rfind("id:", 0) == 0) {
-                string valor = linea.substr(3);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setId(valor);
-            }
-            else if (linea.rfind("categoria:", 0) == 0) {
-                string valor = linea.substr(9);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setCategoria(valor);
-            }
-            else if (linea.rfind("descripcion:", 0) == 0) {
-                string valor = linea.substr(11);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setDescripcion(valor);
-            }
-            else if (linea.rfind("duracion:", 0) == 0) {
-                string valor = linea.substr(8);
-
-                string numeroHoras = "";
-                for (char c : valor) {
-                    if (isdigit(c)) {
-                        numeroHoras += c;
-                    }
-                    else {
-                        break;
-                    }
-                }
-
-                if (!numeroHoras.empty()) {
-                    int horas = stoi(numeroHoras);
-                    curso->setDuracionHoras(horas);
-                }
-                else {
-                    curso->setDuracionHoras(0);
-                }
-            }
-            else if (linea.rfind("fecha:", 0) == 0) {
-                string valor = linea.substr(6);
-                valor.erase(0, valor.find_first_not_of(" "));
-                curso->setFechaCreacion(valor);
+    while (true) {
+        c = _getch(); // lee carácter sin mostrarlo
+        if (c == 13) break; // Enter
+        else if (c == 8) { // Backspace
+            if (!password.empty()) {
+                password.pop_back();
+                cout << "\b \b"; // Borra el * anterior
             }
         }
         else {
-            if (linea.rfind("- ", 0) == 0) {
-                string leccionTitulo = linea.substr(2);
-                string contenidoVacio = "";
-                int duracionPorDefecto = 0;
-
-                Leccion* lec = new Leccion(leccionTitulo, contenidoVacio, duracionPorDefecto);
-                curso->getLecciones().insertarAlFinal(lec);
-            }
+            password += c;
+            cout << '*';
         }
+    }
+
+    return password;
+}
+
+void imprimirConFondo(string texto, string colorFondo) {
+    string fondo;
+
+    if (colorFondo == "negro")      fondo = "40";
+    else if (colorFondo == "rojo")  fondo = "41";
+    else if (colorFondo == "verde") fondo = "42";
+    else if (colorFondo == "amarillo") fondo = "43";
+    else if (colorFondo == "azul")  fondo = "44";
+    else if (colorFondo == "magenta") fondo = "45";
+    else if (colorFondo == "cyan")  fondo = "46";
+    else if (colorFondo == "blanco")fondo = "47";
+    else fondo = "40"; // fondo negro por defecto
+
+    std::cout << "\033[37;" << fondo << "m" // texto blanco + fondo
+        << texto
+        << "\033[0m"; // restaura color y fondo
+}
+
+void sombrearZonaRect(int filaInicio, int columnaInicio, int alto, int ancho, string colorFondo) {
+    std::string fondo;
+
+    if (colorFondo == "negro")      fondo = "40";
+    else if (colorFondo == "rojo")  fondo = "41";
+    else if (colorFondo == "verde") fondo = "42";
+    else if (colorFondo == "amarillo") fondo = "43";
+    else if (colorFondo == "azul")  fondo = "44";
+    else if (colorFondo == "magenta") fondo = "45";
+    else if (colorFondo == "cyan")  fondo = "46";
+    else if (colorFondo == "blanco")fondo = "47";
+    else fondo = "40"; // fondo negro por defecto
+
+    for (int i = 0; i < alto; ++i) {
+        std::cout << "\033[" << (filaInicio + i) << ";" << columnaInicio << "H";
+        std::cout << "\033[0;" << fondo << "m" << std::string(ancho, ' ') << "\033[0m";
+    }
+}
+
+void moverCursor(int fila, int columna) {
+    cout << "\033[" << fila << ";" << columna << "H";
+}
+void resetColor() {
+    cout << "\033[0m";
+}
+void moverCursorColor(int fila, int columna, string color) {
+    string codigoColor = "0"; 
+
+    if (color == "negro")        codigoColor = "30";
+    else if (color == "rojo")    codigoColor = "31";
+    else if (color == "verde")   codigoColor = "32";
+    else if (color == "amarillo")codigoColor = "33";
+    else if (color == "azul")    codigoColor = "34";
+    else if (color == "magenta") codigoColor = "35";
+    else if (color == "cyan")    codigoColor = "36";
+    else if (color == "blanco")  codigoColor = "37";
+    else if (color == "brillante") codigoColor = "1";
+    else if (color == "subrayado") codigoColor = "4";
+    else if (color == "inverso") codigoColor = "7";
+
+    std::cout << "\033[" << fila << ";" << columna << "H"
+        << "\033[" << codigoColor << "m";
+}
+void limpiarZona(int fila, int columnaInicio, int cantidad) {
+    moverCursor(fila, columnaInicio);
+    cout << string(cantidad, ' ');
+    moverCursor(fila, columnaInicio);
+}
+Profesor* leerProfesor(string ruta) {
+    ifstream archivo(ruta);
+    Profesor* profesor = new Profesor();
+    if (!archivo.is_open()) {
+        cerr << "Error al abrir el archivo: " << ruta << '\n';
+        system("pause");
+        return profesor;
+    }
+    string linea;
+    int i = 1;
+    while (getline(archivo, linea)) {
+        if (i == 1) {
+            profesor->setCodigo(linea);
+        }
+        else if (i == 2) {
+            profesor->setNombre(linea);
+        }
+        else if (i == 3) {
+            profesor->setApellido(linea);
+        }
+        else if (i == 4) {
+            profesor->setCorreo(linea);
+        }
+        else if (i == 5) {
+            profesor->setTiempoEnCoursera(stoi(linea));
+        }
+        else if (i == 6) {
+            profesor->setId(linea);
+        }
+        else if (i == 7) {
+            profesor->setReputacion(stoi(linea));
+        }
+        i++;
     }
 
     archivo.close();
-    return curso;
+    return profesor;
+
 }
+void guardarEstudiante(Estudiante nuevoEstudiante) {
+    string nombre = nuevoEstudiante.getCorreo();
+    string ruta = "Usuarios/" + nombre + ".txt";
 
-
-Profesor* leerprofesor(const string& ruta) {
-    try {
-        ifstream archivo(ruta);
-
-        string linea, codigo, nombre, apellido, correo, curso_asignado;
-        char sexo = ' ', estadoCivil = ' ';
-        int edad = 0, tiempoEnCoursera = 0, id = 0, reputacion = 0;
-
-        while (getline(archivo, linea)) {
-            linea.erase(0, linea.find_first_not_of(" \t\r\n"));
-            linea.erase(linea.find_last_not_of(" \t\r\n") + 1);
-            if (linea.empty()) continue;
-
-            if (linea.rfind("codigo:", 0) == 0) codigo = linea.substr(7);
-            else if (linea.rfind("nombre:", 0) == 0) nombre = linea.substr(7);
-            else if (linea.rfind("apellido:", 0) == 0) apellido = linea.substr(9);
-            else if (linea.rfind("correo:", 0) == 0) correo = linea.substr(7);
-            //else if (linea.rfind("sexo:", 0) == 0 && linea.length() > 6) sexo = linea[6];
-            //else if (linea.rfind("estado_civil:", 0) == 0 && linea.length() > 14) estadoCivil = linea[14];
-            //else if (linea.rfind("edad:", 0) == 0) {
-            //    string val = linea.substr(5);
-            //    if (!val.empty()) edad = stoi(val);
-            //}
-            else if (linea.rfind("tiempo_en_coursera:", 0) == 0) {
-                string val = linea.substr(21);
-                if (!val.empty()) tiempoEnCoursera = stoi(val);
-            }
-            else if (linea.rfind("id:", 0) == 0) {
-                string val = linea.substr(3);
-                if (!val.empty()) id = stoi(val);
-            }
-            else if (linea.rfind("reputacion:", 0) == 0) {
-                string val = linea.substr(11);
-                if (!val.empty()) reputacion = stoi(val);
-            }
-            else if (linea.rfind("curso_asignado:", 0) == 0) {
-                if (linea.length() > 16) {
-                    curso_asignado = linea.substr(16);
-                    curso_asignado.erase(0, curso_asignado.find_first_not_of(" "));
-                }
-                else {
-                    curso_asignado = ""; //b dnt
-                }
-            }
-        }
-
-        archivo.close();
-
-        if (codigo.empty() || nombre.empty()) {
-            return nullptr;
-        }
-
-        Profesor* prof = new Profesor(codigo, nombre, apellido, correo,
-            tiempoEnCoursera, id, reputacion);
-        if (!curso_asignado.empty())
-            prof->asignarCurso(curso_asignado);
-
-        return prof;
-    }
-    catch (const exception& e) {
-        return nullptr;
-    }
-}
-
-void guardarUsuario(Usuario usuario) {
-    ofstream archivo("Usuarios/usuarios.txt", ios::app);
+    ofstream archivo(ruta);
     if (archivo.is_open()) {
-        archivo << usuario.tipoUsuario << " " << usuario.correo << " " << usuario.contrasena << endl;
+        archivo << 'E' << '\n';
+        archivo << nuevoEstudiante.getCorreo() << '\n';
+        archivo << nuevoEstudiante.getContrasena() << '\n';
+        archivo << nuevoEstudiante.getCodigo() << '\n';
         archivo.close();
     }
     else {
-        cout << "Error al abrir el archivo para guardar.\n";
+        cout << "Error al crear el archivo para el usuario.\n";
+    }
+    nombre = nuevoEstudiante.getCodigo();
+    ruta = "estudiantesCreados/" + nombre + ".txt";
+
+    ofstream archivo2(ruta);
+    if (archivo2.is_open()) {
+        archivo2 << nuevoEstudiante.getNombres() << '\n';
+        archivo2 << nuevoEstudiante.getApellidos() << '\n';
+        archivo2 << nuevoEstudiante.getCorreo() << '\n';
+        archivo2.close();
+    }
+    else {
+        cout << "Error al crear el archivo para el usuario.\n";
     }
 }
+
 string obtenerFechaHoraActual() {
     time_t ahora = time(0);
     tm tiempo;
@@ -188,62 +197,32 @@ string obtenerFechaHoraActual() {
 
 void Sistema::menuPrincipal() {
     int opcion;
-    cout << "Coursera\n";
-    cout << "1. Iniciar sesion\n";
-    cout << "2. Registrarte\n";
-    cout << "3. Acceder a los cursos(sin iniciar sesion)\n";
-    cout << "4. Salir\n";
-    cout << "Opcion: ";
-    cin >> opcion;
-    switch (opcion) {
-    case 1:
-        iniciarSesion();
-        break;
-    case 2:
-        registrarse();
-        break;
-    case 3:
-        break;
-    case 4:
-        break;
-    default:
-        break;
-    }
+    do {
+        system("cls");
+        inicioUI();
+        moverCursor(24,5);
+		cin >> opcion;
+		switch (opcion) {
+		case 1:
+			iniciarSesion();
+			break;
+		case 2:
+			registrarse();
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		default:
+			break;
+		}
+    } while (opcion != 5);
 }
 
 
 void Sistema::menuInstitucion() {
 
     Institucion inst("UPC", "Educacion universitaria", 2018);
-
-    fs::create_directory("logs");
-
-    for (const auto& entry : fs::directory_iterator("profesoresGuardados")) {
-        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
-            if (fs::file_size(entry.path()) == 0) continue;
-
-            Profesor* prof = leerprofesor(entry.path().string());
-            if (prof != nullptr) {
-                inst.agregarprofesor(*prof);
-                delete prof;
-            }
-        }
-    }
-
-    for (auto entry : fs::directory_iterator("cursosCreados")) {
-        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
-            Curso* curso = leerCursoDesdeArchivo(entry.path().string());
-            if (curso != nullptr) {
-                inst.agregarcurso(curso); 
-            }
-        }
-    }
-
-    // test
-    Profesor p1("P1", "Cain", "Mohammed", "cain@upc.edu.pe", 5, 101, 95);
-    Profesor p2("P2", "Beniju", "Ballestin", "beniju@upc.edu.pe", 3, 102, 88);
-    inst.agregarprofesor(p1);
-    inst.agregarprofesor(p2);
 
     int opc;
     do {
@@ -287,89 +266,149 @@ void Sistema::menuInstitucion() {
 
     } while (opc != 5);
 }
+void saldoEstudiante() {
 
+}
 void Sistema::menuEstudiante() {
     int opcion;
-    system("cls");
     do {
         system("cls");
-        cout << "Menu estudiante\n";
-        cout << "1. Ver Cursos\n";
-        cout << "2. Ver Perfil\n";
-        cout << "3. Saldo\n";
-        cout << "4. Cerrar Sesion\n";
-        cout << "Opcino: ";
+        estudianteUI();
+        moverCursor(24, 5);
         cin >> opcion;
         switch (opcion)
         {
         case 1:
+            //seleccionar Curso
             cursosEstudiante();
             break;
         case 2:
-            perfilEstudiante();
+            //Buscar Cursos
+            cursosInscritos();
             break;
         case 3:
+            //perfil
+            perfilEstudiante();
             break;
         case 4:
+            break;
+        case 5:
             break;
         default:
             break;
         }
-    } while (opcion != 4);
+    } while (opcion != 5);
+}
+void Sistema::cursosInscritos() {
+    ListaEnlazada<Curso> inscritos = estudiante->getCursosInscritos();
+    Nodo<Curso>* actual = inscritos.obtenerCabeza();
+    cout << "Tus cursos Inscritos son: \n";
+    int i = 1;
+    while (actual != nullptr) {
+        Curso& auxCurso = actual->dato;
+        cout << i << ". ";
+        cout << auxCurso.getNombre() << '\n';
+        actual = actual->siguiente;
+        i++;
+    }
 }
 void Sistema::perfilEstudiante() {
     system("cls");
-    cout << "Perfil\n";
-    cout << "1. Nombres: " << estudiante->getNombres() << '\n';
-    cout << "2. Apellidos: " << estudiante->getApellidos() << '\n';
-    cout << "3. Correo: " << estudiante->getCorreo() << '\n';
-    system("pause");
+    verPerfilUI();
+    moverCursor(9, 81);
+    cout << estudiante->getNombres();
+    moverCursor(12, 81);
+    cout << estudiante->getApellidos();
+    moverCursor(15, 81);
+    cout << estudiante->getCorreo();
+    string s;
+    moverCursor(24, 5);
+    cin >> s;
+
+    system("cls");
 }
 void Sistema::cursosEstudiante() {
+    int opcion, indice;
     system("cls");
     cout << "Los Cursos disponibles son: \n";
     AdministrarCurso auxCursos = cursos;
-    auxCursos.ImprimirNombreCursos();
-    system("pause");
-}
-bool Sistema::validarCorreo() {
-    return false;
-}
-
-void Sistema::iniciarSesion() {
-    string correo, contrasena;
-    cout << "Ingrese el correo: ";
-    cin >> correo;
-    cout << "Ingrese la contrasena: ";
-    cin >> contrasena;
-
-    bool encontrado = false;
-    Nodo<Usuario>* actual = usuarios.obtenerCabeza();
-    Usuario& u = actual->dato;
-    while (actual != nullptr) {
-        u = actual->dato;
-        actual = actual->siguiente;
-        if (u.correo == correo && u.contrasena == contrasena) {
-            encontrado = true;
+    Curso nuevoCurso;
+    do {
+        system("cls");
+		auxCursos.ImprimirNombreCursos();
+		cout << "Opciones: \n";
+		cout << "1. Ver detalles de un curso\n";
+		cout << "2. Inscribirse a un curso\n";
+		cout << "3. Ver cursos ordenados por nombre\n";
+		cout << "4. Ver cursos ordenados por costo\n";
+        cout << "5. Volver\n";
+        cout << "Opcion : "; cin >> opcion;
+        system("cls");
+        switch (opcion) {
+        case 1:
+            auxCursos.ImprimirNombreCursosIndices();
+            cout << "\nIngrese el indice del curso a ver detalles: ";
+            cin >> indice;
+            auxCursos.verDetallesCursos(indice);
+            system("pause");
+            break;
+        case 2:
+            auxCursos.ImprimirNombreCursosIndices();
+            cout << "\nSeleccione el indice del curso a inscribirse: "; cin >> indice;
+            nuevoCurso = auxCursos.InscribirseACurso(indice);
+            estudiante->agregarCurso(nuevoCurso);
+            cout << "Se ha inscrito correctamente al curso de " << nuevoCurso.getNombre() << "!\n";
+            system("pause");
+            break;
+        case 3:
+            auxCursos.mostrarCursosOrdenados([](Curso a, Curso b) {
+                string aux = a.getNombre();
+                string aux2 = b.getNombre();
+                char c1 = aux[0];
+                char c2 = aux2[0];
+                return toupper(c1) < toupper(c2);
+                });
+            system("pause");
+            break;
+        case 4:
+            auxCursos.mostrarCursosOrdenados([](Curso a, Curso b) {
+                return a.getCosto() < b.getCosto();
+                });
+            system("pause");
+            break;
+        case 5:
+            break;
+        default:
+            cout << "Ingrese a una opcion valida\n";
             break;
         }
+    } while (opcion != 5);
+}
+bool Sistema::validarCorreo(string& correo) {
+    string ar = "Usuarios/" + correo + ".txt";
+    ifstream archivo(ar);
+    if (!archivo) {
+        return false;
     }
-    if (encontrado) {
-        switch (u.tipoUsuario) {
-        case 'E': menuEstudiante(); break;
-        case 'P': menuProfesor(); break;
-        case 'I':  break;
+    return true;
+}
+bool Sistema::validarContrasena(string& contrasena, string& correo) {
+    string ruta = "Usuarios/" + correo + ".txt";
+    ifstream archivo(ruta);
+    string linea;
+    int lineaActual = 0;
+    bool si = false;
+    while (getline(archivo, linea)) {
+        lineaActual++;
+        if (lineaActual == 3) {
+            archivo.close();
+            if (linea == contrasena) {
+                si = true;
+                break;
+            }
         }
     }
-    else {
-        cout << "Correo o contraseÃ±a incorrectos.\n";
-    }
-    if (correo == "admin@gmail.com" && contrasena == "password")
-    {
-        menuAdmin();
-    }
-    system("pause");
-    system("cls");
+    return si;
 }
 
 void Sistema::menuAdmin() {
@@ -382,47 +421,98 @@ void Sistema::menuAdmin() {
 }
 
 void Sistema::registrarse() {
-    system("cls");
+    registroUI();
     char tipoUsuario;
-    cout << "Ingrese si es Estudiante(E), Profesor(P) o Institucion(I): "; cin >> tipoUsuario;
-    switch (tipoUsuario) {
-    case 'E':
-        registroEstudiante();
-        menuEstudiante();
-        break;
-    case 'P':
-        registroProfesor();
-        menuProfesor();
-        break;
-    case 'I':
-        registroInstitucion();
-        menuInstitucion();
-        break;
-    }
+    string waza;
+    do {
+		moverCursor(24, 71);
+		cin >> waza;
+		for (char& c : waza) c = tolower(c); // validacion 
+        if (waza == "estudiante") tipoUsuario = 'E';
+        else if (waza == "profesor") tipoUsuario = 'P';
+        else if (waza == "institucion") tipoUsuario = 'I';
+        else if (waza == "volver") tipoUsuario = 'V';
+        else tipoUsuario = 'O';
+		switch (tipoUsuario) {
+		case 'E':
+			registroEstudiante();
+			menuEstudiante();
+            return;
+			break;
+		case 'P':
+			registroProfesor();
+			menuProfesor();
+            return;
+			break;
+		case 'I':
+			registroInstitucion();
+			menuInstitucion();
+            return;
+			break;
+        case 'V':
+            break;
+        case 'O' :
+            moverCursor(23, 65);
+            cout << "Input invalido";
+		}
+    } while (waza != "volver");
 }
-
+/// <summary>
+/// 
+/// /
+/// /
+/// /
+/// /
+/// /
+/// /
+/// /
+/// 
+/// 
+/// 
+/// 
+/// 
+/// 
+/// 
+/// /////////////
+/// 
+/// /
+/// /
+/// 
+/// </summary>
 void Sistema::registroEstudiante() {
-    system("cls");
     string correo, contrasena, nombres, apellidos;
-    cout << "Ingrese el correo: "; cin >> correo;
-    cout << "Ingrese la contrasena: "; cin >> contrasena;
+    string contrasena2;
+    string codigo;
+    registroEstudianteUI();
+    moverCursor(7, 62);
     cin.ignore();
-    cout << "Ingrese sus Nombres: ";
+
     getline(cin, nombres);
-    cout << "Ingrese sus apellidos: ";
+    moverCursor(10, 62);
     getline(cin, apellidos);
-    cout << "Se ha registrado correctamente\n";
+
+    moverCursor(13, 62);
+    cin >> correo;
+
+    moverCursor(16, 62);
+    cin >> contrasena;
+
+    moverCursor(20, 62);
+    cin >> contrasena2;
+
     estudiante->setNombres(nombres);
     estudiante->setApellidos(apellidos);
     estudiante->setContrasena(contrasena);
     estudiante->setCorreo(correo);
-    Usuario nuevoUsuario = { 'E', correo, contrasena };
-    guardarUsuario(nuevoUsuario);
-    system("pause");
+    codigo = HashUtil::generarHash(nombres + to_string(rand() % 10000));
+    estudiante->setCodigo(codigo);
+    guardarEstudiante(*estudiante);
+    
     system("cls");
 }
 
 void Sistema::registroProfesor() {
+
     system("cls");
 	string codigo, nombre, apellido, correo;
 	char sexo, estadoCivil;
@@ -447,7 +537,6 @@ void Sistema::registroProfesor() {
     profesor->setNombre(nombre);
     //profesor.setSexo(sexo);
     Usuario nuevoUsuario = { 'P', correo, contrasena };
-    guardarUsuario(nuevoUsuario);
 
     system("pause");
     system("cls");
@@ -467,53 +556,52 @@ void Sistema::registroInstitucion() {
     system("cls");
 }
 void Sistema::inicializarDatos() {
-    string carpeta = "cursosCreados/";
+    //leer los cursos
+    string ruta = "cursosCreados/cursoHash.txt";
+    ifstream archivo(ruta);
+    if (!archivo.is_open()) {
+        cout << "error hijito\n";
+        system("pause");
+    }
+    string linea;
+    while (getline(archivo, linea)) {
+        string ruta2 = "cursosCreados/" + linea + ".txt";
+        Curso* curso = leerCurso(ruta2);
+        cursos.insertarAlFinal(*curso);
+    }
+    //leer a los profes
+	string rutaProfes("profesoresCreados/profesoresHash.txt");
+	ifstream archivoProfes(rutaProfes);
+	while (getline(archivoProfes, linea)) {
+		string rutaHash = "profesoresCreados/" + linea + ".txt";
+		Profesor* profesor = leerProfesor(rutaHash);
+		profesores.insertarAlFinal(*profesor);
+	}
 
-    for (auto entry : fs::directory_iterator(carpeta)) {
-        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
-            Curso* curso = leerCursoDesdeArchivo(entry.path().string());
-            cursos.insertarAlFinal(*curso);
-        }
-    }
-    
-    ifstream archivo("Usuarios/usuarios.txt");
-    if (archivo.is_open()) {
-        Usuario usuario;
-        while (archivo >> usuario.tipoUsuario >> usuario.correo >> usuario.contrasena) {
-            usuarios.insertarAlFinal(usuario);
-        }
-        archivo.close();
-    }
-    else {
-        cout << "No se pudo abrir el archivo de usuarios.\n";
-    }
 }
-
 void Sistema::menuProfesor() {
     int opcion;
     do {
         cout << "\n===== MENU PROFESOR =====" << endl;
         cout << "1. Crear curso" << endl;
-        cout << "2. Salir" << endl;
+        cout << "2. Ver cursos existentes" << endl;
+        cout << "3. Eliminar curso" << endl;
+        cout << "4. Salir" << endl;
         cout << "Opcion: ";
         cin >> opcion;
         cin.ignore();
 
         if (opcion == 1) {
-            // Crear curso
             string nombre, categoria, descripcion;
             int duracion;
 
             cout << "\n--- CREAR CURSO ---" << endl;
             cout << "Nombre del curso: ";
             getline(cin, nombre);
-
             cout << "Categoria: ";
             getline(cin, categoria);
-
             cout << "Descripcion: ";
             getline(cin, descripcion);
-
             cout << "Duracion (en horas): ";
             cin >> duracion;
             cin.ignore();
@@ -531,7 +619,7 @@ void Sistema::menuProfesor() {
             int subop;
             do {
                 cout << "\n--- GESTION DE LECCIONES ---" << endl;
-                cout << "1. Aï¿½adir una leccion al curso" << endl;
+                cout << "1. Añadir una leccion al curso" << endl;
                 cout << "2. Salir y guardar curso" << endl;
                 cout << "Opcion: ";
                 cin >> subop;
@@ -543,20 +631,19 @@ void Sistema::menuProfesor() {
 
                     cout << "Titulo de la leccion: ";
                     getline(cin, titulo);
-
                     cout << "Contenido de la leccion: ";
                     getline(cin, contenido);
-
                     cout << "Duracion de la leccion (en minutos): ";
                     cin >> duracionMin;
                     cin.ignore();
 
                     Leccion* nueva = new Leccion(titulo, contenido, duracionMin);
                     nuevoCurso.agregarLeccion(nueva);
-                    cursos.insertarAlFinal(nuevoCurso);
                 }
 
             } while (subop != 2);
+
+            cursos.insertarAlFinal(nuevoCurso);
 
             string archivoNombre = "cursosCreados/" + id + ".txt";
             ofstream archivo(archivoNombre);
@@ -583,16 +670,346 @@ void Sistema::menuProfesor() {
             }
         }
 
-    } while (opcion != 2);
+        else if (opcion == 2) {
+            cout << "\n--- CURSOS EXISTENTES ---\n";
+            cout << "Falta papu\n";
+        }
+
+        else if (opcion == 3) {
+            cout << "\n--- ELIMINAR CURSO ---\n";
+            cout << "Ingrese el ID del curso a eliminar: ";
+            string idEliminar;
+            getline(cin, idEliminar);
+
+            string ruta = "cursosCreados/" + idEliminar + ".txt";
+            if (fs::exists(ruta)) {
+                fs::remove(ruta);
+                cout << "Archivo eliminado correctamente.\n";
+            }
+            else {
+                cout << "No se encontró el archivo.\n";
+            }
+
+            bool eliminado = cursos.eliminarSi([&](Curso c) {
+                return c.getId() == idEliminar;
+                });
+
+            if (eliminado) {
+                cout << "Curso eliminado de la lista en memoria.\n";
+            }
+            else {
+                cout << "Curso no encontrado en la lista.\n";
+            }
+        }
+
+    } while (opcion != 4);
 }
 
+void Sistema::iniciarSesionUI() {
+
+	cout << "\033[?25l";
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloIniciarSesion(3, 45);
+    disenio.cuadroDobleLineas(10, 55, 30, 5);
+    disenio.tituloEmail(8, 55);
+    disenio.cuadroDobleLineas(20, 55, 30, 5);
+    disenio.tituloPassword(18, 55);
+    moverCursor(6, 2);
+    cout << "- Escriba volver para";
+    moverCursor(7, 2);
+    cout << "volver al menu principal";
+
+	cout << "\033[?25h"; 
+}
+void Sistema::inicioUI() {
+	cout << "\033[?25l"; // eliminar cursor
+    disenio.cuadro_dividido(120, 28);
+    moverCursorColor(0, 0, "azul");
+    disenio.tituloCoursera(3, 33);
+    moverCursor(3, 85);
+    cout << "Iniciar Sesion";
+    moverCursor(3, 105);
+    cout << "Registrarte";
+    resetColor();
+    moverCursor(8, 2);
+    cout << "1. Iniciar Sesion";
+    moverCursor(10, 2);
+    cout << "2. Registrarse";
+    moverCursor(12, 2);
+    cout << "Navegacion:";
+    moverCursor(14, 2);
+    cout << "3. Derecha";
+    moverCursor(16, 2);
+    cout << "4. Izquierda";
+    moverCursor(18, 2);
+    cout << "5. Salir";
+	cout << "\033[?25h"; // mostrar cursor luego de eliminar cursor
+    for (int i = 0, j = 0; i < 4; i++) {
+        disenio.cuadroRedondo(8, i + 33 + j, 20, 7);
+        j += 20;
+    }
+    for (int i = 0, j = 0; i < 4; i++) {
+        disenio.cuadroRedondo(16, i + 33 + j, 20, 7);
+        j += 20;
+    }
+    for (int i = 0, j = 0; i < 4; i++) {
+        disenio.cuadroRedondo(24, i + 68 + j, 3, 3);
+        j += 2;
+    }
+    moverCursor(25, 69);
+    imprimirConFondo("1", "verde");
+    moverCursor(25, 72);
+    cout << "2";
+    moverCursor(25, 75);
+    cout << "3";
+    moverCursor(25, 78);
+    cout << "4";
+    mostrarCursosUI();
+}
+
+void Sistema::estudianteUI() {
+    //metodo para imprimir solo el primer nombre del usuario
+    string nom = estudiante->getNombres(), nombre = "";
+    for (int i = 0; i < nom.size(); i++) {
+        if (nom[i] == ' ') break;
+        nombre += nom[i];
+    }
+	cout << "\033[?25l"; 
+    disenio.cuadro_dividido(120, 28);
+    moverCursorColor(0, 0, "azul");
+    disenio.tituloCoursera(3, 33);
+    moverCursor(3, 95);
+    cout << "Bienvenido " << nombre;
+    resetColor();
+    moverCursor(8, 2);
+    cout << "1. Seleccionar Curso";
+    moverCursor(10, 2);
+    cout << "2. Buscar Cursos";
+    moverCursor(12, 2);
+    cout << "3. Perfil";
+    moverCursor(14, 2);
+    cout << "Navegacion:";
+    moverCursor(16, 2);
+    cout << "3. Derecha";
+    moverCursor(18, 2);
+    cout << "4. Izquierda";
+    moverCursor(20, 2);
+    cout << "5. Cerrar Sesion";
+	cout << "\033[?25h";
+
+    for (int i = 0, j = 0; i < 4; i++) {
+        disenio.cuadroRedondo(8, i + 33 + j, 20, 7);
+        j += 20;
+    }
+    for (int i = 0, j = 0; i < 4; i++) {
+        disenio.cuadroRedondo(16, i + 33 + j, 20, 7);
+        j += 20;
+    }
+    for (int i = 0, j = 0; i < 4; i++) {
+        disenio.cuadroRedondo(24, i + 68 + j, 3, 3);
+        j += 2;
+    }
+    moverCursor(25, 69);
+    imprimirConFondo("1", "verde");
+    moverCursor(25, 72);
+    cout << "2";
+    moverCursor(25, 75);
+    cout << "3";
+    moverCursor(25, 78);
+    cout << "4";
+    mostrarCursosUI();
+}
+void Sistema::iniciarSesion() {
+    system("cls");
+    iniciarSesionUI();
+    string correo, contrasena;
+    do {
+        moverCursor(12, 57);
+        cin >> correo;
+        if (correo == "volver") return;
+        if (!validarCorreo(correo)) {
+            moverCursorColor(16, 57, "rojo");
+            cout << "Correo no encontrado!, escriba volver para ir el menu principal";
+            resetColor();
+            moverCursor(12, 57);
+            limpiarZona(12, 57, 25);
+        }
+    } while (!validarCorreo(correo));
+    limpiarZona(16, 57, 63);
+    do {
+        moverCursor(22, 57);
+        contrasena = leerPassword();
+        if (contrasena == "volver") return;
+        if (!validarContrasena(contrasena, correo)) {
+            moverCursorColor(26, 57, "rojo");
+            cout << "Contrasena incorrecta!, escriba volver para ir al menu principal";
+            resetColor();
+            moverCursor(22, 57);
+            limpiarZona(22, 57, 25);
+        }
+    } while (!validarContrasena(contrasena, correo));
+    string ruta = "Usuarios/" + correo + ".txt";
+
+    ifstream archivo(ruta);
+    string linea;
+    string tipo;
+    while (getline(archivo, linea)) {
+        tipo = linea;
+        break;
+    }
+    int i = 1;
+    string subRuta, linea2;
+    if (tipo == "E") {
+                    
+        ifstream archivo2(ruta);
+        while (getline(archivo2, linea)) {
+            if (i == 4) {
+                subRuta = "estudiantesCreados/" + linea + ".txt";
+                ifstream sub_ruta(subRuta);
+                int j = 1;
+                estudiante->setCodigo(linea);
+                while (getline(sub_ruta, linea2)) {
+                   //cout << linea2 << ": linea\n";
+                    if (j == 1) {
+                        estudiante->setNombres(linea2);
+                    }
+                    else if (j == 2) {
+                        estudiante->setApellidos(linea2);
+                    }
+                    else if (j == 3) {
+                        estudiante->setCorreo(linea2);
+                    }
+                    j++;
+                }
+                break;
+            }
+            i++;
+        }
+        menuEstudiante();
+    }
+    else if (tipo == "P") {
+        menuProfesor();
+    }
+    else if (tipo == "I") {
+        
+    }
+    else {
+
+    }
+}
+void limpiarCursosCuadros() {
+    int a = 9, b = 0;
+    for (int i = 0; i < 2; i++) {
+        if (i == 1) {
+            a += 8;
+            b = 0;
+        }
+        for (int j = 0; j < 4; j++) {
+            limpiarZona(a, 34 + b, 4, 18);
+            b += 21;
+        }
+    }
+}
+void Sistema::mostrarCursosUI() {
+    Nodo<Curso>* actual = cursos.obtenerCabeza();
+    int i = 1;
+    int a = 9, b = 34;
+    moverCursorColor(0, 0, "subrayado");
+    while (actual != nullptr) {
+        Curso& auxCurso = actual->dato;
+        string nombre = auxCurso.getNombre();
+        string p1 = "";
+        string p2 = "";
+        if (nombre.size() > 18) {
+			p1 = nombre.substr(0, 18);
+            p2 = nombre.substr(18);
+        }
+        else {
+            p1 = nombre;
+        }
+        moverCursor(a, b); 
+        cout << p1;
+        moverCursor(a + 1, b);
+        cout << p2;
+        b += 21;
+        actual = actual->siguiente;
+        i++;
+        if (i == 5) {
+            a += 8;
+            b = 34;
+        }
+        else if (i == 9) break;
+    }
+    resetColor();
+    //system("pause");
+    //limpiarCursosCuadros();
+}
+void Sistema::registroUI() {
+    system("cls");
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloElegirPerfil(3, 51);
+    disenio.cuadroPosicional(7, 35, 20, 12);
+    disenio.cuadroPosicional(7, 65, 20, 12);
+    disenio.cuadroPosicional(7, 95, 20, 12);
+    disenio.cuadroDobleLineas(23, 60, 31, 4);
+    disenio.logoProfesor(8, 66);
+    disenio.logoEstudiante(9, 36);
+    disenio.logoInstitucion(9, 97);
+    moverCursor(19, 40);
+    cout << "Estudiante";
+    moverCursor(19, 71);
+    cout << "Profesor";
+    moverCursor(19, 99);
+    cout << "Institucion";
+}
+void Sistema::registroEstudianteUI() {
+    system("cls");
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloRegistroEstudiante(2, 33);
+    disenio.tituloNombre(6, 38);
+    disenio.tituloApellido(9, 38);
+    disenio.tituloEmail(12, 38);
+    disenio.tituloPassword(15, 38);
+    disenio.tituloConfirmar(18, 38);
+
+    disenio.cuadroDobleLineas(6, 60, 50, 3);
+    disenio.cuadroDobleLineas(9, 60, 50, 3);
+    disenio.cuadroDobleLineas(12, 60, 50, 3);
+    disenio.cuadroDobleLineas(15, 60, 50, 3);
+    disenio.cuadroDobleLineas(19, 60, 50, 3);
+}
+
+void Sistema::bienvenidoUI() {
+	cout << "\033[?25l"; // eliminar cursor
+    disenio.cuadro(120, 28);
+    disenio.tituloBienvenido(7, 21);
+    disenio.barraCargaConCuadro(17, 37, 50, 50);
+	cout << "\033[?25h"; 
+
+}
+
+void Sistema::verPerfilUI() {
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloTuPerfil(3, 30);
+
+    disenio.cuadroPosicional(6, 33, 20, 12);
+    disenio.logoEstudiante(8, 34);
+    
+    disenio.tituloNombre(8, 65);
+    disenio.tituloApellido(11, 65);
+    disenio.tituloEmail(14, 65);
+    disenio.cuadroRedondo(8, 80, 30, 3);
+    disenio.cuadroRedondo(11, 80, 30, 3);
+    disenio.cuadroRedondo(14, 80, 30, 3);
+    disenio.cuadroRedondo(17, 80, 30, 3);
+}
+
+void Sistema::verCursoSeleccionadoUI(Curso curso) {
+    disenio.cuadro_dividido(120, 28);
+}
 
 void Sistema::iniciarPrograma() {
-
     inicializarDatos();
-    //menuPrincipal();    
-    //menuProfesor();
-    //menuEstudiante();
-    menuInstitucion();
-
+    bienvenidoUI();
+    menuPrincipal();    
 }

@@ -1,9 +1,7 @@
-[Matematica Basica]
-id: 845632255
-categoria: Ciencias
-descripcion: Curso donde ensena lo basico de matematica como funciones
-duracion: 50 horas
-fecha: 14/06/2025 10:35:39
-
-[LECCIONES]
-- Funciones
+Matematica Basica
+845632255
+Ciencias
+Curso donde ensena lo basico de matematica como funciones
+50
+14/06/2025 10:35:39
+Funciones

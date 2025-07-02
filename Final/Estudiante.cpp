@@ -1,31 +1,33 @@
 #include "Estudiante.h"
 
-// Constructor por defecto
 Estudiante::Estudiante() {
     correo = "";
     contrasena = "";
     nombres = "";
     apellidos = "";
+    codigo = "";
+    saldo = 0;
 }
 
-// Constructor con parámetros
-Estudiante::Estudiante(string correo, string contrasena, string nombres, string apellidos) {
+Estudiante::Estudiante(string correo, string contrasena, string nombres, string apellidos, string codigo) {
     this->correo = correo;
     this->contrasena = contrasena;
     this->nombres = nombres;
     this->apellidos = apellidos;
+    this->codigo = codigo;
+    this->saldo = 0;
 }
 
-// Destructor
+
 Estudiante::~Estudiante() {
-    // Por ahora vacío
 }
 
-// Getters
 string Estudiante::getCorreo() {
     return correo;
 }
-
+string Estudiante::getCodigo() {
+    return codigo;
+}
 string Estudiante::getContrasena() {
     return contrasena;
 }
@@ -37,12 +39,15 @@ string Estudiante::getNombres() {
 string Estudiante::getApellidos() {
     return apellidos;
 }
-
-// Setters
+double Estudiante::getSaldo() {
+    return saldo;
+}
 void Estudiante::setCorreo(string correo) {
     this->correo = correo;
 }
-
+void Estudiante::setSaldo(double saldo) {
+    this->saldo = saldo;
+}
 void Estudiante::setContrasena(string contrasena) {
     this->contrasena = contrasena;
 }
@@ -53,4 +58,13 @@ void Estudiante::setNombres(string nombres) {
 
 void Estudiante::setApellidos(string apellidos) {
     this->apellidos = apellidos;
+}
+void Estudiante::agregarCurso(Curso curso) {
+    cursosInscritos.insertarAlFinal(curso);
+}
+void Estudiante::setCodigo(string codigo) {
+    this->codigo = codigo;
+}
+ListaEnlazada<Curso> Estudiante::getCursosInscritos() {
+    return cursosInscritos;
 }

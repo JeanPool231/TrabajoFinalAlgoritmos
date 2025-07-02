@@ -1,0 +1,8 @@
+codigo: 468796009
+nombre: nose
+apellido: nose
+correo: nose
+tiempo_en_coursera: 0
+id: 0
+reputacion: 0
+curso_asignado: 

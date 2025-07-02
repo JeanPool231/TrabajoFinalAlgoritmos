@@ -54,6 +54,24 @@
     <ClCompile Include="Institucion.cpp">
       <Filter>Archivos de encabezado\Institucion</Filter>
     </ClCompile>
+    <ClCompile Include="Estudiante.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="CursoUtils.cpp">
+      <Filter>Archivos de encabezado\Curso</Filter>
+    </ClCompile>
+    <ClCompile Include="AdministrarInstituciones.cpp">
+      <Filter>Archivos de encabezado\Institucion</Filter>
+    </ClCompile>
+    <ClCompile Include="AdministrarCursos.cpp">
+      <Filter>Archivos de encabezado\Curso</Filter>
+    </ClCompile>
+    <ClCompile Include="AdministradorProfesores.cpp">
+      <Filter>Archivos de encabezado\Profesor</Filter>
+    </ClCompile>
+    <ClCompile Include="Administrador.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ListaEnlazada.h">
@@ -100,6 +118,39 @@
     </ClInclude>
     <ClInclude Include="Institucion.h">
       <Filter>Archivos de encabezado\Institucion</Filter>
+    </ClInclude>
+    <ClInclude Include="Estudiante.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Usuario.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="CursoUtils.h">
+      <Filter>Archivos de encabezado\Curso</Filter>
+    </ClInclude>
+    <ClInclude Include="AdministrarInstituciones.h">
+      <Filter>Archivos de encabezado\Institucion</Filter>
+    </ClInclude>
+    <ClInclude Include="AdministradorProfesores.h">
+      <Filter>Archivos de encabezado\Profesor</Filter>
+    </ClInclude>
+    <ClInclude Include="AdministrarCursos.h">
+      <Filter>Archivos de encabezado\Curso</Filter>
+    </ClInclude>
+    <ClInclude Include="ArbolBB.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="TEMPlistaEnlazada.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="HashEntidad.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTabla.h">
+      <Filter>Archivos de encabezado\Generico</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

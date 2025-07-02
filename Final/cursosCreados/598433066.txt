@@ -1,8 +1,0 @@
-[algoritmos]
-id: 598433066
-categoria: ?
-descripcion: a
-duracion: 120 horas
-fecha: 10/06/2025 21:23:54
-
-[LECCIONES]

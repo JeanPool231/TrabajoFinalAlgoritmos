@@ -1,0 +1,8 @@
+codigo: 43296512
+nombre: Carlos Obregon
+apellido: Fuentes Coaguila
+correo: carlos@gmail.com
+tiempo_en_coursera: 0
+id: 0
+reputacion: 0
+curso_asignado: 

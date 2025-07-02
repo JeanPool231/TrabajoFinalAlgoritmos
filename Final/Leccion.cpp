@@ -2,8 +2,12 @@
 
 Leccion::Leccion() : duracionMinutos(0) {}
 
-Leccion::Leccion(string& titulo, string& contenido, int duracionMinutos) :
-	duracionMinutos(duracionMinutos), titulo(titulo), contenido(contenido)  {}
+Leccion::Leccion(string titulo, string contenido, int duracion) {
+    this->titulo = titulo;
+    this->contenido = contenido;
+    this->duracionMinutos = duracion;
+}
+
 
 string& Leccion::getTitulo() { return titulo; }
 
