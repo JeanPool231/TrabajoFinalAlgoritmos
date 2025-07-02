@@ -396,3 +396,91 @@ void desvincularcursoalprofe2(Institucion& inst) {
     archivoLogs << mensaje << "\n";
     archivoLogs.close();
 }
+
+
+void AdministrarInstituciones::guardarInstitucionEnArchivo(Institucion* institucion) {
+    string id = HashUtil::generarHash(institucion->getNombre() + to_string(institucion->getYearRegistro()));
+    string archivo = "institucionesCreadas/" + id + ".txt";
+
+    ofstream out(archivo);
+    if (out.is_open()) {
+        out << institucion->getNombre() << "";
+            out << institucion->getDescripcion() << "";
+            out << institucion->getYearRegistro() << "";
+            out.close();
+
+        ofstream hashFile("institucionesCreadas/institucionesHash.txt", ios::app);
+        hashFile << id << "";
+            hashFile.close();
+    }
+}
+
+Institucion* AdministrarInstituciones::leerInstitucionDesdeArchivo(string ruta) {
+    ifstream in(ruta);
+    if (!in.is_open()) return nullptr;
+
+    string nombre, descripcion;
+    int year;
+    getline(in, nombre);
+    getline(in, descripcion);
+    in >> year;
+    in.close();
+
+    return new Institucion(nombre, descripcion, year);
+}
+
+void AdministrarInstituciones::registrarInstitucion(Institucion* institucion) {
+    guardarInstitucionEnArchivo(institucion);
+    string hash = HashUtil::generarHash(institucion->getNombre() + to_string(rand()));
+    generarTokenRegistro(hash);
+}
+
+void AdministrarInstituciones::generarTokenRegistro(string hashInstitucion) {
+    ofstream out("institucionesCreadas/tokens.txt", ios::app);
+    if (out.is_open()) {
+        out << hashInstitucion << "";
+            out.close();
+    }
+}
+
+bool AdministrarInstituciones::validarYEliminarToken(string token) {
+    ifstream in("institucionesCreadas/tokens.txt");
+    vector<string> tokens;
+    string linea;
+    bool encontrado = false;
+
+    while (getline(in, linea)) {
+        if (linea == token) {
+            encontrado = true;
+        }
+        else {
+            tokens.push_back(linea);
+        }
+    }
+    in.close();
+
+    if (encontrado) {
+        ofstream out("institucionesCreadas/tokens.txt", ios::trunc);
+        for (const string& t : tokens) {
+            out << t << "";
+        }
+        out.close();
+    }
+    return encontrado;
+}
+
+string AdministrarInstituciones::obtenerInstitucionDesdeToken(string tokenBuscado) {
+    ifstream archivo("institucionesCreadas/tokensInstituciones.txt");
+    string linea;
+    while (getline(archivo, linea)) {
+        size_t pos = linea.find("|");
+        if (pos != string::npos) {
+            string token = linea.substr(0, pos);
+            string hash = linea.substr(pos + 1);
+            if (token == tokenBuscado) {
+                return hash;
+            }
+        }
+    }
+    return "";
+}

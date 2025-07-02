@@ -380,6 +380,16 @@ public:
         std::wcout << L"░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░▀░░▀░▀░▀▀▀░░░▀▀▀░▀▀▀░░▀░░▀▀▀░▀▀░░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀\n";
         _setmode(_fileno(stdout), _O_TEXT);
     }
+    void tituloRegistroProfesor(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+        moverCursor(fila++, columna);
+        std::wcout << L"░█▀▄░█▀▀░█▀▀░▀█▀░█▀▀░▀█▀░█▀▄░█▀█░░░█▀█░█▀▄░█▀█░█▀▀░█▀▀░█▀▀░█▀█░█▀▄\n";
+        moverCursor(fila++, columna);
+        std::wcout << L"░█▀▄░█▀▀░█░█░░█░░▀▀█░░█░░█▀▄░█░█░░░█▀▀░█▀▄░█░█░█▀▀░█▀▀░▀▀█░█░█░█▀▄\n";
+        moverCursor(fila++, columna);
+        std::wcout << L"░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░▀░░▀░▀░▀▀▀░░░▀░░░▀░▀░▀▀▀░▀░░░▀▀▀░▀▀▀░▀▀▀░▀░▀\n";
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
     void tituloNombre(int fila, int columna) {
         _setmode(_fileno(stdout), _O_U16TEXT);
 
@@ -408,6 +418,15 @@ public:
         moverCursor(fila++, columna); std::wcout << L"┗┗┛┛┗┗┛ ┗┻┛┗ ┛┗┗┻\n";
         moverCursor(fila++, columna); std::wcout << L"                  \n";
 
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+
+    void tituloToken(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        moverCursor(fila++, columna); std::wcout << L"┏┳┓  ┓     \n";
+        moverCursor(fila++, columna); std::wcout << L" ┃ ┏┓┃┏┏┓┏┓\n";
+        moverCursor(fila++, columna); std::wcout << L" ┻ ┗┛┛┗┗ ┛┗\n";
         _setmode(_fileno(stdout), _O_TEXT);
     }
 

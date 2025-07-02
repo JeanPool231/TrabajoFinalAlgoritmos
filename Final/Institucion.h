@@ -30,6 +30,11 @@ public:
     string getdescripcion();
     int getyear();
 
+	string getNombre() { return nombre; }
+	string getDescripcion() { return descripcion; }
+	int getYearRegistro() { return yearderegistro; }
+
+
     vector<Curso*>& getcursos() {
         return cursos;
     }

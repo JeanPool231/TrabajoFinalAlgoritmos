@@ -37,4 +37,13 @@ public:
     TEMPListaEnlazada<string>& getLogs();
 };
 
+
+class ProfesorArchivo {
+public:
+    static Profesor* leerProfesor(const string& pathArchivo);
+    static void guardarProfesor(Profesor* profesor);
+    static void agregarHashProfesor(const string& hash);
+};
+
+
 #endif

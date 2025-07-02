@@ -8,6 +8,7 @@
 namespace fs = std::filesystem;
 #include <conio.h>
 #include "AdministrarCursos.h"
+#include "AdministrarInstituciones.h"
 #include <vector>
 #include <clocale>
 #include <algorithm>
@@ -457,7 +458,6 @@ void Sistema::registrarse() {
 		}
     } while (waza != "volver");
 }
-/// <summary>
 /// 
 /// /
 /// /
@@ -475,10 +475,7 @@ void Sistema::registrarse() {
 /// 
 /// /////////////
 /// 
-/// /
-/// /
-/// 
-/// </summary>
+
 void Sistema::registroEstudiante() {
     string correo, contrasena, nombres, apellidos;
     string contrasena2;
@@ -511,33 +508,82 @@ void Sistema::registroEstudiante() {
     system("cls");
 }
 
+
 void Sistema::registroProfesor() {
-
     system("cls");
-	string codigo, nombre, apellido, correo;
-	char sexo, estadoCivil;
-    int edad, tiempoEnCoursera, id, reputacion;
-    string contrasena;
-    cout << "Ingrese el codigo de la institucion: ";
-    cin >> codigo;
-    cout << "Ingrese el correo: "; cin >> correo;
-    cout << "Ingrese la contrasena: "; cin >> contrasena;
-    cin.ignore();
-    cout << "Ingrese sus Nombres: ";
-    getline(cin, nombre);
-    cout << "Ingrese sus apellidos: ";
-    getline(cin, apellido);
-    //cout << "Ingrese su genero (M : masculino, F : femenino): "; cin >> sexo;
-    cout << "Se ha registrado correctamente profesor\n";
-    profesor->setApellido(apellido);
-    profesor->setCodigo(codigo);
-    profesor->setCorreo(correo);
-    //profesor.setEdad(edad);
-    //profesor.setId(id);
-    profesor->setNombre(nombre);
-    //profesor.setSexo(sexo);
-    Usuario nuevoUsuario = { 'P', correo, contrasena };
 
+    string tokenInstitucion;
+    string nombre, apellido, correo, contrasena;
+
+    registroProfesorUI();
+
+    moverCursor(7, 62);
+    cin.ignore();
+    getline(cin, nombre);
+
+    moverCursor(10, 62);
+    getline(cin, apellido);
+
+    moverCursor(13, 62);
+    cin >> correo;
+
+    moverCursor(16, 62);
+    cin >> contrasena;
+    
+    moverCursor(20, 62);
+    cin >> contrasena;
+
+    moverCursor(25, 62);
+    cin >> tokenInstitucion;
+
+    //string hashInstitucion = obtenerInstitucionDesdeToken(tokenInstitucion);
+    //if (hashInstitucion == "") {
+    //    moverCursorColor(26, 62, "rojo");
+    //    cout << "Token inválido. No se puede registrar el profesor.";
+    //    resetColor();
+    //    system("pause");
+    //    return;
+    //}
+
+
+
+    string hashProfesor = HashUtil::generarHash(nombre + to_string(rand() % 10000));
+
+    Profesor nuevoProfesor;
+    nuevoProfesor.setCodigo(hashProfesor);
+    nuevoProfesor.setNombre(nombre);
+    nuevoProfesor.setApellido(apellido);
+    nuevoProfesor.setCorreo(correo);
+    //nuevoProfesor.setInstitucion(hashInstitucion);
+
+    string rutaGuardar = "profesoresCreados/" + hashProfesor + ".txt";
+    ofstream archivo(rutaGuardar);
+    if (archivo.is_open()) {
+        archivo << nombre << endl;
+        archivo << apellido << endl;
+        archivo << correo << endl;
+        //archivo << hashInstitucion << endl;
+        archivo.close();
+    }
+
+    ofstream hashFile("profesoresCreados/profesoresHash.txt", ios::app);
+    if (hashFile.is_open()) {
+        hashFile << hashProfesor << endl;
+        hashFile.close();
+    }
+
+    ofstream userFile("Usuarios/" + correo + ".txt");
+    if (userFile.is_open()) {
+        userFile << "P" << endl;
+        userFile << correo << endl;
+        userFile << contrasena << endl;
+        userFile << hashProfesor << endl;
+        userFile.close();
+    }
+
+    //moverCursorColor(21, 62, "verde");
+    //cout << "\n\n¡Profesor registrado exitosamente!";
+    resetColor();
     system("pause");
     system("cls");
 }
@@ -962,6 +1008,25 @@ void Sistema::registroUI() {
     moverCursor(19, 99);
     cout << "Institucion";
 }
+void Sistema::registroProfesorUI() {
+    system("cls");
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloRegistroProfesor(2, 33);
+    disenio.tituloNombre(6, 38);
+    disenio.tituloApellido(9, 38);
+    disenio.tituloEmail(12, 38);
+    disenio.tituloPassword(15, 38);
+    disenio.tituloConfirmar(18, 38);
+    disenio.tituloToken(24, 38);
+
+    disenio.cuadroDobleLineas(6, 60, 50, 3);
+    disenio.cuadroDobleLineas(9, 60, 50, 3);
+    disenio.cuadroDobleLineas(12, 60, 50, 3);
+    disenio.cuadroDobleLineas(15, 60, 50, 3);
+    disenio.cuadroDobleLineas(19, 60, 50, 3);
+    disenio.cuadroDobleLineas(24, 60, 50, 3);
+}
+
 void Sistema::registroEstudianteUI() {
     system("cls");
     disenio.cuadro_dividido(120, 28);

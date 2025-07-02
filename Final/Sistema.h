@@ -45,6 +45,7 @@ private:
 	void iniciarSesionUI();
 	void mostrarCursosUI();
 	void registroEstudianteUI();
+	void registroProfesorUI();
 	void registroUI();
 	void inicioUI();
 	void bienvenidoUI();

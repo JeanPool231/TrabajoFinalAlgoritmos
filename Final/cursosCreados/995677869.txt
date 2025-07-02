@@ -1,0 +1,9 @@
+[mi error confiar]
+id: 995677869
+categoria: errores
+descripcion: ayuda
+duracion: 12 horas
+fecha: 02/07/2025 00:11:58
+
+[LECCIONES]
+- papu

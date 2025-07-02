@@ -1,8 +1,0 @@
-codigo: 345198198
-nombre: Valeria Isabel
-apellido: Tafur Contreras
-correo: valeria.contreras@gmail.com
-tiempo_en_coursera: 0
-id: 0
-reputacion: 0
-curso_asignado: 

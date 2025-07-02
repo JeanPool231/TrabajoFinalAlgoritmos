@@ -8,6 +8,79 @@ using namespace std;
 namespace fs = std::filesystem;
 
 
+Profesor* ProfesorArchivo::leerProfesor(const string& pathArchivo) {
+    ifstream archivo(pathArchivo);
+    if (!archivo.is_open()) {
+        cerr << "Error al abrir el archivo: " << pathArchivo << endl;
+        return nullptr;
+    }
+
+    string linea;
+    Profesor* profesor = new Profesor();
+    int lineaNum = 0;
+
+    while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+
+        switch (lineaNum) {
+        case 0:
+            profesor->setId(linea);
+            break;
+        case 1:
+            profesor->setNombre(linea);
+            break;
+        case 2:
+            profesor->setApellido(linea);
+            break;
+        case 3:
+            profesor->setCorreo(linea);
+            break;
+        case 4:
+            //profesor->setInstitucionId(linea);
+            break;
+        }
+        lineaNum++;
+    }
+
+    archivo.close();
+    return profesor;
+}
+
+void ProfesorArchivo::guardarProfesor(Profesor* profesor) {
+    string carpeta = "profesoresCreados/";
+    string archivoNombre = carpeta + profesor->getId() + ".txt";
+
+    ofstream archivo(archivoNombre);
+    if (!archivo.is_open()) {
+        cerr << "Error al guardar el archivo: " << archivoNombre << endl;
+        return;
+    }
+
+    archivo << profesor->getId() << endl;
+    archivo << profesor->getNombre() << endl;
+    archivo << profesor->getApellido() << endl;
+    archivo << profesor->getCorreo() << endl;
+    //archivo << profesor->getInstitucionId() << endl;
+
+    archivo.close();
+    agregarHashProfesor(profesor->getId());
+}
+
+void ProfesorArchivo::agregarHashProfesor(const string& hash) {
+    string rutaHash = "profesoresCreados/profesoresHash.txt";
+    ofstream archivo(rutaHash, ios::app);
+    if (archivo.is_open()) {
+        archivo << hash << endl;
+        archivo.close();
+    }
+    else {
+        cerr << "Error al abrir el archivo de hash: " << rutaHash << endl;
+    }
+}
+
+
+
+
 void AdministradorProfesores::mostrarLogs() {
     logs.recorrer([](string msg) {
         cout << "[LOG] " << msg << endl;
