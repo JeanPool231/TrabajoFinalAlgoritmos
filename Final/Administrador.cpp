@@ -3,7 +3,7 @@
 namespace fs = std::filesystem;
 
 Administrador::Administrador() {}
-Administrador::~Administrador() {}
+//Administrador::~Administrador() {}
 
 void Administrador::guardar(Usuario usuario, string id) {
 	string name = "Usuarios/" + usuario.correo + ".txt"; ofstream archivo(name, ios::app);
