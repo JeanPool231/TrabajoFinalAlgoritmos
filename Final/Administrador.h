@@ -14,7 +14,7 @@ class Administrador
 {
 public:
 	Administrador();
-	~Administrador();
+	//~Administrador();
 
 	void guardar(Usuario usuario, string id);
 	void eliminar(string correo);
