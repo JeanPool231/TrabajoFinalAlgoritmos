@@ -222,8 +222,6 @@ void Sistema::menuPrincipal() {
 
 void Sistema::menuInstitucion() {
 
-    Institucion inst("UPC", "Educacion universitaria", 2018);
-
     int opc;
     do {
         cout << "\nInstitucion\n";
@@ -238,34 +236,237 @@ void Sistema::menuInstitucion() {
         cin.ignore();
 
         switch (opc) {
-        case 1:
-            inst.verinformacion();
-            break;
-
-        case 2: {
-            inst.menugestiondeprofes();
-            break;
-        }
-
-        case 3:
-            inst.vercursos();
-            break;
-
-        case 4: {
-            inst.verestadisticas();
-            break;
-        }
-
+        case 1:  verInformacionUI();   break;
+        case 2: {   gestionProfesoresUI();  break;   }
+        case 3: verCursosUI();    break;
+        case 4: {   verEstadisticasUI();  break;   }
         case 5:
-            cout << "Saliendo .,...\n";
-            break;
-
+            cout << "salir\n";     break;
         default:
             cout << "opcion no valida\n";
         }
 
     } while (opc != 5);
 }
+
+void Sistema::gestionProfesoresUI() {
+    AdministrarInstitucion admin;
+    int opcion;
+    do {
+        cout << "\nGestion de profes\n";
+        cout << "1. Agregar profesor\n";
+        cout << "2. Quitar profesor\n";
+        cout << "3. Asignar curso\n";
+        cout << "4. Desvincular curso\n";
+        cout << "5. Ver historial de logs\n";
+        cout << "6. Volver\n";
+        cout << "Opción: ";
+        cin >> opcion;
+        cin.ignore();
+
+        if (opcion == 1) {
+            string codigo, nombre, apellido, correo, curso;
+            cout << "Nombre: "; getline(cin, nombre);
+            codigo = HashUtil::generarHash(nombre + to_string(rand() % 10000));
+            cout << "Apellido: "; getline(cin, apellido);
+            cout << "Correo: "; getline(cin, correo);
+
+            ListaEnlazada<Curso*> disponibles = admin.obtenerCursosLibres(*institucion);
+            if (!disponibles.estaVacia()) {
+                cout << "\nCursos disponibles:\n";
+                Nodo<Curso*>* actual = disponibles.obtenerCabeza();
+                int i = 1;
+                while (actual) {
+                    cout << i++ << ". " << actual->dato->getNombre() << "\n";
+                    actual = actual->siguiente;
+                }
+
+                int op;
+                cout << "Seleccione curso o 0 para ninguno: ";
+                cin >> op;
+                cin.ignore();
+
+                if (op > 0) {
+                    actual = disponibles.obtenerCabeza();
+                    for (int j = 1; j < op && actual; ++j) actual = actual->siguiente;
+                    if (actual) curso = actual->dato->getNombre();
+                }
+            }
+
+            admin.agregarprofesor2(*institucion, codigo, nombre, apellido, correo, 0, 0, 0, curso);
+            cout << codigo << '\n';
+        }
+
+        else if (opcion == 2) {
+            ListaEnlazada<Profesor> lista = admin.obtenerListaProfes(*institucion);
+            Nodo<Profesor>* actual = lista.obtenerCabeza();
+            int i = 1;
+            while (actual) {
+                cout << i++ << ". " << actual->dato.getCodigo() << " | " << actual->dato.getNombre() << "\n";
+                actual = actual->siguiente;
+            }
+            int op;
+            cout << "Seleccione: "; cin >> op; cin.ignore();
+            string msg;
+            if (admin.quitarprofesor2(*institucion, op - 1, msg)) cout << msg << "\n";
+            else cout << "error\n";
+        }
+
+        else if (opcion == 3) {
+            string msg;
+            ListaEnlazada<Profesor*> profes = admin.obtenerProfesoresSinCurso(*institucion);
+            ListaEnlazada<Curso*> cursos = admin.obtenerCursosLibres(*institucion);
+
+            Nodo<Profesor*>* pNode = profes.obtenerCabeza();
+            int i = 1;
+            if (!pNode) {
+                cout << "Todos los profesores tienen cursos.\n";
+                continue;
+            }
+
+            cout << "Profesores sin curso:\n";
+            while (pNode) {
+                cout << i++ << ". " << pNode->dato->getNombre() << "\n";
+                pNode = pNode->siguiente;
+            }
+
+            int ip;
+            cout << "Seleccione un indicea: "; cin >> ip; cin.ignore();
+
+            Nodo<Curso*>* cNode = cursos.obtenerCabeza();
+            if (!cNode) {
+                cout << "No hay cursos disponibles.\n";
+                continue;
+            }
+
+            cout << "Cursos disponibles:\n";
+            i = 1;
+            while (cNode) {
+                cout << i++ << ". " << cNode->dato->getNombre() << "\n";
+                cNode = cNode->siguiente;
+            }
+
+            int ic;
+            cout << "Seleccione un curso: "; cin >> ic; cin.ignore();
+
+            if (admin.asignarCursoAProfesor(*institucion, ip - 1, ic - 1, msg)) cout << msg << "\n";
+            else cout << "No se pudo asignar el curso.\n";
+        }
+
+        else if (opcion == 4) {
+            ListaEnlazada<Profesor*> profs = admin.obtenerProfesoresConCurso(*institucion);
+            Nodo<Profesor*>* nodo = profs.obtenerCabeza();
+            if (!nodo) {
+                cout << "Nadie tiene cursos asignados.\n";
+                continue;
+            }
+
+            int i = 1;
+            cout << "\nProfesores con cursos asignados:\n";
+            while (nodo) {
+                string cursos = "";
+                for (const auto& c : nodo->dato->getCursosAsignados())
+                    cursos += c + "; ";
+                cout << i++ << ". " << nodo->dato->getNombre() << " (" << cursos << ")\n";
+                nodo = nodo->siguiente;
+            }
+
+            int profIndex;
+            cout << "Seleccione un profesor: ";
+            cin >> profIndex; cin.ignore();
+
+            nodo = profs.obtenerCabeza();
+            for (int j = 1; j < profIndex && nodo; ++j) nodo = nodo->siguiente;
+            if (!nodo) {
+                cout << "error\n";
+                continue;
+            }
+
+            auto& cursos = nodo->dato->getCursosAsignados();
+            if (cursos.empty()) {
+                cout << "Este profesor no tiene cursos.\n";
+                continue;
+            }
+
+            cout << "Cursos asignados:\n";
+            for (size_t i = 0; i < cursos.size(); ++i)
+                cout << i + 1 << ". " << cursos[i] << "\n";
+
+            int cursoIndex;
+            cout << "Seleccione el curso a desvincular: ";
+            cin >> cursoIndex; cin.ignore();
+
+            if (cursoIndex < 1 || cursoIndex > cursos.size()) {
+                cout << "404\n";
+                continue;
+            }
+
+            string cursoAEliminar = cursos[cursoIndex - 1], msg;
+            if (admin.desvincularCursoDeProfesor(*institucion, profIndex - 1, cursoAEliminar, msg)) {
+                cout << msg << "\n";
+            }
+            else {
+                cout << "error\n";
+            }
+        }
+
+        else if (opcion == 5) {
+            historialLogsUI();
+        }
+
+    } while (opcion != 6);
+}
+
+void Sistema::verCursosUI() {
+    AdministrarInstitucion admin;
+    ListaEnlazada<string> listado;
+    admin.obtenerListadoCursosConProfesor(*institucion, listado);
+
+    cout << "\nCursos\n";
+    listado.recorrer([](const string& l) {
+        cout << l << "\n";
+        });
+}
+
+void Sistema::historialLogsUI() {
+    AdministrarInstitucion admin;
+    int op;
+    do {
+        cout << "\nLogs\n";
+        cout << "1. Ver todos\n2. Por fecha\n3. Por acción\n4. Volver\nOpción: ";
+        cin >> op; cin.ignore();
+
+        ListaEnlazada<string> resultado;
+
+        if (op == 1) admin.mostrarLogsPorFiltro("todo", "", resultado);
+        else if (op == 2) {
+            string f;
+            cout << "Fecha (dia/mes/año): ";
+            getline(cin, f);
+            admin.mostrarLogsPorFiltro("fecha", f, resultado);
+        }
+        else if (op == 3) {
+            string a;
+            cout << "Acción(agregado, eliminado, desvinculado): ";
+            getline(cin, a);
+            admin.mostrarLogsPorFiltro("accion", a, resultado);
+        }
+
+        resultado.recorrer([](const string& l) {
+            cout << "- " << l << "\n";
+            });
+
+    } while (op != 4);
+}
+void Sistema::verInformacionUI() {
+    institucion->mostrarInformacion();
+}
+void Sistema::verEstadisticasUI() {
+    institucion->mostrarEstadisticas();
+}
+
+/// ///////////////////////
+
 void saldoEstudiante() {
 
 }
@@ -555,7 +756,61 @@ void Sistema::registroInstitucion() {
     system("pause");
     system("cls");
 }
+
+void Sistema::cargarprofesBETA(Institucion* institucion) {
+    for (const auto& entrada : fs::directory_iterator("profesoresCreados")) {
+        if (entrada.path().extension() == ".txt" && entrada.path().filename() != "profesoresHash.txt") {
+            ifstream archivo(entrada.path());
+            if (!archivo.is_open()) continue;
+
+            string codigo = "0", nombre = "N/A", apellido = "N/A", correo = "N/A";
+            string tiempoStr = "0", idStr = "0", reputacionStr = "0", cursosLinea = "0";
+
+            vector<string> lineas;
+            string linea;
+            while (getline(archivo, linea)) lineas.push_back(linea);
+            archivo.close();
+
+            if (lineas.size() >= 1) codigo = lineas[0];
+            if (lineas.size() >= 2) nombre = lineas[1];
+            if (lineas.size() >= 3) apellido = lineas[2];
+            if (lineas.size() >= 4) correo = lineas[3];
+            if (lineas.size() >= 5) tiempoStr = lineas[4];
+            if (lineas.size() >= 6) idStr = lineas[5];
+            if (lineas.size() >= 7) cursosLinea = lineas[6];
+
+            int tiempo = 0, reputacion = 0;
+            try { tiempo = stoi(tiempoStr); }
+            catch (...) {}
+            try { reputacion = stoi(reputacionStr); }
+            catch (...) {}
+
+            Profesor prof(codigo, nombre, apellido, correo, tiempo, idStr, reputacion);
+
+            if (cursosLinea != "0") {
+                stringstream ss(cursosLinea);
+                string curso;
+                while (getline(ss, curso, ';')) {
+                    prof.agregarCurso(curso);
+                }
+            }
+
+            institucion->getprofesores().insertar(prof, [](Profesor& a, Profesor& b) {
+                return a.getCodigo() < b.getCodigo();
+                });
+        }
+    }
+}
 void Sistema::inicializarDatos() {
+
+    AdministrarInstitucion admin;
+    institucion = new Institucion();
+    cargarprofesBETA(institucion);
+
+    institucion->setNombre("Universidad Peruana de Ciencias");
+    institucion->setDescripcion("Exigete, Innova UPC");
+    institucion->setYearDeRegistro(2000);
+
     //leer los cursos
     string ruta = "cursosCreados/cursoHash.txt";
     ifstream archivo(ruta);
@@ -568,12 +823,18 @@ void Sistema::inicializarDatos() {
         string ruta2 = "cursosCreados/" + linea + ".txt";
         Curso* curso = leerCurso(ruta2);
         cursos.insertarAlFinal(*curso);
+        institucion->getcursos().insertarAlFinal(curso);
+
     }
     //leer a los profes
 	string rutaProfes("profesoresCreados/profesoresHash.txt");
 	ifstream archivoProfes(rutaProfes);
 	while (getline(archivoProfes, linea)) {
+
+        linea.erase(remove(linea.begin(), linea.end(), '\r'), linea.end());
+        linea.erase(remove(linea.begin(), linea.end(), '\n'), linea.end());
 		string rutaHash = "profesoresCreados/" + linea + ".txt";
+
 		Profesor* profesor = leerProfesor(rutaHash);
 		profesores.insertarAlFinal(*profesor);
 	}
@@ -891,7 +1152,7 @@ void Sistema::iniciarSesion() {
         menuProfesor();
     }
     else if (tipo == "I") {
-        
+        menuInstitucion();
     }
     else {
 

@@ -177,8 +177,8 @@ void Administrador::anadir_instituciones(AVLTree<Institucion*>& inst)
 	cout << "Ingrese el correo de la institucion a anadir: "; cin >> correo;
 	cout << "Ingrese la contrasena de la institucion a anadir: "; cin >> contrasena;
 	Institucion* ins = new Institucion(nombre, descripcion, yearderegistro);
-	auto cmp = [](Institucion*& a, Institucion*& b) { return a->getyear() < b->getyear(); };
-	inst.insertar(ins, cmp);
+	//auto cmp = [](Institucion*& a, Institucion*& b) { return a->getyear() < b->getyear(); };
+	//inst.insertar(ins, cmp);
 	Usuario institucion = { 'I', correo, contrasena };
 	guardar(institucion);
 	cout << "Institucion Anadida";

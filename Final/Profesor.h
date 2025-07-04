@@ -13,6 +13,7 @@ private:
 	int tiempoEnCoursera, reputacion;
 	string cursoAsignado;
 	ListaEnlazada<Curso*> cursosCreados;
+	vector<string> cursosAsignados;
 public:
 	Profesor();
 	~Profesor();
@@ -33,21 +34,24 @@ public:
 	string getId();
 	int getReputacion();
 
-	void asignarCurso(string nombreCurso) {
-		cursoAsignado = nombreCurso;
-	}
-	void quitarCurso() {
-		cursoAsignado = "";
-	}
-	string getCursoAsignado() {
-		return cursoAsignado;
+	void agregarCurso(const string& nombreCurso) {
+		cursosAsignados.push_back(nombreCurso);
 	}
 
-	void agregarCurso(Curso* c) {
-		cursosCreados.insertarAlFinal(c);
-	}
-	ListaEnlazada<Curso*>& getCursosCreados() {
-		return cursosCreados;
+	void quitarCurso(const string& nombreCurso) {
+		cursosAsignados.erase(
+			remove_if(cursosAsignados.begin(), cursosAsignados.end(),
+				[&](const string& curso) {
+					return curso == nombreCurso;
+				}),
+			cursosAsignados.end());
 	}
 
+	vector<string>& getCursosAsignados() {
+		return cursosAsignados;
+	}
+
+	void setCursosAsignados(const vector<string>& cursos) {
+		cursosAsignados = cursos;
+	}
 };

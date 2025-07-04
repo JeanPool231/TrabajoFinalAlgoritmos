@@ -1,0 +1,5 @@
+codigo: 269828753
+nombre: Karime Cali
+apellido: Pisfil Romino
+correo: karime.pisfil@gmail.com
+curso_asignado: Fundamentos de Ciberseguridad

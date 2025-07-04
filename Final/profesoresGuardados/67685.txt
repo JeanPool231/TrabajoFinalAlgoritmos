@@ -1,0 +1,5 @@
+codigo: 67685
+nombre: 0
+apellido: 2
+correo: 3
+curso_asignado: 0

@@ -1,73 +1,41 @@
 #pragma once
 #include <string>
-#include <vector>
 #include "Curso.h"
 #include "Profesor.h"
-#include "AVLTree.h"
 #include "ListaEnlazada.h"
+#include "AVLTree.h"
 
 using namespace std;
 
 class Institucion {
 private:
-    ListaEnlazada<string> logs;
-    vector<Curso*> cursos;
-    AVLTree<Profesor> profesores;
-
     string nombre;
     string descripcion;
     int yearderegistro;
+    ListaEnlazada<Curso*> cursos;
+    AVLTree<Profesor> profesores;
+    ListaEnlazada<string> logsdeprofes;
 
 public:
-    Institucion() {
-        nombre = "";
-        descripcion = "";
-        yearderegistro = 0;
+    Institucion();
+    Institucion(const string& nombre, const string& descripcion, int year);
+
+    void setNombre(const string& nom);
+    void setDescripcion(const string& desc);
+    void setYearDeRegistro(int y);
+
+    const string& getNombre() const;
+    const string& getDescripcion() const;
+    int getYearDeRegistro() const;
+
+    ListaEnlazada<Curso*>& getcursos();
+    AVLTree<Profesor>& getprofesores();
+    ListaEnlazada<string>& getlogsdeprofes();
+
+    void mostrarInformacion();
+    void mostrarEstadisticas();
+
+    void agregarCurso(Curso* curso) {
+        cursos.insertarAlFinal(curso);
     }
-    Institucion(string nombre, string descripcion, int yearderegistro);
-
-    string getnombre();
-    string getdescripcion();
-    int getyear();
-
-    vector<Curso*>& getcursos() {
-        return cursos;
-    }
-
-    AVLTree<Profesor>& getprofesores() { 
-        return profesores;
-    }
-
-    ListaEnlazada<string>& getlogsdeprofes() { 
-        return logs; 
-    }
-
-    void agregarcurso(Curso* curso);
-
-    void agregarprofesor(Profesor prof); 
-
-    void quitarprofesor(int id);
-
-    void guardarprofenearchivo(Profesor prof); //admininsti
-    
-    ///////////////////////////////////////////
-
-    void verinformacion();
-
-    void menugestiondeprofes();
-
-    void verhistorial(); //admininsti
-
-    void agregarprofe(); //admininsti
-
-    void quitarprofes(); //admininsti
-
-    void asignarcursosalprofe(); //admininsti
-
-    void desvincularprofes(); //admininsti
-
-    void vercursos();
-
-    void verestadisticas();
-    
 };

@@ -12,6 +12,7 @@
 #include "Institucion.h"
 #include "Administrador.h"
 #include "UI.h"
+#include "AdministrarInstituciones.h"
 using namespace std;
 
 class Sistema {
@@ -25,7 +26,7 @@ private:
 	ListaEnlazada<Usuario> usuarios;
 	ListaEnlazada<Profesor> profesores;
 	ListaEnlazada<Estudiante> estudiantes;
-	void menuInstitucion();
+
 	void menuPrincipal();
 	void registroEstudiante();
 	void registroProfesor();
@@ -33,6 +34,14 @@ private:
 	void registrarse();
 	void iniciarSesion();
     void menuAdmin();
+	void menuInstitucion();
+	void gestionProfesoresUI();
+	void verInformacionUI();
+	void verEstadisticasUI();
+	void verCursosUI();
+	void historialLogsUI();
+	void cargarprofesBETA(Institucion* institucion);
+	//
 	bool validarCorreo(string& correo);
 	bool validarContrasena(string& contrasena, string& correo);
 	void inicializarDatos();

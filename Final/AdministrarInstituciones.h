@@ -1,19 +1,38 @@
 #pragma once
-
-#include "Institucion.h"
+#include <iostream>
+#include <string>
+#include <fstream>
 #include "Profesor.h"
 #include "Curso.h"
-#include "AVLTree.h"
+#include "Institucion.h"
 #include "ListaEnlazada.h"
+using namespace std;
 
-void guardarprofenelarchivo(Profesor prof);
+class AdministrarInstitucion {
+public:
+    AdministrarInstitucion();
+    ~AdministrarInstitucion();
 
-void agregarprofesor2(Institucion& inst);
+    void guardarprofenelarchivo(Profesor prof);
+    bool desvincularCursoDeProfesor(Institucion& inst, int idxProfe, string cursoAEliminar, string& mensaje);
 
-void mostrarhistorial2(const ListaEnlazada<string>& logs);
+    void agregarprofesor2(Institucion& inst, const string& codigo, const string& nombre,
+        const string& apellido, const string& correo, int tiempoEnCoursera, int id,
+        int reputacion, const string& cursoAsignado);
 
-void quitarprofesor2(Institucion& inst);
+    bool quitarprofesor2(Institucion& inst, int indexAEliminar, string& mensajeConfirmacion);
+    ListaEnlazada<Profesor> obtenerListaProfes(Institucion& inst);
 
-void asignarcursoalprofe2(Institucion& inst);
+    ListaEnlazada<Profesor*> obtenerProfesoresSinCurso(Institucion& inst);
+    ListaEnlazada<Curso*> obtenerCursosLibres(Institucion& inst);
+    bool asignarCursoAProfesor(Institucion& inst, int idxProfe, int idxCurso, string& logMensaje);
 
-void desvincularcursoalprofe2(Institucion& inst);
+    ListaEnlazada<Profesor*> obtenerProfesoresConCurso(Institucion& inst);
+
+    void mostrarLogsPorFiltro(const string& filtro, const string& valor, ListaEnlazada<string>& resultado);
+
+    void obtenerResumenCursos(Institucion& inst, ListaEnlazada<string>& resumen);
+    void obtenerResumenProfesores(Institucion& inst, ListaEnlazada<string>& resumen);
+    size_t contarCursos(Institucion& inst);
+    void obtenerListadoCursosConProfesor(Institucion& inst, ListaEnlazada<string>& listado);
+};
