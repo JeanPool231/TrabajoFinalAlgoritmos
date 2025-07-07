@@ -4,6 +4,7 @@
 #include "AVLTree.h"
 #include "Estudiante.h"
 #include "Profesor.h"
+#include "Leccion.h"
 #include "Institucion.h"
 #include "Usuario.h"
 #include <conio.h>
@@ -13,9 +14,10 @@ class Administrador
 {
 public:
 	Administrador();
-	~Administrador();
+	//~Administrador();
 
-	void guardar(Usuario usuario);
+	void guardar(Usuario usuario, string id);
+	void eliminar(string correo);
 	void ver_cursos(ListaEnlazada<Curso*>& curso);
 	void anadir_cursos(ListaEnlazada<Curso*>& curso);
 	void eliminar_cursos(ListaEnlazada<Curso*>& curso);
