@@ -1,0 +1,5 @@
+codigo: 92869537
+nombre: 0
+apellido: 0
+correo: 0
+curso_asignado: 0

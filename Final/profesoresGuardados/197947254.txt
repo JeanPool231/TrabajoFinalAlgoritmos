@@ -1,0 +1,5 @@
+codigo: 197947254
+nombre: Valentina Ramona
+apellido: Romani Huanchi
+correo: valentina.romani@gmail.com
+curso_asignado: Calculo

@@ -1,13 +1,14 @@
 ﻿#include "AdministrarInstituciones.h"
-#include <iostream>
 #include <fstream>
-#include <regex>
-#include <algorithm>
-#include <filesystem>
+#include <iostream>
 #include <sstream>
-#include "HashUtil.h"
+#include <filesystem>
+#include <algorithm>
 using namespace std;
 namespace fs = std::filesystem;
+
+AdministrarInstitucion::AdministrarInstitucion() {}
+AdministrarInstitucion::~AdministrarInstitucion() {}
 
 string obtenerFechaHoraActual1() {
     time_t ahora = time(0);
@@ -24,375 +25,242 @@ string obtenerFechaHoraActual1() {
 
     return ss.str();
 }
-
-string limpiarespacio(const string& str) {
-    string limpio = str;
-    limpio.erase(remove_if(limpio.begin(), limpio.end(), ::isspace), limpio.end());
-    return limpio;
-}
-
-void guardarprofenelarchivo(Profesor prof) {
-
-    fs::create_directory("profesoresGuardados");
-
-    string codigoLimpio = limpiarespacio(prof.getCodigo());
-    string ruta = "profesoresGuardados/" + codigoLimpio + ".txt";
-
-    ofstream archivo(ruta);
-    if (!archivo.is_open()) {
-        return;
-    }
-
+void AdministrarInstitucion::guardarprofenelarchivo(Profesor prof) {
+    ofstream archivo("profesoresGuardados/" + prof.getCodigo() + ".txt");
     archivo << "codigo: " << prof.getCodigo() << "\n";
     archivo << "nombre: " << prof.getNombre() << "\n";
     archivo << "apellido: " << prof.getApellido() << "\n";
     archivo << "correo: " << prof.getCorreo() << "\n";
-    archivo << "tiempo_en_coursera: " << prof.getTiempoEnCoursera() << "\n";
-    archivo << "id: " << prof.getId() << "\n";
-    archivo << "reputacion: " << prof.getReputacion() << "\n";
-    archivo << "curso_asignado: " << prof.getCursoAsignado() << "\n";
-    archivo.close();
-}
-
-
-void guardarProfesor(Profesor profesor) {
-    filesystem::create_directory("profesoresCreados");
-
-    string ruta = "profesoresCreados/" + profesor.getCodigo() + ".txt";
-    ofstream archivo(ruta);
-
-    if (archivo.is_open()) {
-        archivo << profesor.getCodigo() << "\n";
-        archivo << profesor.getNombre() << "\n";
-        archivo << profesor.getApellido() << "\n";
-        archivo << profesor.getCorreo() << "\n";
-        archivo << profesor.getTiempoEnCoursera() << "\n";
-        archivo << profesor.getId() << "\n";
-        archivo << profesor.getReputacion() << "\n";
-        archivo.close();
-    }
-    else {
-        cerr << "No se pudo abrir el archivo para escritura.\n";
-    }
-}
-
-void agregarprofesor2(Institucion& inst) {
-
-    vector<Curso*>& cursos = inst.getcursos(); 
-    AVLTree<Profesor>& profesores = inst.getprofesores();
-    vector<Curso*> disponibles;
-
-
-    string codigo = "", nombre, apellido, correo, cursoSeleccionado;
-    int tiempoEnCoursera = 0, reputacion = 0;
-    string id = "";
-    cout << "Ingrese datos del profesor:\n";
-    cout << "Nombre: "; getline(cin, nombre);
-    cout << "Apellido: "; getline(cin, apellido);
-    cout << "Correo: "; getline(cin, correo);
-    codigo = HashUtil::generarHash(nombre + to_string(rand() % 10000));
-    cout << '\n';
-    cout << codigo << '\n';
-    system("pause");
-    cin.ignore();
-
-    for (auto c : cursos) {
-        bool ocupado = false;
-        profesores.recorrerInOrden([&](Profesor& p) {
-            if (p.getCursoAsignado() == c->getNombre()) ocupado = true;
-            });
-        if (!ocupado) {
-            disponibles.push_back(c);
-        }
-    }
-
-    cout << "\nCursos\n";
-    if (disponibles.empty()) {
-        cout << "no hay cursos disponibles para asignarle a un profesor\n";
-        cursoSeleccionado = "";
-    }
-    else {
-        cout << "0. No asignar ningun curso\n";
-        for (size_t j = 0; j < disponibles.size(); ++j) {
-            cout << j + 1 << ". " << disponibles[j]->getNombre() << "\n";
-        }
-
-        int opcionCurso;
-        cout << "Ingrese el numero del indice para asignarle un curso: ";
-        cin >> opcionCurso; cin.ignore();
-
-        if (opcionCurso == 0) {
-            cursoSeleccionado = "";
-        }
-        else if (opcionCurso < 1 || opcionCurso > disponibles.size()) {
-            cout << "opcion invalida\n";
-            return;
-        }
-        else {
-            cursoSeleccionado = disponibles[opcionCurso - 1]->getNombre();
-        }
-    }
-
-
-    Profesor nuevo(codigo, nombre, apellido, correo,
-        tiempoEnCoursera, id, reputacion);
-    nuevo.asignarCurso(cursoSeleccionado);
-
-    profesores.insertar(nuevo, [](Profesor& a, Profesor& b) {
-        return a.getCodigo() < b.getCodigo();
-        });
-    guardarProfesor(nuevo);
-    guardarprofenelarchivo(nuevo);
-
-
-    string mensaje = "Agregado: " + nombre + " " + apellido + " | " + obtenerFechaHoraActual1();
-    inst.getlogsdeprofes().insertarAlFinal(mensaje);
-
-    ofstream archivoLogs("logs/logsProfesores.txt", ios::app);
-    archivoLogs << mensaje << "\n";
-    archivoLogs.close();
-
-
-}
-
-void mostrarhistorial2(const ListaEnlazada<string>& logs) {
-    
-    
-    string ruta = "logs/logsProfesores.txt";
-    ifstream archivo(ruta);
-    if (!archivo.is_open()) {
-        cout << "\nno hay ningun log\n";
-        return;
-    }
-
-    vector<string> logsTotales;
-    string linea;
-    while (getline(archivo, linea)) {
-        logsTotales.push_back(linea);
-    }
+    archivo << "curso_asignado: ";
+    if (!prof.getCursosAsignados().empty())
+        archivo << prof.getCursosAsignados()[0] << "\n";
+    else
+        archivo << "0\n";
     archivo.close();
 
-    if (logsTotales.empty()) {
-        cout << "\nNo hay ningun dato en el log que mostrar\n";
-        return;
+    ofstream plano("profesoresCreados/" + prof.getCodigo() + ".txt");
+    plano << prof.getCodigo() << "\n"
+        << prof.getNombre() << "\n"
+        << prof.getApellido() << "\n"
+        << prof.getCorreo() << "\n0\n0\n";
+
+    if (!prof.getCursosAsignados().empty()) {
+        string cursosConcat;
+        for (const string& c : prof.getCursosAsignados()) cursosConcat += c + ";";
+        cursosConcat.pop_back();
+        plano << cursosConcat << "\n";
     }
-
-    int opcion;
-    do {
-        cout << "\nHistorial\n";
-        cout << "1. Ver todos los logs\n";
-        cout << "2. Filtrar por la fecha\n";
-        cout << "3. Filtrar por cualquier accion\n";
-        cout << "4. Volver al menu anterior\n";
-        cout << "Ponga su opcion: ";
-        cin >> opcion;
-        cin.ignore();
-
-        if (opcion == 1) {
-            for (const string& l : logsTotales) {
-                cout << "- " << l << "\n";
-            }
-        }
-        else if (opcion == 2) {
-            cout << "Ingrese la fecha (Dia/Mes/Año) (no letras): "; //bug letras 
-            string fecha;
-            getline(cin, fecha);
-
-            bool encontrado = false;
-            for (const string& l : logsTotales) {
-                if (l.find(fecha) != string::npos) {
-                    cout << "- " << l << "\n";
-                    encontrado = true;
-                }
-            }
-            if (!encontrado) {
-                cout << "Error, ejemplo : 26/05/2026\n";
-            }
-        }
-        else if (opcion == 3) {
-            cout << "Ingrese la accion : ";
-            string palabra;
-            getline(cin, palabra);
-
-            bool encontrado = false;
-            for (const string& l : logsTotales) {
-                if (l.find(palabra) != string::npos) {
-                    cout << "- " << l << "\n";
-                    encontrado = true;
-                }
-            }
-            if (!encontrado) {
-                cout << "Error, ejemplos : Agregado, Eliminado, Curso Asignado, Curso desvinculado\n";
-            }
-        }
-        else if (opcion != 4) {
-            cout << "erorr\n";
-        }
-
-    } while (opcion != 4);
+    else plano << "0\n";
+    plano.close();
 }
 
+bool AdministrarInstitucion::quitarprofesor2(Institucion& inst, int idx, string& mensaje) {
+    auto& arbol = inst.getprofesores();
+    ListaEnlazada<Profesor> lista;
+    arbol.recorrerInOrden([&](Profesor& p) { lista.insertarAlFinal(p); });
 
-void quitarprofesor2(Institucion& inst) {
-    vector<Curso*>& cursos = inst.getcursos();
-    AVLTree<Profesor>& profesores = inst.getprofesores();
-    vector<Profesor> todos;
+    Nodo<Profesor>* actual = lista.obtenerCabeza();
+    for (int i = 0; actual && i < idx; ++i) actual = actual->siguiente;
+    if (!actual) return false;
 
-    profesores.recorrerInOrden([&](Profesor& p) {
-        todos.push_back(p);
-        });
+    Profesor objetivo = actual->dato;
 
-    if (todos.empty()) {
-        cout << "No hay profesores para eliminar.\n";
-        return;
-    }
+        fs::remove("profesoresGuardados/" + objetivo.getCodigo() + ".txt");
+        fs::remove("profesoresCreados/" + objetivo.getCodigo() + ".txt");
 
-    cout << "\nLista de los profesores:\n";
-    for (size_t i = 0; i < todos.size(); ++i) {
-        cout << i + 1 << ". " << todos[i].getCodigo() << " | " << todos[i].getNombre();
-        if (!todos[i].getCursoAsignado().empty())
-            cout << " (Curso: " << todos[i].getCursoAsignado() << ")";
-        cout << endl;
-    }
-
-    int opcion;
-    cout << "Ingrese el indice del profesor a eliminar: ";
-    cin >> opcion; cin.ignore();
-
-    if (opcion < 1 || opcion > todos.size()) {
-        cout << "opcion incorrecta\n";
-        return;
-    }
-
-    string codigo = limpiarespacio(todos[opcion - 1].getCodigo());
-    fs::remove("profesoresGuardados/" + codigo + ".txt");
-
-
-    AVLTree<Profesor> nuevoArbol;
-    profesores.recorrerInOrden([&](Profesor& p) {
-        if (p.getCodigo() != codigo) {
-            nuevoArbol.insertar(p, [](Profesor& a, Profesor& b) {
+    AVLTree<Profesor> nuevo;
+    arbol.recorrerInOrden([&](Profesor& p) {
+        if (p.getCodigo() != objetivo.getCodigo()) {
+            nuevo.insertar(p, [](Profesor& a, Profesor& b) {
                 return a.getCodigo() < b.getCodigo();
                 });
         }
         });
-    profesores = nuevoArbol;
+    inst.getprofesores() = nuevo;
+    mensaje = "Eliminado: " + objetivo.getNombre() + " " + objetivo.getApellido();
 
-    cout << "Profesor eliminado \n";
+    string log = mensaje + " | " + obtenerFechaHoraActual1();
+    inst.getlogsdeprofes().insertarAlFinal(log);
+    ofstream archivo("logs/logsProfesores.txt", ios::app);
+    archivo << log << "\n";
+    archivo.close();
+    return true;
+}
 
-    string mensaje = "Eliminado: " + todos[opcion - 1].getNombre() + " " + todos[opcion - 1].getApellido() + " | " + obtenerFechaHoraActual1();
-    inst.getlogsdeprofes().insertarAlFinal(mensaje);
-
-    ofstream archivoLogs("logs/logsProfesores.txt", ios::app);
-    archivoLogs << mensaje << "\n";
-    archivoLogs.close();
+void AdministrarInstitucion::agregarprofesor2(Institucion& inst, const string& codigo, const string& nombre,
+    const string& apellido, const string& correo, int tiempo, int id,
+    int reputacion, const string& cursoAsignado) {
+    Profesor nuevo(codigo, nombre, apellido, correo, tiempo, to_string(id), reputacion);
+    if (!cursoAsignado.empty()) nuevo.agregarCurso(cursoAsignado);
+    inst.getprofesores().insertar(nuevo, [](Profesor& a, Profesor& b) {
+        return a.getCodigo() < b.getCodigo();
+        });
+    guardarprofenelarchivo(nuevo);
+   
+    string log = "Agregado: " + nombre + " " + apellido + " | " + obtenerFechaHoraActual1();
+    inst.getlogsdeprofes().insertarAlFinal(log);
+    ofstream archivo("logs/logsProfesores.txt", ios::app);
+    archivo << log << "\n";
+    archivo.close();
 
 }
 
-void asignarcursoalprofe2(Institucion& inst) {
-    vector<Curso*>& cursos = inst.getcursos();
-    AVLTree<Profesor>& profesores = inst.getprofesores();
-    vector<Profesor*> sinCurso;
-
-
-    profesores.recorrerInOrden([&](Profesor& p) {
-        if (p.getCursoAsignado().empty()) sinCurso.push_back(&p);
+ListaEnlazada<Profesor> AdministrarInstitucion::obtenerListaProfes(Institucion& inst) {
+    ListaEnlazada<Profesor> lista;
+    inst.getprofesores().recorrerInOrden([&](Profesor& p) {
+        lista.insertarAlFinal(p);
         });
+    return lista;
+}
 
-    if (sinCurso.empty()) {
-        cout << "Todos los profesores tienen un curso asignado\n";
-        return;
-    }
+ListaEnlazada<Profesor*> AdministrarInstitucion::obtenerProfesoresSinCurso(Institucion& inst) {
+    ListaEnlazada<Profesor*> lista;
+    inst.getprofesores().recorrerInOrden([&](Profesor& p) {
+        if (p.getCursosAsignados().empty()) lista.insertarAlFinal(&p);
+        });
+    return lista;
+}
 
-    cout << "\nProfesores sin algun curso asignado:\n";
-    for (size_t i = 0; i < sinCurso.size(); ++i) {
-        cout << i + 1 << ". " << sinCurso[i]->getCodigo() << " | " << sinCurso[i]->getNombre() << endl;
-    }
+ListaEnlazada<Profesor*> AdministrarInstitucion::obtenerProfesoresConCurso(Institucion& inst) {
+    ListaEnlazada<Profesor*> lista;
+    inst.getprofesores().recorrerInOrden([&](Profesor& p) {
+        if (!p.getCursosAsignados().empty()) lista.insertarAlFinal(&p);
+        });
+    return lista;
+}
 
-    int opcionprof;
-    cout << "Ingrese el indice del profesor: ";
-    cin >> opcionprof; cin.ignore();
-    if (opcionprof < 1 || opcionprof > sinCurso.size()) {
-        cout << "opcion invalida\n";
-        return;
-    }
+ListaEnlazada<Curso*> AdministrarInstitucion::obtenerCursosLibres(Institucion& inst) {
+    ListaEnlazada<Curso*> libres;
+    Nodo<Curso*>* nodo = inst.getcursos().obtenerCabeza();
 
-    vector<Curso*> libres;
-    for (auto c : cursos) {
+    while (nodo != nullptr) {
+        Curso* c = nodo->dato;
         bool ocupado = false;
-        profesores.recorrerInOrden([&](Profesor& p) {
-            if (p.getCursoAsignado() == c->getNombre()) ocupado = true;
+        string nombre = c->getNombre();
+
+        inst.getprofesores().recorrerInOrden([&](Profesor& p) {
+            for (const string& asignado : p.getCursosAsignados()) {
+                if (asignado == nombre) {
+                    ocupado = true;
+                    break;
+                }
+            }
             });
-        if (!ocupado) libres.push_back(c);
+
+        if (!ocupado) libres.insertarAlFinal(c);
+
+        nodo = nodo->siguiente;
     }
 
-    if (libres.empty()) {
-        cout << "no hay cursos disponibles\n";
-        return;
-    }
-
-    cout << "\nCursos disponibles:\n";
-    for (size_t i = 0; i < libres.size(); ++i) {
-        cout << i + 1 << ". " << libres[i]->getNombre() << endl;
-    }
-
-    int opcionCurso;
-    cout << "Seleccione el numero de curso: ";
-    cin >> opcionCurso; cin.ignore();
-    if (opcionCurso < 1 || opcionCurso > libres.size()) {
-        cout << "opcion invalida\n";
-        return;
-    }
-
-    sinCurso[opcionprof - 1]->asignarCurso(libres[opcionCurso - 1]->getNombre());
-    guardarprofenelarchivo(*sinCurso[opcionprof - 1]);
-    cout << "Curso asignado.\n";
-
-    string mensaje = "Curso asignado: " + sinCurso[opcionprof - 1]->getNombre() + " → " + libres[opcionCurso - 1]->getNombre() + " | " + obtenerFechaHoraActual1();
-    inst.getlogsdeprofes().insertarAlFinal(mensaje);
-
-    ofstream archivoLogs("logs/logsProfesores.txt", ios::app);
-    archivoLogs << mensaje << "\n";
-    archivoLogs.close();
-
-
+    return libres;
 }
 
-void desvincularcursoalprofe2(Institucion& inst) {
-    vector<Curso*>& cursos = inst.getcursos();
-    AVLTree<Profesor>& profesores = inst.getprofesores();
-    vector<Profesor*> conCurso;
-    profesores.recorrerInOrden([&](Profesor& p) {
-        if (!p.getCursoAsignado().empty()) conCurso.push_back(&p);
+bool AdministrarInstitucion::asignarCursoAProfesor(Institucion& inst, int idxProfe, int idxCurso, string& mensaje) {
+    ListaEnlazada<Profesor*> profes = obtenerProfesoresSinCurso(inst);
+    ListaEnlazada<Curso*> cursos = obtenerCursosLibres(inst);
+    Nodo<Profesor*>* pNode = profes.obtenerCabeza();
+    Nodo<Curso*>* cNode = cursos.obtenerCabeza();
+    for (int i = 0; i < idxProfe && pNode; ++i) pNode = pNode->siguiente;
+    for (int i = 0; i < idxCurso && cNode; ++i) cNode = cNode->siguiente;
+    if (!pNode || !cNode) return false;
+
+    Profesor* profe = pNode->dato;
+    string nombreCurso = cNode->dato->getNombre();
+
+    profe->agregarCurso(nombreCurso);
+    guardarprofenelarchivo(*profe);
+    cout << "Curso asignado.";
+    string log = "Asignado: " + profe->getNombre() + " → " + nombreCurso + " | " + obtenerFechaHoraActual1();
+    inst.getlogsdeprofes().insertarAlFinal(log);
+    ofstream archivo("logs/logsProfesores.txt", ios::app);
+    archivo << log << "\n";
+    archivo.close();
+    return true;
+}
+
+bool AdministrarInstitucion::desvincularCursoDeProfesor(Institucion& inst, int idxProfe, string cursoAEliminar, string& mensaje) {
+    ListaEnlazada<Profesor*> profes = obtenerProfesoresConCurso(inst);
+    Nodo<Profesor*>* nodo = profes.obtenerCabeza();
+    for (int i = 0; i < idxProfe && nodo; ++i) nodo = nodo->siguiente;
+    if (!nodo) return false;
+
+    Profesor* profe = nodo->dato;
+    profe->quitarCurso(cursoAEliminar);
+    guardarprofenelarchivo(*profe);
+    string log = "Desvinculado: " + profe->getNombre() + " ← " + cursoAEliminar + " | " + obtenerFechaHoraActual1();
+    inst.getlogsdeprofes().insertarAlFinal(log);
+    ofstream archivo("logs/logsProfesores.txt", ios::app);
+    archivo << log << "\n";
+    archivo.close();
+
+    cout << "Curso desvinculado.";
+    return true;
+}
+
+void AdministrarInstitucion::mostrarLogsPorFiltro(const string& filtro, const string& valor, ListaEnlazada<string>& resultado) {
+    ifstream archivo("logs/logsProfesores.txt");
+    string linea;
+    while (getline(archivo, linea)) {
+        if (filtro == "fecha" && linea.find(valor) != string::npos) resultado.insertarAlFinal(linea);
+        else if (filtro == "accion" && linea.find(valor) != string::npos) resultado.insertarAlFinal(linea);
+        else if (filtro == "todo") resultado.insertarAlFinal(linea);
+    }
+}
+
+void AdministrarInstitucion::obtenerResumenCursos(Institucion& inst, ListaEnlazada<string>& resumen) {
+    Nodo<Curso*>* nodo = inst.getcursos().obtenerCabeza();
+
+    while (nodo != nullptr) {
+        Curso* curso = nodo->dato;
+        string profe = "No asignado";
+
+        inst.getprofesores().recorrerInOrden([&](Profesor& p) {
+            for (const string& c : p.getCursosAsignados()) {
+                if (c == curso->getNombre()) {
+                    profe = p.getNombre();
+                    break;
+                }
+            }
+            });
+
+        resumen.insertarAlFinal(curso->getNombre() + " | Profesor: " + profe);
+        nodo = nodo->siguiente;
+    }
+}
+
+void AdministrarInstitucion::obtenerResumenProfesores(Institucion& inst, ListaEnlazada<string>& resumen) {
+    inst.getprofesores().recorrerInOrden([&](Profesor& p) {
+        resumen.insertarAlFinal(p.getCodigo() + " - " + p.getNombre() + " " + p.getApellido());
         });
+}
 
-    if (conCurso.empty()) {
-        cout << "Ningun profesor tiene algun curso asignado\n";
-        return;
+void AdministrarInstitucion::obtenerListadoCursosConProfesor(Institucion& inst, ListaEnlazada<string>& listado) {
+    Nodo<Curso*>* nodo = inst.getcursos().obtenerCabeza();
+
+    while (nodo != nullptr) {
+        Curso* curso = nodo->dato;
+        string profe = "No asignado";
+
+        inst.getprofesores().recorrerInOrden([&](Profesor& p) {
+            for (const string& c : p.getCursosAsignados()) {
+                if (c == curso->getNombre()) {
+                    profe = p.getNombre();
+                    break;
+                }
+            }
+            });
+
+        listado.insertarAlFinal("Curso: " + curso->getNombre() + " | Profesor: " + profe);
+        nodo = nodo->siguiente;
     }
+}
 
-    cout << "\nLista de profes con curso:\n";
-    for (size_t i = 0; i < conCurso.size(); ++i) {
-        cout << i + 1 << ". " << conCurso[i]->getCodigo() << " | " << conCurso[i]->getNombre()
-            << " (" << conCurso[i]->getCursoAsignado() << ")\n";
+size_t AdministrarInstitucion::contarCursos(Institucion& inst) {
+    size_t count = 0;
+    Nodo<Curso*>* nodo = inst.getcursos().obtenerCabeza();
+    while (nodo != nullptr) {
+        count++;
+        nodo = nodo->siguiente;
     }
-
-    int opcion;
-    cout << "Seleccione un profesor a desvincular: ";
-    cin >> opcion; cin.ignore();
-    if (opcion < 1 || opcion > conCurso.size()) {
-        cout << "opcion incorrecta\n";
-        return;
-    }
-
-    conCurso[opcion - 1]->quitarCurso();
-    guardarprofenelarchivo(*conCurso[opcion - 1]);
-    cout << "Curso desvinculado\n";
-
-    string mensaje = "Curso desvinculado: " + conCurso[opcion - 1]->getNombre() + " | " + obtenerFechaHoraActual1();
-    inst.getlogsdeprofes().insertarAlFinal(mensaje);
-
-    ofstream archivoLogs("logs/logsProfesores.txt", ios::app);
-    archivoLogs << mensaje << "\n";
-    archivoLogs.close();
+    return count;
 }

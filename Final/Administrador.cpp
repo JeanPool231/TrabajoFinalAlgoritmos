@@ -280,12 +280,14 @@ void Administrador::anadir_instituciones(AVLTree<Institucion*>& inst)
 	cout << "Ingrese el correo de la institucion a añadir: "; cin >> correo;
 	cout << "Ingrese la contraseña de la institucion a añadir: "; cin >> contraseña;
 	Institucion* ins = new Institucion(nombre, descripcion, yearderegistro);
+
 	auto cmp = [](Institucion*& a, Institucion*& b) { return a->getyear() < b->getyear(); };
 	inst.insertar(ins, cmp);
 	Usuario institucion = { 'I', correo, contraseña };
 	guardar(institucion, descripcion);
 	cout << "Institucion Añadida" << endl;
 	_getch();
+
 }
 void Administrador::eliminar_instituciones(AVLTree<Institucion*>& inst)
 {
