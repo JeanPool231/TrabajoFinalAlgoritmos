@@ -289,6 +289,22 @@ public:
 
         _setmode(_fileno(stdout), _O_TEXT);
     }
+
+    void tituloTIpo(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        moverCursor(fila, columna);
+        std::wcout << L"┏┳┓•    \n";
+        moverCursor(fila + 1, columna);
+        std::wcout << L" ┃ ┓┏┓┏┓\n";
+        moverCursor(fila + 2, columna);
+        std::wcout << L" ┻ ┗┣┛┗┛\n";
+        moverCursor(fila + 3, columna);
+        std::wcout << L"     ┛   \n";
+
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+
     void tituloPassword(int fila, int columna) {
         _setmode(_fileno(stdout), _O_U16TEXT);
 
@@ -380,6 +396,18 @@ public:
         std::wcout << L"░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░▀░░▀░▀░▀▀▀░░░▀▀▀░▀▀▀░░▀░░▀▀▀░▀▀░░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀\n";
         _setmode(_fileno(stdout), _O_TEXT);
     }
+
+    void tituloRegistroInstitucion(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+        moverCursor(fila++, columna);
+        std::wcout << L"░█▀▄░█▀▀░█▀▀░▀█▀░█▀▀░▀█▀░█▀▄░█▀█░░░▀█▀░█▀█░█▀▀░▀█▀░▀█▀░▀█▀░█░█░█▀▀░▀█▀░█▀█░█▀█\n";
+        moverCursor(fila++, columna);
+        std::wcout << L"░█▀▄░█▀▀░█░█░░█░░▀▀█░░█░░█▀▄░█░█░░░░█░░█░█░▀▀█░░█░░░█░░░█░░█░█░█░░░░█░░█░█░█░█\n";
+        moverCursor(fila++, columna);
+        std::wcout << L"░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░▀░░▀░▀░▀▀▀░░░▀▀▀░▀░▀░▀▀▀░░▀░░▀▀▀░░▀░░▀▀▀░▀▀▀░▀▀▀░▀▀▀░▀░▀\n";
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+
     void tituloNombre(int fila, int columna) {
         _setmode(_fileno(stdout), _O_U16TEXT);
 

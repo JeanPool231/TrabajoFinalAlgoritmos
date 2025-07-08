@@ -680,7 +680,7 @@ void Sistema::registrarse() {
 			break;
 		case 'I':
 			registroInstitucion();
-			menuInstitucion();
+			//menuInstitucion();
             return;
 			break;
         case 'V':
@@ -764,28 +764,26 @@ void Sistema::registroInstitucion() {
 
     registroInstitucionUI();
     moverCursor(7, 62);
-    cin.ignore();
-
     getline(cin, nombreInst);
-    moverCursor(7, 62);
 
     moverCursor(10, 62);
     cin >> correo;
 
+    cin.ignore();
     moverCursor(13, 62);
     getline(cin, tipoInst);
 
-    moverCursor(13, 62);
+    moverCursor(16, 62);
     cin >> contra;
 
     do {
-        moverCursor(18, 62);
+        moverCursor(21, 62);
         cin >> confContra;
 
         if (contra != confContra) {
-            moverCursor(17, 62);
+            moverCursor(20, 62);
             cout << "Intente nuevamente.";
-            moverCursor(18, 62);
+            moverCursor(21, 62);
         }
     } while (contra != confContra);
 
@@ -793,13 +791,17 @@ void Sistema::registroInstitucion() {
     institucion->setCorreo(correo);
     institucion->setTipoInst(tipoInst);
     institucion->setContrasena(contra);
+
     codigo = HashUtil::generarHash(nombreInst + to_string(rand() % 10000));
     institucion->setCodigo(codigo);
-    enviarSolicitud(*institucion);
-    cout << "Se ha registrado los datos \n Por favor espere a que el admin apruebe su registro\n";
 
+    enviarSolicitud(*institucion);
+
+    cout << "Se ha registrado los datos \nPor favor espere a que el admin apruebe su registro\n";
+    system("pause");
     system("cls");
 }
+
 
 
 void Sistema::cargarprofesBETA(Institucion* institucion) {
@@ -1288,16 +1290,18 @@ void Sistema::registroEstudianteUI() {
 void Sistema::registroInstitucionUI() {
     system("cls");
     disenio.cuadro_dividido(120, 28);
-    disenio.tituloRegistroEstudiante(2, 33);
+    disenio.tituloRegistroInstitucion(2, 33);
     disenio.tituloNombre(6, 38);
     disenio.tituloEmail(9, 38);
-    disenio.tituloPassword(12, 38);
-    disenio.tituloConfirmar(16, 38);
+    disenio.tituloTIpo(12, 38);
+    disenio.tituloPassword(15, 38);
+    disenio.tituloConfirmar(19, 38);
 
     disenio.cuadroDobleLineas(6, 60, 50, 3);
     disenio.cuadroDobleLineas(9, 60, 50, 3);
     disenio.cuadroDobleLineas(12, 60, 50, 3);
-    disenio.cuadroDobleLineas(17, 60, 50, 3);
+    disenio.cuadroDobleLineas(15, 60, 50, 3);
+    disenio.cuadroDobleLineas(20, 60, 50, 3);
 }
 
 void Sistema::bienvenidoUI() {
