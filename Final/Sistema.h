@@ -60,6 +60,7 @@ private:
 	void estudianteUI();
 	void verPerfilUI();
 	void verCursoSeleccionadoUI(Curso);
+
 public:
 	void iniciarPrograma();
 };

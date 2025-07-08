@@ -70,3 +70,17 @@ void Institucion::mostrarEstadisticas() {
     cout << "\nEstadisticas\n";
     cout << "Cantidad total de cursos: " << contador << "\n";
 }
+
+void Institucion::setCorreo(const string& correo) {
+	this->correo = correo;
+}
+void Institucion::setContrasena(const string& contrasena) {
+	this->contrasena = contrasena;
+}
+void Institucion::setTipoInst(const string& tipoInst) {
+	this->tipoInst = tipoInst;
+}
+
+void Institucion::setCodigo(const string& codigo){
+	this->codigo = codigo;
+}

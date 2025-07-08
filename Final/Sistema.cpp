@@ -179,6 +179,39 @@ void guardarEstudiante(Estudiante nuevoEstudiante) {
     }
 }
 
+
+//void enviarSolicitud(Institucion nuevaInstitucion) {
+//    string nombre = nuevaInstitucion.getCorreo();
+//    string ruta = "Usuarios/" + nombre + ".txt";
+//
+//    ofstream archivo(ruta);
+//    if (archivo.is_open()) {
+//        archivo << 'I' << '\n';
+//        archivo << nuevaInstitucion.getNombre() << '\n';
+//        archivo << nuevaInstitucion.getCorreo() << '\n';
+//        archivo << nuevaInstitucion.getTipoInst() << '\n';
+//        archivo.close();
+//    }
+//    else {
+//        cout << "Error al crear el archivo para la institucion.\n";
+//    }
+//    nombre = nuevaInstitucion.getCodigo();
+//    ruta = "solicitudesInstituciones/" + nombre + ".txt";
+//
+//    ofstream archivo2(ruta);
+//    if (archivo2.is_open()) {
+//        archivo2 << nuevaInstitucion.getNombre() << '\n';
+//        archivo2 << nuevaInstitucion.getCorreo() << '\n';
+//        archivo2 << nuevaInstitucion.getTipoInst() << '\n';
+//        archivo2.close();
+//    }
+//    else {
+//        cout << "Error al crear el archivo para la institucion.\n";
+//    }
+//}
+
+
+
 string obtenerFechaHoraActual() {
     time_t ahora = time(0);
     tm tiempo;
@@ -658,28 +691,8 @@ void Sistema::registrarse() {
 		}
     } while (waza != "volver");
 }
-/// <summary>
-/// 
-/// /
-/// /
-/// /
-/// /
-/// /
-/// /
-/// /
-/// 
-/// 
-/// 
-/// 
-/// 
-/// 
-/// 
-/// /////////////
-/// 
-/// /
-/// /
-/// 
-/// </summary>
+
+
 void Sistema::registroEstudiante() {
     string correo, contrasena, nombres, apellidos;
     string contrasena2;
@@ -711,6 +724,7 @@ void Sistema::registroEstudiante() {
     
     system("cls");
 }
+
 
 void Sistema::registroProfesor() {
 
@@ -744,18 +758,46 @@ void Sistema::registroProfesor() {
 }
 
 void Sistema::registroInstitucion() {
-    system("cls");
-    //string correo, contrasena, nombres, apellidos;
-    //cout << "Ingrese el correo: "; cin >> correo;
-    //cout << "Ingrese la contrasena: "; cin >> contrasena;
-    //cout << "Ingrese sus Nombres: ";
-    //getline(cin, nombres);
-    //cout << "Ingrese sus apellidos: ";
-    //getline(cin, apellidos);
+    string nombreInst, correo, tipoInst, contra, confContra;
+    string codigo;
+    //registroInstitucionUI();
+    moverCursor(7, 62);
+    cin.ignore();
+
+    getline(cin, nombreInst);
+    moverCursor(10, 62);
+
+    moverCursor(13, 62);
+    cin >> correo;
+
+    getline(cin, tipoInst);
+    moverCursor(16, 62);
+
+    moverCursor(19, 62);
+    cin >> contra;
+
+    do {
+        moverCursor(21, 62);
+        cin >> confContra;
+
+        if (contra != confContra) {
+            moverCursor(21, 62);
+            cout << "Intente nuevamente.";
+        }
+    } while (contra != confContra);
+
+    institucion->setNombre(nombreInst);
+    institucion->setCorreo(correo);
+    institucion->setTipoInst(tipoInst);
+    institucion->setContrasena(contra);
+    codigo = HashUtil::generarHash(nombreInst + to_string(rand() % 10000));
+    institucion->setCodigo(codigo);
+    //enviarSolicitud(*institucion);
     cout << "Se ha registrado los datos \n Por favor espere a que el admin apruebe su registro\n";
-    system("pause");
+
     system("cls");
 }
+
 
 void Sistema::cargarprofesBETA(Institucion* institucion) {
     for (const auto& entrada : fs::directory_iterator("profesoresCreados")) {
@@ -1023,7 +1065,7 @@ void Sistema::inicioUI() {
     cout << "2";
     moverCursor(25, 75);
     cout << "3";
-    moverCursor(25, 78);
+    moverCursor(25, 78); 
     cout << "4";
     mostrarCursosUI();
 }
