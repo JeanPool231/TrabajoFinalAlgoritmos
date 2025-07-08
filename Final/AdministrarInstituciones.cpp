@@ -198,7 +198,7 @@ bool AdministrarInstitucion::desvincularCursoDeProfesor(Institucion& inst, int i
 }
 
 void AdministrarInstitucion::mostrarLogsPorFiltro(const string& filtro, const string& valor, ListaEnlazada<string>& resultado) {
-    ifstream archivo("logs/logsProfesores.txt");
+    ifstream archivo("logsp/logsProfesores.txt");
     string linea;
     while (getline(archivo, linea)) {
         if (filtro == "fecha" && linea.find(valor) != string::npos) resultado.insertarAlFinal(linea);

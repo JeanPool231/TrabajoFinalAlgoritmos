@@ -46,7 +46,8 @@ public:
 
     void mostrarInformacion();
     void mostrarEstadisticas();
-
+    int contar();
+    int contarcursos();
     void agregarCurso(Curso* curso) {
         cursos.insertarAlFinal(curso);
     }

@@ -102,3 +102,17 @@ void Institucion::setTipoInst(const string& tipoInst) {
 void Institucion::setCodigo(const string& codigo){
 	this->codigo = codigo;
 }
+
+int Institucion::contar() {
+    int total = 0;
+    profesores.recorrerInOrden([&](Profesor&) { total++; });
+    return total;
+}
+
+int Institucion::contarcursos() {
+    int total = 0;
+    cursos.recorrer([&](Curso* curso) {
+        total++;
+        });
+    return total;
+}

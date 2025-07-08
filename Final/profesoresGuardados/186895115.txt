@@ -1,0 +1,5 @@
+codigo: 186895115
+nombre: abc
+apellido: abc
+correo: abc
+curso_asignado: 0

@@ -34,12 +34,25 @@ private:
 	void registrarse();
 	void iniciarSesion();
     void menuAdmin();
+
 	void menuInstitucion();
+
 	void gestionProfesoresUI();
-	void verInformacionUI();
+	void agregarProfesorUI();
+	void quitarProfesorUI();
+	void desvincularCursoUI();
+	void asignarCursoUI();
+
+	void verInformacionInstitucionUI();
+	void verProfesoresInstitucionUI();
+	void mostrarcursos();
+	void menuVerInformacion();
+	void menuInstitucionUI();
+	void historialLogsUI();
+
+	//
 	void verEstadisticasUI();
 	void verCursosUI();
-	void historialLogsUI();
 	void cargarprofesBETA(Institucion* institucion);
 	//
 	bool validarCorreo(string& correo);
@@ -61,6 +74,8 @@ private:
 	void estudianteUI();
 	void verPerfilUI();
 	void verCursoSeleccionadoUI(Curso);
+
+
 
 public:
 	void iniciarPrograma();

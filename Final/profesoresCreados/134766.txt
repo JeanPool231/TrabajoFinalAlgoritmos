@@ -1,0 +1,7 @@
+134766
+a
+b
+c
+0
+0
+Programacion en python desde cero
