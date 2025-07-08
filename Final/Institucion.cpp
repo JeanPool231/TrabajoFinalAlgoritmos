@@ -71,6 +71,24 @@ void Institucion::mostrarEstadisticas() {
     cout << "Cantidad total de cursos: " << contador << "\n";
 }
 
+
+const string& Institucion::getCorreo() const {
+	return correo;
+}
+
+const string& Institucion::getContrasena() const {
+	return contrasena;
+}
+
+const string& Institucion::getTipoInst() const {
+	return tipoInst;
+}
+
+const string& Institucion::getCodigo() const {
+	return codigo;
+}
+
+
 void Institucion::setCorreo(const string& correo) {
 	this->correo = correo;
 }

@@ -180,35 +180,35 @@ void guardarEstudiante(Estudiante nuevoEstudiante) {
 }
 
 
-//void enviarSolicitud(Institucion nuevaInstitucion) {
-//    string nombre = nuevaInstitucion.getCorreo();
-//    string ruta = "Usuarios/" + nombre + ".txt";
-//
-//    ofstream archivo(ruta);
-//    if (archivo.is_open()) {
-//        archivo << 'I' << '\n';
-//        archivo << nuevaInstitucion.getNombre() << '\n';
-//        archivo << nuevaInstitucion.getCorreo() << '\n';
-//        archivo << nuevaInstitucion.getTipoInst() << '\n';
-//        archivo.close();
-//    }
-//    else {
-//        cout << "Error al crear el archivo para la institucion.\n";
-//    }
-//    nombre = nuevaInstitucion.getCodigo();
-//    ruta = "solicitudesInstituciones/" + nombre + ".txt";
-//
-//    ofstream archivo2(ruta);
-//    if (archivo2.is_open()) {
-//        archivo2 << nuevaInstitucion.getNombre() << '\n';
-//        archivo2 << nuevaInstitucion.getCorreo() << '\n';
-//        archivo2 << nuevaInstitucion.getTipoInst() << '\n';
-//        archivo2.close();
-//    }
-//    else {
-//        cout << "Error al crear el archivo para la institucion.\n";
-//    }
-//}
+void enviarSolicitud(Institucion nuevaInstitucion) {
+    string nombre = nuevaInstitucion.getCorreo();
+    string ruta = "Usuarios/" + nombre + ".txt";
+
+    ofstream archivo(ruta);
+    if (archivo.is_open()) {
+        archivo << 'I' << '\n';
+        archivo << nuevaInstitucion.getNombre() << '\n';
+        archivo << nuevaInstitucion.getCorreo() << '\n';
+        archivo << nuevaInstitucion.getTipoInst() << '\n';
+        archivo.close();
+    }
+    else {
+        cout << "Error al crear el archivo para la institucion.\n";
+    }
+    nombre = nuevaInstitucion.getCodigo();
+    ruta = "solicitudesInstituciones/" + nombre + ".txt";
+
+    ofstream archivo2(ruta);
+    if (archivo2.is_open()) {
+        archivo2 << nuevaInstitucion.getNombre() << '\n';
+        archivo2 << nuevaInstitucion.getCorreo() << '\n';
+        archivo2 << nuevaInstitucion.getTipoInst() << '\n';
+        archivo2.close();
+    }
+    else {
+        cout << "Error al crear el archivo para la institucion.\n";
+    }
+}
 
 
 
@@ -760,29 +760,32 @@ void Sistema::registroProfesor() {
 void Sistema::registroInstitucion() {
     string nombreInst, correo, tipoInst, contra, confContra;
     string codigo;
-    //registroInstitucionUI();
+    cin.ignore();
+
+    registroInstitucionUI();
     moverCursor(7, 62);
     cin.ignore();
 
     getline(cin, nombreInst);
-    moverCursor(10, 62);
+    moverCursor(7, 62);
 
-    moverCursor(13, 62);
+    moverCursor(10, 62);
     cin >> correo;
 
+    moverCursor(13, 62);
     getline(cin, tipoInst);
-    moverCursor(16, 62);
 
-    moverCursor(19, 62);
+    moverCursor(13, 62);
     cin >> contra;
 
     do {
-        moverCursor(21, 62);
+        moverCursor(18, 62);
         cin >> confContra;
 
         if (contra != confContra) {
-            moverCursor(21, 62);
+            moverCursor(17, 62);
             cout << "Intente nuevamente.";
+            moverCursor(18, 62);
         }
     } while (contra != confContra);
 
@@ -792,7 +795,7 @@ void Sistema::registroInstitucion() {
     institucion->setContrasena(contra);
     codigo = HashUtil::generarHash(nombreInst + to_string(rand() % 10000));
     institucion->setCodigo(codigo);
-    //enviarSolicitud(*institucion);
+    enviarSolicitud(*institucion);
     cout << "Se ha registrado los datos \n Por favor espere a que el admin apruebe su registro\n";
 
     system("cls");
@@ -1280,6 +1283,21 @@ void Sistema::registroEstudianteUI() {
     disenio.cuadroDobleLineas(12, 60, 50, 3);
     disenio.cuadroDobleLineas(15, 60, 50, 3);
     disenio.cuadroDobleLineas(19, 60, 50, 3);
+}
+
+void Sistema::registroInstitucionUI() {
+    system("cls");
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloRegistroEstudiante(2, 33);
+    disenio.tituloNombre(6, 38);
+    disenio.tituloEmail(9, 38);
+    disenio.tituloPassword(12, 38);
+    disenio.tituloConfirmar(16, 38);
+
+    disenio.cuadroDobleLineas(6, 60, 50, 3);
+    disenio.cuadroDobleLineas(9, 60, 50, 3);
+    disenio.cuadroDobleLineas(12, 60, 50, 3);
+    disenio.cuadroDobleLineas(17, 60, 50, 3);
 }
 
 void Sistema::bienvenidoUI() {
