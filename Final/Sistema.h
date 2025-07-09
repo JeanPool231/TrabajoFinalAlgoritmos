@@ -13,6 +13,7 @@
 #include "Administrador.h"
 #include "ListaDobleCircular.h"
 #include "UI.h"
+#include "HashTable.h"
 #include "AdministrarInstituciones.h"
 using namespace std;
 
@@ -29,6 +30,10 @@ private:
 	ListaEnlazada<Estudiante> estudiantes;
 	ListaDobleCircular<ListaEnlazada<Curso>> bloques;
 	ListaEnlazada<Leccion> lecciones;
+	TablaHash<string, Curso> accederCurso;
+	TablaHash<string, Profesor> accederProfesor;
+	TablaHash<string, Institucion> accederInstitucion;
+	TablaHash<string, Leccion>  accederLeccion;
 	void menuPrincipal();
 	void registroEstudiante();
 	void registroProfesor();
