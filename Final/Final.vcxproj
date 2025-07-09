@@ -154,6 +154,7 @@
     <ClInclude Include="Grafo.h" />
     <ClInclude Include="HashEntidad.h" />
     <ClInclude Include="HashTabla.h" />
+    <ClInclude Include="HashTable.h" />
     <ClInclude Include="HashUtil.h" />
     <ClInclude Include="Institucion.h" />
     <ClInclude Include="Leccion.h" />
