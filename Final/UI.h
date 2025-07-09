@@ -458,6 +458,53 @@ public:
         _setmode(_fileno(stdout), _O_TEXT);
     }
 
+    void tituloCurso(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        moverCursor(fila++, columna); std::wcout << L"░█▀▀░█░█░█▀▄░█▀▀░█▀█\n";
+        moverCursor(fila++, columna); std::wcout << L"░█░░░█░█░█▀▄░▀▀█░█░█\n";
+        moverCursor(fila++, columna); std::wcout << L"░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀▀▀\n";
+
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+    void tituloLibro(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        moverCursor(fila++, columna); std::wcout << L"▓▓▓▓▓▓▓▒▒▒\n";
+        moverCursor(fila++, columna); std::wcout << L"▓▓▓▓▓▓▓▒▒▒\n";
+        moverCursor(fila++, columna); std::wcout << L"▓▓▓▓▓▓▓▒▒▒\n";
+        moverCursor(fila++, columna); std::wcout << L"▓▓▓▓▓▓▓▒▒▒\n";
+        moverCursor(fila++, columna); std::wcout << L"▓▓▓▓▓▓▓▓▒▒\n";
+        moverCursor(fila++, columna); std::wcout << L"▓▓▓▓▒▓▓▒▒▒\n";
+        moverCursor(fila++, columna); std::wcout << L"▓▓▓▓▓▓▓▓▒▒\n";
+        moverCursor(fila++, columna); std::wcout << L"▓▓▓▓▓▓▓▓▒▒\n";
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+
+    void tituloBuscarCursos(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        moverCursor(fila++, columna); std::wcout << L"░█▀▄░█░█░█▀▀░█▀▀░█▀█░█▀▄░░░█▀▀░█░█░█▀▄░█▀▀░█▀█░█▀▀\n";
+        moverCursor(fila++, columna); std::wcout << L"░█▀▄░█░█░▀▀█░█░░░█▀█░█▀▄░░░█░░░█░█░█▀▄░▀▀█░█░█░▀▀█\n";
+        moverCursor(fila++, columna); std::wcout << L"░▀▀░░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀░▀░░░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀▀▀░▀▀▀\n";
+
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+    void tituloCursosPerfil(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        moverCursor(fila++, columna); std::wcout << L"┏┓        \n";
+        moverCursor(fila++, columna); std::wcout << L"┃ ┓┏┏┓┏┏┓┏\n";
+        moverCursor(fila++, columna); std::wcout << L"┗┛┗┻┛ ┛┗┛┛\n";
+        _setmode(_fileno(stdout), _O_TEXT);
+    }
+    void tituloTusCursos(int fila, int columna) {
+        _setmode(_fileno(stdout), _O_U16TEXT);
+
+        moverCursor(fila++, columna); std::wcout << L"░▀█▀░█░█░█▀▀░░░█▀▀░█░█░█▀▄░█▀▀░█▀█░█▀▀\n";
+        moverCursor(fila++, columna); std::wcout << L"░░█░░█░█░▀▀█░░░█░░░█░█░█▀▄░▀▀█░█░█░▀▀█\n";
+        moverCursor(fila++, columna); std::wcout << L"░░▀░░▀▀▀░▀▀▀░░░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀▀▀░▀▀▀\n";
+
     void logoUPC(int fila, int columna) {
 
         _setmode(_fileno(stdout), _O_U16TEXT);
@@ -550,8 +597,12 @@ public:
         moverCursor(fila++, columna); std::wcout << L"▀▀█ █▀▀   █▀▄ █▀▀ █▄█  █  ▀▀█  █  █▀▄ █ █   █▀▀ █ █\n";
         moverCursor(fila++, columna); std::wcout << L"▀▀▀ ▀▀▀   ▀ ▀ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀  ▀  ▀ ▀ ▀▀▀   ▀▀▀ ▀ ▀\n";
 
+
         _setmode(_fileno(stdout), _O_TEXT);
     }
+
+
+};
 
     void botonesCursosProfesor(int fila, int columna) {
         _setmode(_fileno(stdout), _O_U16TEXT);
@@ -796,3 +847,4 @@ public:
 
 
 };
+
