@@ -151,6 +151,7 @@
     <ClInclude Include="Curso.h" />
     <ClInclude Include="CursoUtils.h" />
     <ClInclude Include="Estudiante.h" />
+    <ClInclude Include="Grafo.h" />
     <ClInclude Include="HashEntidad.h" />
     <ClInclude Include="HashTabla.h" />
     <ClInclude Include="HashUtil.h" />
