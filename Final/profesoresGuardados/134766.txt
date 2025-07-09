@@ -1,5 +1,0 @@
-codigo: 134766
-nombre: a
-apellido: b
-correo: c
-curso_asignado: Programacion en python desde cero

@@ -264,12 +264,13 @@ void Sistema::menuInstitucion() {
         cin.ignore();
 
         switch (opc) {
-        case 1:  menuVerInformacion();   break;
+        case 1: 
+           menuVerInformacion(); 
+            break;
         case 2: {   gestionProfesoresUI();  break;   }
         case 3: verCursosUI();    break;
-        case 4: {   verEstadisticasUI();  break;   }
-        case 5:
-            cout << "salir\n";     break;
+        case 4: {   historialLogsUI();  break;   }
+        case 5:    break;
         default:
             cout << "opcion no valida\n";
         }
@@ -277,17 +278,43 @@ void Sistema::menuInstitucion() {
     } while (opc != 5);
 }
 
+
+void Sistema::menuInstitucionUI() {
+    cout << "\033[?25l";
+
+    disenio.cuadro_dividido(120, 28);
+
+    moverCursorColor(2, 2, "azul");
+    disenio.tituloOpciones(2, 2);
+    resetColor();
+
+    moverCursor(8, 3);  cout << "1. Ver informacion ";
+    moverCursor(10, 3); cout << "2. Gestionar profesores";
+    moverCursor(12, 3); cout << "3. Ver cursos publicados";
+    moverCursor(14, 3); cout << "4. Registro de logs";
+    moverCursor(16, 3); cout << "5. Salir de la sesion";
+    disenio.logoUPC(2, 93);
+   disenio.tituloCoursera(3, 33);
+   disenio.tituloTuInstitucion2(7, 30);
+  //  disenio.tituloBienvenido1(3, 33);
+    disenio.cuadroDobleLineas(23, 4, 20, 4);
+    moverCursor(24, 6);
+
+    cout << "\033[?25h";
+}
+
+
 void Sistema::menuVerInformacion() {
     int opcion;
     do {
         system("cls");
         verInformacionInstitucionUI();
 
-        moverCursor(22, 4);
-        cout << "Input: ";
-        moverCursor(22, 11);
+      /*  moverCursor(22, 4);
+        cout << "Input: ";*/
+        moverCursor(24, 6);
         cin >> opcion;
-
+        
         switch (opcion) {
         case 1:
             mostrarcursos();
@@ -364,7 +391,7 @@ void Sistema::mostrarcursos() {
             }
         }
 
-        moverCursor(22, 4);
+        moverCursor(24, 6);
         cin >> opcion;
 
         switch (opcion) {
@@ -447,7 +474,7 @@ void Sistema::verProfesoresInstitucionUI() {
             }
         }
 
-        moverCursor(22, 4);
+        moverCursor(24, 6);
        // cout << "Input: ";
         cin >> opcion;
 
@@ -473,29 +500,6 @@ void Sistema::verProfesoresInstitucionUI() {
 
 }
 
-void Sistema::menuInstitucionUI() {
-    cout << "\033[?25l"; 
-
-    disenio.cuadro_dividido(120, 28);
-
-    moverCursorColor(2, 2, "azul");
-    disenio.tituloOpciones(2, 2);
-    resetColor();
-
-    moverCursor(8, 3);  cout << "1. Ver informacion ";
-    moverCursor(10, 3); cout << "2. Gestionar profesores";
-    moverCursor(12, 3); cout << "3. Ver cursos publicados(pera)";
-    moverCursor(14, 3); cout << "4. Ver estadísticas(pera)";
-    moverCursor(16, 3); cout << "5. Salir de la sesion";
-    disenio.logoUPC(2, 93);
-    disenio.tituloCoursera(3, 33);
-    disenio.tituloTuInstitucion2(7, 30);
-    disenio.cuadroDobleLineas(23, 4, 20, 4);
-    moverCursor(24, 6);
-
-    cout << "\033[?25h"; 
-}
-
 
 
 void Sistema::gestionProfesoresUI() {
@@ -512,10 +516,10 @@ void Sistema::gestionProfesoresUI() {
         moverCursor(8, 4);  cout << "2. Quitar profesor";
         moverCursor(10, 4); cout << "3. Asignar curso";
         moverCursor(12, 4); cout << "4. Desvincular curso";
-        moverCursor(14, 4); cout << "5. Historial de logs";
+        moverCursor(14, 4); cout << "5. Buscar Profesor";
         moverCursor(16, 4); cout << "6. Volver";
 
-        moverCursor(24, 13); cin >> opcion;
+        moverCursor(24, 6); cin >> opcion;
         cin.ignore();
 
         cout << "\033[?25h";
@@ -534,8 +538,9 @@ void Sistema::gestionProfesoresUI() {
             desvincularCursoUI();
             break;
         case 5:
-            historialLogsUI(); 
+            buscarProfesorUI(); 
             break;
+          //  return;
         case 6:
             return;
         default:
@@ -544,7 +549,7 @@ void Sistema::gestionProfesoresUI() {
             break;
         }
 
-    } while (opcion != 6);
+    } while (opcion != 5);
 }
 
 
@@ -578,7 +583,8 @@ void Sistema::verInformacionInstitucionUI() {
     moverCursor(15, 90);
     cout << institucion->getYearDeRegistro();
 
-
+    disenio.botonCursos(20, 40);
+    disenio.botonProfesores(20, 75);
     moverCursor(24, 6);
     cout << "\033[?25h"; 
 }
@@ -623,7 +629,7 @@ void Sistema::agregarProfesorUI() {
             actual = actual->siguiente;
             i++;
         }
-        moverCursor(y + 1, 45); cout << "Seleccione curso o 0 para ninguno: ";
+        moverCursor(y + 1, 45); cout << "Seleccione el curso o 0 para ninguno: ";
         int op;
         cin >> op; cin.ignore();
 
@@ -640,7 +646,7 @@ void Sistema::agregarProfesorUI() {
     admin.agregarprofesor2(*institucion, codigo, nombre, apellido, correo, 0, 0, 0, curso);
 
     disenio.cuadroRedondo(23, 35, 60, 3);
-    moverCursor(24, 50); cout << "El codigo generado del profesor es: " << codigo;
+    moverCursor(24, 40); cout << "El codigo generado del profesor es: " << codigo;
     cin.get();
 }
 
@@ -692,8 +698,8 @@ void Sistema::quitarProfesorUI() {
         moverCursor(12, 2); cout << "3. Quitar profesor";
         moverCursor(14, 2); cout << "4. Volver";
 
-        moverCursor(26, 11); cout << "        ";
-        moverCursor(26, 11); cin >> opcion;
+      //  moverCursor(26, 11); cout << "        ";
+        moverCursor(24, 6); cin >> opcion;
         cin.ignore();
 
         if (opcion == 1 && pagina > 0) {
@@ -703,10 +709,10 @@ void Sistema::quitarProfesorUI() {
             pagina++;
         }
         else if (opcion == 3) {
-            moverCursor(17, 4); cout << "Seleccione el indice:";
+            moverCursor(18, 4); cout << "Seleccione el indice:";
             int indice;
-            moverCursor(28, 11); cout << "        ";
-            moverCursor(28, 11); cin >> indice; cin.ignore();
+          //  moverCursor(28, 11); cout << "        ";
+            moverCursor(24, 6); cin >> indice; cin.ignore();
             string msg;
             if (admin.quitarprofesor2(*institucion, indice - 1, msg)) {
                 moverCursor(27, 4); cout << msg;
@@ -783,15 +789,15 @@ void Sistema::asignarCursoUI() {
         moverCursor(14, 2); cout << "4. Volver";
 
        // moverCursor(26, 11); cout << "        ";
-        moverCursor(24, 11); cin >> opcion;
+        moverCursor(24, 6); cin >> opcion;
         cin.ignore();
 
         if (opcion == 1 && pagina > 0) pagina--;
         else if (opcion == 2 && pagina < totalPaginas - 1) pagina++;
         else if (opcion == 3) {
-            moverCursor(17, 4); cout << "Seleccione el indice";
+            moverCursor(18, 4); cout << "Seleccione el indice";
             int seleccion;
-            moverCursor(24, 11); cin >> seleccion; cin.ignore();
+            moverCursor(24, 6); cin >> seleccion; cin.ignore();
 
             if (seleccion < 1 || seleccion > profesores.size()) continue;
             
@@ -804,9 +810,9 @@ void Sistema::asignarCursoUI() {
                 moverCursor(8 + i, 42); cout << i + 1 << ". " << cursos[i]->getNombre();
             }
 
-            moverCursor(20, 4); cout << "Seleccione curso: ";
+            moverCursor(18, 4); cout << "Seleccione curso: ";
             int cursoSeleccion;
-            moverCursor(20, 24); cin >> cursoSeleccion;
+            moverCursor(24, 6); cin >> cursoSeleccion;
             cin.ignore();
 
             if (cursoSeleccion < 1 || cursoSeleccion > cursos.size()) continue;
@@ -814,10 +820,12 @@ void Sistema::asignarCursoUI() {
             string msg;
             if (admin.asignarCursoAProfesor(*institucion, seleccion - 1, cursoSeleccion - 1, msg)) {
                 moverCursor(22, 40); cout << msg;
+                moverCursor(20, 4); cout << "Curso asignado.";
             }
             else {
-                moverCursor(22, 40); cout << "Error al asignar curso.";
+                moverCursor(22, 40); cout << "Error";
             }
+            moverCursor(24, 6);
             cin.get();
         }
 
@@ -872,16 +880,16 @@ void Sistema::desvincularCursoUI() {
         moverCursor(12, 2); cout << "3. Desvincular curso";
         moverCursor(14, 2); cout << "4. Volver";
 
-        moverCursor(26, 11); cout << "        ";
-        moverCursor(26, 11); cin >> opcion;
+       // moverCursor(24, 6); cout << "        ";
+        moverCursor(24, 6); cin >> opcion;
         cin.ignore();
 
         if (opcion == 1 && pagina > 0) pagina--;
         else if (opcion == 2 && pagina < totalPaginas - 1) pagina++;
         else if (opcion == 3) {
-            moverCursor(27, 4); cout << "Seleccione el indice ";
+            moverCursor(20, 2); cout << "Seleccione el indice ";
             int seleccion;
-            moverCursor(28, 11); cin >> seleccion; cin.ignore();
+            moverCursor(25, 6); cin >> seleccion; cin.ignore();
 
             if (cin.fail() || seleccion < 1 || seleccion >(int)profesores.size()) {
                 cin.clear(); cin.ignore(1000, '\n');
@@ -905,9 +913,9 @@ void Sistema::desvincularCursoUI() {
                 moverCursor(8 + i, 42); cout << i + 1 << ". " << cursos[i];
             }
 
-            moverCursor(20, 4); cout << "Seleccione curso: ";
+            moverCursor(18, 4); cout << "Seleccione curso: ";
             int ci;
-            moverCursor(20, 24); cin >> ci;
+            moverCursor(24, 6); cin >> ci;
             cin.ignore();
 
             if (cin.fail() || ci < 1 || ci >(int)cursos.size()) {
@@ -919,10 +927,14 @@ void Sistema::desvincularCursoUI() {
             string msg;
             if (admin.desvincularCursoDeProfesor(*institucion, seleccion - 1, cursos[ci - 1], msg)) {
                 moverCursor(22, 40); cout << msg;
+
+                moverCursor(20, 4); cout << "Curso desvinculado.";
+
             }
             else {
                 moverCursor(22, 40); cout << "Error.";
             }
+            moverCursor(24, 6);
             cin.get();
         }
 
@@ -973,8 +985,8 @@ void Sistema::historialLogsUI() {
         moverCursor(10, 2); cout << "2. Por fecha";
         moverCursor(12, 2); cout << "3. Por accion(no)";
         moverCursor(14, 2); cout << "4. Volver";
-        moverCursor(26, 11); cout << "        ";
-        moverCursor(26, 11); cin >> op;
+       // moverCursor(26, 11); cout << "        ";
+        moverCursor(24, 6); cin >> op;
         cin.ignore();
 
         if (op == 1) {
@@ -986,8 +998,8 @@ void Sistema::historialLogsUI() {
             int accion;
             do {
                 mostrarLogs(logsTotales, pagina);
-                moverCursor(26, 11); cout << "        ";
-                moverCursor(26, 11); cin >> accion; cin.ignore();
+              //  moverCursor(26, 11); cout << "        ";
+                moverCursor(24, 6); cin >> accion; cin.ignore();
                 if (accion == 4 && pagina > 0) pagina--;
                 else if (accion == 5 && pagina < (logsTotales.size() + porPagina - 1) / porPagina - 1) pagina++;
             } while (accion != 6);
@@ -1007,8 +1019,8 @@ void Sistema::historialLogsUI() {
             int accion;
             do {
                 mostrarLogs(logsTotales, pagina);
-                moverCursor(26, 11); cout << "        ";
-                moverCursor(26, 11); cin >> accion; cin.ignore();
+               // moverCursor(26, 11); cout << "        ";
+                moverCursor(24, 6); cin >> accion; cin.ignore();
                 if (accion == 4 && pagina > 0) pagina--;
                 else if (accion == 5 && pagina < (logsTotales.size() + porPagina - 1) / porPagina - 1) pagina++;
             } while (accion != 6);
@@ -1032,8 +1044,8 @@ void Sistema::historialLogsUI() {
             int accion;
             do {
                 mostrarLogs(logsTotales, pagina);
-                moverCursor(26, 11); cout << "        ";
-                moverCursor(26, 11); cin >> accion; cin.ignore();
+              //  moverCursor(26, 11); cout << "        ";
+                moverCursor(24, 6); cin >> accion; cin.ignore();
                 if (accion == 4 && pagina > 0) pagina--;
                 else if (accion == 5 && pagina < (logsTotales.size() + porPagina - 1) / porPagina - 1) pagina++;
             } while (accion != 6);
@@ -1047,12 +1059,95 @@ void Sistema::verCursosUI() {
     ListaEnlazada<string> listado;
     admin.obtenerListadoCursosConProfesor(*institucion, listado);
 
-    cout << "\nCursos\n";
-    listado.recorrer([](const string& l) {
-        cout << l << "\n";
-        });
+    vector<string> cursosTexto;
+    listado.recorrer([&](const string& l) { cursosTexto.push_back(l); });
+
+    int pagina = 0, porPagina = 2;
+    int totalPaginas = (cursosTexto.size() + porPagina - 1) / porPagina;
+    int opcion;
+
+    do {
+        system("cls");
+        disenio.cuadro_dividido(120, 28);
+        disenio.tituloVerCursos(2, 35);
+        int inicio = pagina * porPagina;
+        int fin = min((int)cursosTexto.size(), inicio + porPagina);
+        int y = 5;
+
+        for (int i = inicio; i < fin; ++i) {
+            disenio.cuadroRedondo(y, 30, 80, 8);
+            moverCursor(y + 1, 32);
+
+            stringstream ss(cursosTexto[i]);
+            string linea;
+            int offset = 0;
+            while (getline(ss, linea)) {
+                moverCursor(y + 1 + offset, 32);
+                cout << linea;
+                offset++;
+            }
+
+            y += 10;
+        }
+
+        moverCursor(8, 2); cout << "1. Anterior pagina";
+        moverCursor(10, 2); cout << "2. Siguiente pagina";
+        moverCursor(12, 2); cout << "3. Volver";
+
+        moverCursor(26, 90);
+        cout << "Pagina " << (pagina + 1) << "/" << totalPaginas;
+
+        moverCursor(24, 6); cin >> opcion;
+
+        if (opcion == 1 && pagina > 0) pagina--;
+        else if (opcion == 2 && pagina < totalPaginas - 1) pagina++;
+
+    } while (opcion != 3);
 }
 
+
+void Sistema::buscarProfesorUI() {
+    AdministrarInstitucion admin;
+    string id;
+
+    system("cls");
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloBuscarProfesor(3, 40);
+    
+    int yBase = 10, xBase = 35;
+    disenio.tituloIngreseID(yBase - 3, xBase); 
+    disenio.cuadroRedondo(yBase, xBase, 50, 3); 
+
+    moverCursor(yBase + 1, xBase + 2); 
+    getline(cin, id);
+
+    Profesor* profe = admin.buscarProfesorPorID(*institucion, id); //busqueda
+
+    if (profe) {
+        disenio.cuadroRedondo(15, 30, 85, 8);
+        moverCursor(16, 32);  cout << "Nombre     : " << profe->getNombre() << " " << profe->getApellido();
+        moverCursor(17, 32); cout << "Correo     : " << profe->getCorreo();
+        moverCursor(18, 32); cout << "ID         : " << profe->getCodigo();
+        moverCursor(19, 32); cout << "Cursos     :";
+
+        int y = 23;
+        if (profe->getCursosAsignados().empty()) {
+            moverCursor(y++, 34); cout << "No tiene cursos asignados";
+        }
+        else {
+            for (const string& c : profe->getCursosAsignados()) {
+                moverCursor(y++, 34); cout << "- " << c;
+            }
+        }
+    }
+    else {
+        disenio.cuadroRedondo(10, 30, 85, 3);
+        moverCursor(11, 34); cout << "ID no encontrado";
+    }
+
+    moverCursor(26, 4);
+    cin.get();
+}
 void Sistema::verEstadisticasUI() {
     institucion->mostrarEstadisticas();
 }
@@ -1892,9 +1987,10 @@ void Sistema::verCursoSeleccionadoUI(Curso curso) {
     disenio.cuadro_dividido(120, 28);
 }
 
+
+
 void Sistema::iniciarPrograma() {
     inicializarDatos();
-   // bienvenidoUI();
-//menuPrincipal();    
-    menuInstitucion();
+    bienvenidoUI();
+    menuPrincipal();    
 }

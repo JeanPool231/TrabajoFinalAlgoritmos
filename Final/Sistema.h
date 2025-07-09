@@ -49,7 +49,7 @@ private:
 	void menuVerInformacion();
 	void menuInstitucionUI();
 	void historialLogsUI();
-
+	void buscarProfesorUI();
 	//
 	void verEstadisticasUI();
 	void verCursosUI();

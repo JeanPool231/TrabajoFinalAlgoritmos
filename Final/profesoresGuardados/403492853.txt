@@ -2,4 +2,4 @@ codigo: 403492853
 nombre: Kira
 apellido: Loka
 correo: kiraloka@gmail.com
-curso_asignado: Desarrollo Web con HTML y CSS
+curso_asignado: 0

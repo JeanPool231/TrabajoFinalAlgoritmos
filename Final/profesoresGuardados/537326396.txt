@@ -1,0 +1,5 @@
+codigo: 537326396
+nombre: Michelle
+apellido: Cinch
+correo: michelle.cinch@gmail.com
+curso_asignado: 0
