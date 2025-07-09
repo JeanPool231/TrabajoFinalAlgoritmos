@@ -35,4 +35,6 @@ public:
     void obtenerResumenProfesores(Institucion& inst, ListaEnlazada<string>& resumen);
     size_t contarCursos(Institucion& inst);
     void obtenerListadoCursosConProfesor(Institucion& inst, ListaEnlazada<string>& listado);
+
+    Profesor* buscarProfesorPorID(Institucion& inst, const string& id);
 };
