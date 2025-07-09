@@ -11,6 +11,7 @@
 #include "Profesor.h"
 #include "Institucion.h"
 #include "Administrador.h"
+#include "ListaDobleCircular.h"
 #include "UI.h"
 #include "AdministrarInstituciones.h"
 using namespace std;
@@ -26,7 +27,7 @@ private:
 	ListaEnlazada<Usuario> usuarios;
 	ListaEnlazada<Profesor> profesores;
 	ListaEnlazada<Estudiante> estudiantes;
-
+	ListaDobleCircular<ListaEnlazada<Curso>> bloques;
 	void menuPrincipal();
 	void registroEstudiante();
 	void registroProfesor();
@@ -51,6 +52,7 @@ private:
 	void perfilEstudiante();
 	//void saldoEstudiante();
 	void cursosInscritos();
+	void seleccionarCurso();
 	void iniciarSesionUI();
 	void mostrarCursosUI();
 	void registroEstudianteUI();
@@ -59,7 +61,13 @@ private:
 	void bienvenidoUI();
 	void estudianteUI();
 	void verPerfilUI();
+	void buscarCursos();
+	void cursoSeleccionado(Curso);
 	void verCursoSeleccionadoUI(Curso);
+	void buscarCursosUI();
+	void buscarCursosUI2(bool, int, vector<Curso>&);
+	void cursosEstudianteUI();
+	void mostrarBloque8(ListaEnlazada<Curso>);
 public:
 	void iniciarPrograma();
 };

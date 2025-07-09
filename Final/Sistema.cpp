@@ -14,14 +14,43 @@ namespace fs = std::filesystem;
 #include "CursoUtils.h"
 using namespace std;
 #include <iostream>
+//algoritmo  que calcula la distncia de levenshtein entre 2 estrings;
+// sirve para l a busqueda
+int levenshtein(string a, string b) {
+    int n = a.size();
+    int m = b.size();
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1));
 
+    for (int i = 0; i <= n; i++) dp[i][0] = i;
+    for (int j = 0; j <= m; j++) dp[0][j] = j;
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            if (a[i - 1] == b[j - 1])
+                dp[i][j] = dp[i - 1][j - 1];
+            else
+                dp[i][j] = 1 + min({ dp[i - 1][j],     // eliminar
+                                     dp[i][j - 1],     // insertar
+                                     dp[i - 1][j - 1]  // reemplazar
+                    });
+        }
+    }
+
+    return dp[n][m];
+}
 void limpiarZona(int filaInicio, int columnaInicio, int alto, int ancho) {
     for (int i = 0; i < alto; ++i) {
         cout << "\033[" << (filaInicio + i) << ";" << columnaInicio << "H";
         cout << string(ancho, ' ');
     }
 }
-
+void limpiarInput() {
+    limpiarZona(24, 5, 1, 10);
+}
+void limpiarMenuOpciones() {
+    limpiarZona(5, 2, 16, 25); // limpia las opciones
+    limpiarInput();
+}
 string leerPassword() {
     string password;
     char c;
@@ -480,15 +509,12 @@ void Sistema::menuEstudiante() {
         switch (opcion)
         {
         case 1:
-            //seleccionar Curso
-            cursosEstudiante();
+            seleccionarCurso();
             break;
         case 2:
-            //Buscar Cursos
-            cursosInscritos();
+            buscarCursos();
             break;
         case 3:
-            //perfil
             perfilEstudiante();
             break;
         case 4:
@@ -500,17 +526,85 @@ void Sistema::menuEstudiante() {
         }
     } while (opcion != 5);
 }
-void Sistema::cursosInscritos() {
-    ListaEnlazada<Curso> inscritos = estudiante->getCursosInscritos();
-    Nodo<Curso>* actual = inscritos.obtenerCabeza();
-    cout << "Tus cursos Inscritos son: \n";
+void Sistema::seleccionarCurso() {
+    int opcion;
+    limpiarMenuOpciones();
+    moverCursor(24, 5);
+    cin >> opcion;
+    Nodo<Curso>* actual = cursos.obtenerCabeza();
     int i = 1;
     while (actual != nullptr) {
-        Curso& auxCurso = actual->dato;
-        cout << i << ". ";
-        cout << auxCurso.getNombre() << '\n';
+        if (i == opcion) {
+            estudiante->agregarCurso(actual->dato);
+            cursoSeleccionado(actual->dato);
+            limpiarInput();
+            moverCursor(24, 5);
+            return;
+        }
         actual = actual->siguiente;
         i++;
+    }
+}
+
+void Sistema::buscarCursos() {
+    system("cls");
+    int opcion;
+    buscarCursosUI();
+    cin.ignore();
+    string busca;
+    moverCursor(8, 49);
+    getline(cin, busca);
+    vector<Curso> coincidencias;
+    Nodo<Curso>* actual = cursos.obtenerCabeza();
+
+    while (actual != nullptr) {
+        Curso& auxCurso = actual->dato;
+        string nombreCurso = auxCurso.getNombre();
+        if (levenshtein(nombreCurso, busca) <= 4) {
+            coincidencias.push_back(auxCurso);
+        }
+        actual = actual->siguiente;
+    }
+    if (coincidencias.size() >= 1) {
+        buscarCursosUI2(1, coincidencias.size(), coincidencias);
+    }
+    else {
+        buscarCursosUI2(0, coincidencias.size(), coincidencias);
+    }
+
+    moverCursor(24, 5);
+    cin >> busca;
+}
+void Sistema::cursoSeleccionado(Curso curso) {
+    system("cls");
+    int opcion = 2;
+    verCursoSeleccionadoUI(curso);
+    moverCursor(8, 33);
+    cout << "Nombre del Curso: ";
+    moverCursor(10, 33);
+    cout << curso.getNombre();
+    moverCursor(12, 33);
+    cout << "Categoria del Curso: ";
+    moverCursor(14, 33);
+    cout << curso.getCategoria();
+    moverCursor(16, 33);
+    cout << "Descripcion";
+    moverCursor(18, 33);
+    cout << curso.getDescripcion();
+    moverCursor(22, 33);
+    cout << curso.getCodigoProfesor();
+    //opciones
+    moverCursor(7, 2);
+    cout << "1. Inscribirse al Curso";
+    moverCursor(9, 2);
+    cout << "2. Volver";
+
+    moverCursor(24, 5);
+    cin >> opcion;
+    if (opcion == 2) return;
+
+    if (opcion == 1) {
+        estudiante->agregarCurso(curso);
     }
 }
 void Sistema::perfilEstudiante() {
@@ -522,36 +616,60 @@ void Sistema::perfilEstudiante() {
     cout << estudiante->getApellidos();
     moverCursor(15, 81);
     cout << estudiante->getCorreo();
-    string s;
+    moverCursor(7, 3);
+    cout << "1. Ver Tus Cursos";
+    moverCursor(9, 3);
+    cout << "2. Regresar";
     moverCursor(24, 5);
-    cin >> s;
-
+    int op;
+    cin >> op;
+    if (op == 1) {
+        cursosEstudiante();
+    }
     system("cls");
 }
 void Sistema::cursosEstudiante() {
-    int opcion, indice;
     system("cls");
-    cout << "Los Cursos disponibles son: \n";
+    int opcion, indice;
     AdministrarCurso auxCursos = cursos;
     Curso nuevoCurso;
     do {
         system("cls");
-		auxCursos.ImprimirNombreCursos();
-		cout << "Opciones: \n";
-		cout << "1. Ver detalles de un curso\n";
-		cout << "2. Inscribirse a un curso\n";
-		cout << "3. Ver cursos ordenados por nombre\n";
-		cout << "4. Ver cursos ordenados por costo\n";
-        cout << "5. Volver\n";
-        cout << "Opcion : "; cin >> opcion;
-        system("cls");
+        cursosEstudianteUI();
+        Nodo<Curso>* actual = estudiante->getCursosInscritos().obtenerCabeza();
+		ListaEnlazada<Curso> xd;
+		int i = 0;
+		while (actual != nullptr) {
+			Curso& auxCurso = actual->dato;
+			xd.insertarAlFinal(actual->dato);
+			if (i % 8 == 0 && i != 0) {
+				mostrarBloque8(xd);
+			}
+			actual = actual->siguiente;
+			i++;
+		}
+        mostrarBloque8(xd);
+        moverCursor(6, 3);
+		cout << "1. Ver detalles";
+        moverCursor(7, 3);
+        cout << "de un curso";
+        moverCursor(9, 3);
+		cout << "2. Ver cursos ordenados";
+        moverCursor(10, 3);
+        cout << "por nombre";
+        moverCursor(12, 3);
+		cout << "3. Ver cursos ordenados";
+        moverCursor(13, 3);
+        cout << "por costo";
+        moverCursor(15, 3);
+		cout << "4. Volver ";
+        moverCursor(24, 5);
+        cin >> opcion;
+        limpiarMenuOpciones();
+
         switch (opcion) {
         case 1:
-            auxCursos.ImprimirNombreCursosIndices();
-            cout << "\nIngrese el indice del curso a ver detalles: ";
-            cin >> indice;
-            auxCursos.verDetallesCursos(indice);
-            system("pause");
+            
             break;
         case 2:
             auxCursos.ImprimirNombreCursosIndices();
@@ -658,28 +776,6 @@ void Sistema::registrarse() {
 		}
     } while (waza != "volver");
 }
-/// <summary>
-/// 
-/// /
-/// /
-/// /
-/// /
-/// /
-/// /
-/// /
-/// 
-/// 
-/// 
-/// 
-/// 
-/// 
-/// 
-/// /////////////
-/// 
-/// /
-/// /
-/// 
-/// </summary>
 void Sistema::registroEstudiante() {
     string correo, contrasena, nombres, apellidos;
     string contrasena2;
@@ -838,7 +934,17 @@ void Sistema::inicializarDatos() {
 		Profesor* profesor = leerProfesor(rutaHash);
 		profesores.insertarAlFinal(*profesor);
 	}
-
+    Nodo<Curso>* ini = cursos.obtenerCabeza();
+    ListaEnlazada<Curso> cursosaux;
+    int i = 0;
+    while (ini != nullptr) {
+        if (i % 8 == 0 && i != 0) {
+            bloques.insertarFinal(cursosaux);
+            while (cursosaux.obtenerCabeza() != nullptr) cursosaux.eliminarPrimero();
+        }
+        ini = ini->siguiente;
+        i++;
+    }
 }
 void Sistema::menuProfesor() {
     int opcion;
@@ -1027,7 +1133,6 @@ void Sistema::inicioUI() {
     cout << "4";
     mostrarCursosUI();
 }
-
 void Sistema::estudianteUI() {
     //metodo para imprimir solo el primer nombre del usuario
     string nom = estudiante->getNombres(), nombre = "";
@@ -1202,8 +1307,39 @@ void Sistema::mostrarCursosUI() {
         else if (i == 9) break;
     }
     resetColor();
-    //system("pause");
-    //limpiarCursosCuadros();
+}
+
+void Sistema::mostrarBloque8(ListaEnlazada<Curso> nuevo) {
+    Nodo<Curso>* actual = nuevo.obtenerCabeza();
+    int i = 1;
+    int a = 9, b = 34;
+    moverCursorColor(0, 0, "subrayado");
+    while (actual != nullptr) {
+        Curso& auxCurso = actual->dato;
+        string nombre = auxCurso.getNombre();
+        string p1 = "";
+        string p2 = "";
+        if (nombre.size() > 18) {
+			p1 = nombre.substr(0, 18);
+            p2 = nombre.substr(18);
+        }
+        else {
+            p1 = nombre;
+        }
+        moverCursor(a, b); 
+        cout << p1;
+        moverCursor(a + 1, b);
+        cout << p2;
+        b += 21;
+        actual = actual->siguiente;
+        i++;
+        if (i == 5) {
+            a += 8;
+            b = 34;
+        }
+        else if (i == 9) break;
+    }
+    resetColor();
 }
 void Sistema::registroUI() {
     system("cls");
@@ -1246,29 +1382,86 @@ void Sistema::bienvenidoUI() {
     disenio.tituloBienvenido(7, 21);
     disenio.barraCargaConCuadro(17, 37, 50, 50);
 	cout << "\033[?25h"; 
-
 }
 
 void Sistema::verPerfilUI() {
     disenio.cuadro_dividido(120, 28);
     disenio.tituloTuPerfil(3, 30);
-
     disenio.cuadroPosicional(6, 33, 20, 12);
     disenio.logoEstudiante(8, 34);
-    
     disenio.tituloNombre(8, 65);
     disenio.tituloApellido(11, 65);
     disenio.tituloEmail(14, 65);
     disenio.cuadroRedondo(8, 80, 30, 3);
     disenio.cuadroRedondo(11, 80, 30, 3);
     disenio.cuadroRedondo(14, 80, 30, 3);
-    disenio.cuadroRedondo(17, 80, 30, 3);
 }
 
 void Sistema::verCursoSeleccionadoUI(Curso curso) {
     disenio.cuadro_dividido(120, 28);
+    disenio.tituloCurso(3, 30);
+    disenio.cuadroRedondo(7, 30, 90, 21);
+    disenio.cuadroRedondo(9, 32, 40, 3);
+    disenio.cuadroRedondo(13, 32, 40, 3);
+    disenio.cuadroRedondo(17, 32, 40, 3);
+    disenio.cuadroRedondo(21, 32, 40, 3);
+    disenio.cuadroPosicional(9, 84, 20, 15);
+    disenio.tituloLibro(12, 89);
+} 
+void Sistema::buscarCursosUI() {
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloBuscarCursos(3, 48);
+    disenio.cuadroRedondo(7, 48, 50, 3);
 }
+void Sistema::cursosEstudianteUI() {
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloTusCursos(3, 30);
 
+    for (int i = 0, j = 0; i < 4; i++) {
+        disenio.cuadroRedondo(8, i + 33 + j, 20, 7);
+        j += 20;
+    }
+    for (int i = 0, j = 0; i < 4; i++) {
+        disenio.cuadroRedondo(16, i + 33 + j, 20, 7);
+        j += 20;
+    }
+    for (int i = 0, j = 0; i < 4; i++) {
+        disenio.cuadroRedondo(24, i + 68 + j, 3, 3);
+        j += 2;
+    }
+    
+}
+void Sistema::buscarCursosUI2(bool si, int cantidad, vector<Curso>& v) {
+    if (!si) {
+        disenio.cuadroRedondo(12, 34, 82, 15);
+        moverCursor(16, 33);
+        cout << "No Se encontro coincidencias";
+    }
+    else {
+        disenio.cuadroRedondo(12, 34, 82, 15);
+        if (cantidad == 3) {
+            disenio.cuadroDobleLineas(14, 36, 30, 11);
+            disenio.cuadroDobleLineas(14, 72, 30, 11);
+            disenio.cuadroDobleLineas(14, 96, 20, 11);
+        }
+        else if (cantidad == 2) {
+            disenio.cuadroDobleLineas(14, 36, 20, 11);
+            disenio.cuadroDobleLineas(14, 36, 20, 11);
+        }
+        else if (cantidad == 1) {
+            disenio.cuadroDobleLineas(14, 65, 20, 11);
+            moverCursor(15, 66);
+            cout << v[0].getNombre();
+            moverCursor(16, 66);
+            cout << v[0].getCodigoProfesor();
+        }
+        else {
+            disenio.cuadroDobleLineas(14, 36, 30, 11);
+            disenio.cuadroDobleLineas(14, 72, 30, 11);
+            disenio.cuadroDobleLineas(14, 96, 20, 11);
+        }
+    }
+}
 void Sistema::iniciarPrograma() {
     inicializarDatos();
     bienvenidoUI();
