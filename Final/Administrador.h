@@ -1,4 +1,8 @@
 #pragma once
+#include <iostream>
+#include <ctime>
+#include <fstream>
+#include <sstream>
 #include "ListaEnlazada.h"
 #include "ListaCircularSimple.h"
 #include "AVLTree.h"
@@ -8,6 +12,9 @@
 #include "Institucion.h"
 #include "Usuario.h"
 #include <conio.h>
+#include <vector>
+#include <clocale>
+#include <algorithm>
 using namespace std;
 
 class Administrador
@@ -15,7 +22,6 @@ class Administrador
 public:
 	Administrador();
 	//~Administrador();
-
 	void guardar(Usuario usuario, string id);
 	void eliminar(string correo);
 	void ver_cursos(ListaEnlazada<Curso*>& curso);
