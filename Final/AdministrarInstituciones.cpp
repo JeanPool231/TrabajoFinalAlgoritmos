@@ -81,7 +81,7 @@ bool AdministrarInstitucion::quitarprofesor2(Institucion& inst, int idx, string&
 
     string log = mensaje + " | " + obtenerFechaHoraActual1();
     inst.getlogsdeprofes().insertarAlFinal(log);
-    ofstream archivo("logs/logsProfesores.txt", ios::app);
+    ofstream archivo("logsp/logsProfesores.txt", ios::app);
     archivo << log << "\n";
     archivo.close();
     return true;
@@ -99,7 +99,7 @@ void AdministrarInstitucion::agregarprofesor2(Institucion& inst, const string& c
    
     string log = "Agregado: " + nombre + " " + apellido + " | " + obtenerFechaHoraActual1();
     inst.getlogsdeprofes().insertarAlFinal(log);
-    ofstream archivo("logs/logsProfesores.txt", ios::app);
+    ofstream archivo("logsp/logsProfesores.txt", ios::app);
     archivo << log << "\n";
     archivo.close();
 
@@ -169,10 +169,10 @@ bool AdministrarInstitucion::asignarCursoAProfesor(Institucion& inst, int idxPro
 
     profe->agregarCurso(nombreCurso);
     guardarprofenelarchivo(*profe);
-    cout << "Curso asignado.";
+   
     string log = "Asignado: " + profe->getNombre() + " → " + nombreCurso + " | " + obtenerFechaHoraActual1();
     inst.getlogsdeprofes().insertarAlFinal(log);
-    ofstream archivo("logs/logsProfesores.txt", ios::app);
+    ofstream archivo("logsp/logsProfesores.txt", ios::app);
     archivo << log << "\n";
     archivo.close();
     return true;
@@ -189,16 +189,16 @@ bool AdministrarInstitucion::desvincularCursoDeProfesor(Institucion& inst, int i
     guardarprofenelarchivo(*profe);
     string log = "Desvinculado: " + profe->getNombre() + " ← " + cursoAEliminar + " | " + obtenerFechaHoraActual1();
     inst.getlogsdeprofes().insertarAlFinal(log);
-    ofstream archivo("logs/logsProfesores.txt", ios::app);
+    ofstream archivo("logsp/logsProfesores.txt", ios::app);
     archivo << log << "\n";
     archivo.close();
 
-    cout << "Curso desvinculado.";
+    
     return true;
 }
 
 void AdministrarInstitucion::mostrarLogsPorFiltro(const string& filtro, const string& valor, ListaEnlazada<string>& resultado) {
-    ifstream archivo("logs/logsProfesores.txt");
+    ifstream archivo("logsp/logsProfesores.txt");
     string linea;
     while (getline(archivo, linea)) {
         if (filtro == "fecha" && linea.find(valor) != string::npos) resultado.insertarAlFinal(linea);
@@ -244,13 +244,21 @@ void AdministrarInstitucion::obtenerListadoCursosConProfesor(Institucion& inst, 
         inst.getprofesores().recorrerInOrden([&](Profesor& p) {
             for (const string& c : p.getCursosAsignados()) {
                 if (c == curso->getNombre()) {
-                    profe = p.getNombre();
+                    profe = p.getNombre() + " " + p.getApellido();
                     break;
                 }
             }
             });
 
-        listado.insertarAlFinal("Curso: " + curso->getNombre() + " | Profesor: " + profe);
+        string info =
+            "Nombre: " + curso->getNombre() + "\n" +
+            "ID: " + curso->getId() + "\n" +
+            "Categoria: " + curso->getCategoria() + "\n" +
+            "Descripcion: " + curso->getDescripcion() + "\n" +
+            "Duracion (horas): " + to_string(curso->getDuracionHoras()) + "\n" +
+            "Profesor: " + profe;
+
+        listado.insertarAlFinal(info);
         nodo = nodo->siguiente;
     }
 }
@@ -263,4 +271,16 @@ size_t AdministrarInstitucion::contarCursos(Institucion& inst) {
         nodo = nodo->siguiente;
     }
     return count;
+}
+
+Profesor* AdministrarInstitucion::buscarProfesorPorID(Institucion& inst, const string& id) {
+    Profesor* encontrado = nullptr;
+
+    inst.getprofesores().recorrerInOrden([&](Profesor& p) {
+        if (p.getCodigo() == id) {
+            encontrado = &p;
+        }
+        });
+
+    return encontrado;
 }

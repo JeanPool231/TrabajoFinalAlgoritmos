@@ -11,7 +11,11 @@ class Institucion {
 private:
     string nombre;
     string descripcion;
+    string correo;
     int yearderegistro;
+    string tipoInst;
+    string contrasena;
+    string codigo;
     ListaEnlazada<Curso*> cursos;
     AVLTree<Profesor> profesores;
     ListaEnlazada<string> logsdeprofes;
@@ -23,10 +27,18 @@ public:
     void setNombre(const string& nom);
     void setDescripcion(const string& desc);
     void setYearDeRegistro(int y);
+	void setCorreo(const string& correo);
+	void setContrasena(const string& contrasena);
+	void setTipoInst(const string& tipoInst);
+	void setCodigo(const string& codigo);
 
     const string& getNombre() const;
     const string& getDescripcion() const;
     int getYearDeRegistro() const;
+	const string& getCorreo() const;
+	const string& getContrasena() const;
+	const string& getTipoInst() const;
+	const string& getCodigo() const;
 
     ListaEnlazada<Curso*>& getcursos();
     AVLTree<Profesor>& getprofesores();
@@ -34,7 +46,8 @@ public:
 
     void mostrarInformacion();
     void mostrarEstadisticas();
-
+    int contar();
+    int contarcursos();
     void agregarCurso(Curso* curso) {
         cursos.insertarAlFinal(curso);
     }

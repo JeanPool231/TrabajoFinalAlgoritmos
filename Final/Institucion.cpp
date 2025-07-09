@@ -70,3 +70,49 @@ void Institucion::mostrarEstadisticas() {
     cout << "\nEstadisticas\n";
     cout << "Cantidad total de cursos: " << contador << "\n";
 }
+
+
+const string& Institucion::getCorreo() const {
+	return correo;
+}
+
+const string& Institucion::getContrasena() const {
+	return contrasena;
+}
+
+const string& Institucion::getTipoInst() const {
+	return tipoInst;
+}
+
+const string& Institucion::getCodigo() const {
+	return codigo;
+}
+
+
+void Institucion::setCorreo(const string& correo) {
+	this->correo = correo;
+}
+void Institucion::setContrasena(const string& contrasena) {
+	this->contrasena = contrasena;
+}
+void Institucion::setTipoInst(const string& tipoInst) {
+	this->tipoInst = tipoInst;
+}
+
+void Institucion::setCodigo(const string& codigo){
+	this->codigo = codigo;
+}
+
+int Institucion::contar() {
+    int total = 0;
+    profesores.recorrerInOrden([&](Profesor&) { total++; });
+    return total;
+}
+
+int Institucion::contarcursos() {
+    int total = 0;
+    cursos.recorrer([&](Curso* curso) {
+        total++;
+        });
+    return total;
+}

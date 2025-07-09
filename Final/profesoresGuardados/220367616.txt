@@ -1,5 +1,0 @@
-codigo: 220367616
-nombre: David
-apellido: Delgado
-correo: daviddelgado@gmail.com
-curso_asignado: 0

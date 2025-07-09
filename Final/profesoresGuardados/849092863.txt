@@ -1,0 +1,5 @@
+codigo: 849092863
+nombre: Sofie
+apellido: Ulloa
+correo: sofie.ulloa@gmail.com
+curso_asignado: 0
