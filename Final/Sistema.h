@@ -28,6 +28,7 @@ private:
 	ListaEnlazada<Profesor> profesores;
 	ListaEnlazada<Estudiante> estudiantes;
 	ListaDobleCircular<ListaEnlazada<Curso>> bloques;
+	ListaEnlazada<Leccion> lecciones;
 	void menuPrincipal();
 	void registroEstudiante();
 	void registroProfesor();
@@ -83,6 +84,12 @@ private:
 	void buscarCursosUI2(bool, int, vector<Curso>&);
 	void cursosEstudianteUI();
 	void mostrarBloque8(ListaEnlazada<Curso>);
+	void registroProfesorUI();
+
+	void menuProfesorUI();
+	void crearCursoUI();
+	void gestionleccionesUI();
+	void nuevaLeccionUI();
 
 public:
 	void iniciarPrograma();

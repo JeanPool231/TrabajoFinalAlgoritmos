@@ -208,6 +208,35 @@ void guardarEstudiante(Estudiante nuevoEstudiante) {
     }
 }
 
+void guardarProfesor(Profesor nuevoProfesor, string contra) {
+    string nombre = nuevoProfesor.getCorreo();
+    string ruta = "Usuarios/" + nombre + ".txt";
+
+    ofstream archivo(ruta);
+    if (archivo.is_open()) {
+        archivo << 'P' << '\n';
+        archivo << nuevoProfesor.getCorreo() << '\n';
+        archivo << contra << '\n';
+        archivo << nuevoProfesor.getCodigo() << '\n';
+        archivo.close();
+    }
+    else {
+        cout << "Error al crear el archivo para el usuario.\n";
+    }
+    nombre = nuevoProfesor.getId();
+    ruta = "estudiantesCreados/" + nombre + ".txt";
+
+    ofstream archivo2(ruta);
+    if (archivo2.is_open()) {
+        archivo2 << nuevoProfesor.getNombre() << '\n';
+        archivo2 << nuevoProfesor.getApellido() << '\n';
+        archivo2 << nuevoProfesor.getCorreo() << '\n';
+        archivo2.close();
+    }
+    else {
+        cout << "Error al crear el archivo para el usuario.\n";
+    }
+}
 
 void enviarSolicitud(Institucion nuevaInstitucion) {
     string nombre = nuevaInstitucion.getCorreo();
@@ -1500,32 +1529,54 @@ void Sistema::registroEstudiante() {
 void Sistema::registroProfesor() {
 
     system("cls");
+    registroProfesorUI();
 	string codigo, nombre, apellido, correo;
-	char sexo, estadoCivil;
-    int edad, tiempoEnCoursera, id, reputacion;
+    int edad, tiempoEnCoursera, reputacion;
+    string id;
     string contrasena;
-    cout << "Ingrese el codigo de la institucion: ";
+
+    moverCursor(9, 66);
     cin >> codigo;
-    cout << "Ingrese el correo: "; cin >> correo;
-    cout << "Ingrese la contrasena: "; cin >> contrasena;
+    moverCursor(12, 66);
+    cin >> correo;
+    moverCursor(15, 66);
+    cin >> contrasena;
+
     cin.ignore();
-    cout << "Ingrese sus Nombres: ";
+    moverCursor(18, 66);
     getline(cin, nombre);
-    cout << "Ingrese sus apellidos: ";
+
+    moverCursor(21, 66);
     getline(cin, apellido);
-    //cout << "Ingrese su genero (M : masculino, F : femenino): "; cin >> sexo;
-    cout << "Se ha registrado correctamente profesor\n";
+    id = HashUtil::generarHash(nombre);
     profesor->setApellido(apellido);
     profesor->setCodigo(codigo);
     profesor->setCorreo(correo);
-    //profesor.setEdad(edad);
-    //profesor.setId(id);
     profesor->setNombre(nombre);
-    //profesor.setSexo(sexo);
-    Usuario nuevoUsuario = { 'P', correo, contrasena };
+    profesor->setId(id);
+    guardarProfesor(*profesor, contrasena);
 
-    system("pause");
     system("cls");
+}
+void Sistema::registroProfesorUI() {
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloRegistroProfesor(3, 45);
+
+    disenio.tituloCodigoProfesor(8, 44);
+    disenio.cuadroRedondo(8, 65, 45, 3);
+
+    disenio.tituloCorreoLineas(11, 44);
+    disenio.cuadroRedondo(11, 65, 45, 3);
+
+    disenio.tituloPassword(14, 44);
+    disenio.cuadroRedondo(14, 65, 45, 3);
+
+    disenio.tituloNombre(17, 44);
+    disenio.cuadroRedondo(17, 65, 45, 3);
+
+    disenio.tituloApellido(20, 44);
+    disenio.cuadroRedondo(20, 65, 45, 3);
+
 }
 
 void Sistema::registroInstitucion() {
@@ -1671,27 +1722,35 @@ void Sistema::inicializarDatos() {
 void Sistema::menuProfesor() {
     int opcion;
     do {
-        cout << "\n===== MENU PROFESOR =====" << endl;
+        system("cls");
+        menuProfesorUI();
+        moverCursor(5, 3);
         cout << "1. Crear curso" << endl;
+        moverCursor(7, 3);
         cout << "2. Ver cursos existentes" << endl;
+        moverCursor(9, 3);
         cout << "3. Eliminar curso" << endl;
-        cout << "4. Salir" << endl;
-        cout << "Opcion: ";
+        moverCursor(11, 3);
+        cout << "4. Cerrar Sesion" << endl;
+        moverCursor(24, 5);
         cin >> opcion;
         cin.ignore();
 
+        system("cls");
         if (opcion == 1) {
             string nombre, categoria, descripcion;
             int duracion;
-
-            cout << "\n--- CREAR CURSO ---" << endl;
-            cout << "Nombre del curso: ";
+            crearCursoUI();
+            moverCursor(11, 59);
             getline(cin, nombre);
-            cout << "Categoria: ";
+
+            moverCursor(14, 59);
             getline(cin, categoria);
-            cout << "Descripcion: ";
+
+            moverCursor(17, 59);
             getline(cin, descripcion);
-            cout << "Duracion (en horas): ";
+
+            moverCursor(20, 59);
             cin >> duracion;
             cin.ignore();
 
@@ -1707,23 +1766,36 @@ void Sistema::menuProfesor() {
 
             int subop;
             do {
-                cout << "\n--- GESTION DE LECCIONES ---" << endl;
-                cout << "1. Añadir una leccion al curso" << endl;
-                cout << "2. Salir y guardar curso" << endl;
-                cout << "Opcion: ";
+                system("cls");
+                gestionleccionesUI();
+                moverCursor(6, 3);
+                cout << "1. Anadir una leccion";
+                moverCursor(7, 3);
+                cout << "al curso";
+                moverCursor(9, 3);
+                cout << "2. Salir y guardar";
+                moverCursor(10, 3);
+                cout << "curso";
+
+                moverCursor(24, 5);
                 cin >> subop;
                 cin.ignore();
 
                 if (subop == 1) {
                     string titulo, contenido;
                     int duracionMin;
-
-                    cout << "Titulo de la leccion: ";
+                    
+                    nuevaLeccionUI();
+                    moverCursor(14, 59);
                     getline(cin, titulo);
-                    cout << "Contenido de la leccion: ";
+
+                    
+                    moverCursor(17, 59);
                     getline(cin, contenido);
-                    cout << "Duracion de la leccion (en minutos): ";
+
+                    moverCursor(20, 59);
                     cin >> duracionMin;
+
                     cin.ignore();
 
                     Leccion* nueva = new Leccion(titulo, contenido, duracionMin);
@@ -1733,30 +1805,6 @@ void Sistema::menuProfesor() {
             } while (subop != 2);
 
             cursos.insertarAlFinal(nuevoCurso);
-
-            string archivoNombre = "cursosCreados/" + id + ".txt";
-            ofstream archivo(archivoNombre);
-            if (archivo.is_open()) {
-                archivo << "[" << nombre << "]\n";
-                archivo << "id: " << id << "\n";
-                archivo << "categoria: " << categoria << "\n";
-                archivo << "descripcion: " << descripcion << "\n";
-                archivo << "duracion: " << duracion << " horas\n";
-                archivo << "fecha: " << nuevoCurso.getFechaCreacion() << "\n";
-                archivo << "\n[LECCIONES]\n";
-
-                Nodo<Leccion*>* actual = nuevoCurso.getLecciones().obtenerCabeza();
-                while (actual) {
-                    archivo << "- " << actual->dato->getTitulo() << "\n";
-                    actual = actual->siguiente;
-                }
-
-                archivo.close();
-                cout << "Curso guardado en " << archivoNombre << endl;
-            }
-            else {
-                cerr << "Error al guardar el curso." << endl;
-            }
         }
 
         else if (opcion == 2) {
@@ -1770,30 +1818,42 @@ void Sistema::menuProfesor() {
             string idEliminar;
             getline(cin, idEliminar);
 
-            string ruta = "cursosCreados/" + idEliminar + ".txt";
-            if (fs::exists(ruta)) {
-                fs::remove(ruta);
-                cout << "Archivo eliminado correctamente.\n";
-            }
-            else {
-                cout << "No se encontró el archivo.\n";
-            }
-
             bool eliminado = cursos.eliminarSi([&](Curso c) {
                 return c.getId() == idEliminar;
                 });
-
-            if (eliminado) {
-                cout << "Curso eliminado de la lista en memoria.\n";
-            }
-            else {
-                cout << "Curso no encontrado en la lista.\n";
-            }
         }
 
     } while (opcion != 4);
 }
+void Sistema::nuevaLeccionUI() {
+    disenio.tituloNombre(13, 40);
+    disenio.tituloContenido(16, 40);
+    disenio.tituloDuracion(19, 40);
 
+    disenio.cuadroRedondo(13, 58, 45, 3);
+    disenio.cuadroRedondo(16, 58, 45, 3);
+    disenio.cuadroRedondo(19, 58, 45, 3);
+}
+void Sistema::gestionleccionesUI() {
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloLeccion(5, 36);
+}
+void Sistema::menuProfesorUI() {
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloMenuProfesor2(5, 36);
+}
+void Sistema::crearCursoUI() {
+    disenio.cuadro_dividido(120, 28);
+    disenio.tituloCrearCurso(5, 36);
+    disenio.tituloNombre(10, 40);
+    disenio.tituloCategoria(13, 40);
+    disenio.tituloDescripcion2(16, 40);
+    disenio.tituloDuracion(19, 40);
+    disenio.cuadroRedondo(10, 58, 45, 3);
+    disenio.cuadroRedondo(13, 58, 45, 3);
+    disenio.cuadroRedondo(16, 58, 45, 3);
+    disenio.cuadroRedondo(19, 58, 45, 3);
+}
 void Sistema::iniciarSesionUI() {
 
 	cout << "\033[?25l";
